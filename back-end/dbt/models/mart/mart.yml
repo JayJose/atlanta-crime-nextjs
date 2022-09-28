@@ -1,0 +1,12 @@
+
+version: 2
+
+models:
+  - name: fct_crimes
+    description: "Fact table of crimes"
+    columns:
+      - name: crime_tk
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null

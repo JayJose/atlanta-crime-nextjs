@@ -1,0 +1,10 @@
+.env
+.git
+.DS_Store
+*.md
+!README.md
+*.sh
+*.example
+azure-pipelines.yaml
+venvcrime
+__pycache__

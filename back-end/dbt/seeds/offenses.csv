@@ -1,0 +1,15 @@
+﻿ibr_code,uc2_literal,offense_category,offense,crime_against
+120,robbery,robbery,robbery,property
+220,burglary,burglary / breaking & entering,burglary/breaking & entering,property
+240,auto theft,motor vehicle theft,motor vehicle theft,property
+09a,homicide,homicide offenses,murder and non-negligent manslaughter,person
+09b,homicide,homicide offenses,negligient manslaughter,person
+13a,agg assault,assault offenses,aggravated assault,person
+23a,larceny-non vehicle,larceny / theft offenses,pocket-picking,property
+23b,larceny-non vehicle,larceny / theft offenses,purse-snatching,property
+23c,larceny-non vehicle,larceny / theft offenses,shoplifting,property
+23d,larceny-non vehicle,larceny / theft offenses,theft from building,property
+23e,larceny-non vehicle,larceny / theft offenses,theft from coin-operated machine or device,property
+23f,larceny-from vehicle,larceny / theft offenses,theft from motor vehicle,property
+23g,larceny-from vehicle,larceny / theft offenses,theft of motor vehicle parts or accessories,property
+23h,larceny-non vehicle,larceny / theft offenses,all other larceny,property
