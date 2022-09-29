@@ -15,9 +15,12 @@ import theme from '../styles/theme';
 // bar chart
 import { MyResponsiveBar } from '../components/barChart';
 import chartData from '../data/chartData.json';
+import { countByCategory } from '../lib/transformData';
 
-export const Layout = () => {
+export const Layout = (props) => {
   const [showSidebar, setShowSidebar] = useState(false);
+
+  var crimeCounts = countByCategory(props.crimes, 'neighborhood');
 
   return (
     <Grommet theme={theme} full>
@@ -41,9 +44,18 @@ export const Layout = () => {
                 overflow={{ horizontal: 'hidden' }}
               >
                 <Box flex align="center" justify="center">
-                  <MyResponsiveBar data={chartData} />
-                  <MyResponsiveBar data={chartData} />
-                  <MyResponsiveBar data={chartData} />
+                  <MyResponsiveBar
+                    data={countByCategory(props.crimes, 'crime_against')}
+                    layout={'horizontal'}
+                  />
+                  <MyResponsiveBar
+                    data={countByCategory(props.crimes, 'offense_category')}
+                    layout={'vertical'}
+                  />
+                  <MyResponsiveBar
+                    data={countByCategory(props.crimes, 'offense')}
+                    layout={'horizontal'}
+                  />
                 </Box>
                 {!showSidebar || size !== 'small' ? (
                   <Collapsible direction="horizontal" open={showSidebar}>

@@ -22,7 +22,6 @@ export async function getStaticProps() {
 }
 
 export default function Home(props) {
-  //props.neighborhoods
   return (
     <>
       <Head>
@@ -31,7 +30,7 @@ export default function Home(props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Layout></Layout>
+      <Layout {...props}></Layout>
     </>
   );
 }
