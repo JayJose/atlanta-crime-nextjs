@@ -1,20 +1,15 @@
 import React, { useState } from 'react';
-
 import {
   Box,
   Button,
   Collapsible,
   Grommet,
   Heading,
-  Footer,
   Layer,
   ResponsiveContext
 } from 'grommet';
-
 import { FormClose, Notification } from 'grommet-icons';
-
 import { AppBar } from './appBar';
-
 import theme from '../styles/theme';
 
 // bar chart

@@ -2,11 +2,11 @@ export default {
   global: {
     colors: {
       brand: '#6FFFB0',
-      background: '#6FFFB0'
+      background: 'light-2'
     },
     font: {
-      family: 'Roboto',
-      size: '18px',
+      family: 'Helvetica',
+      size: '20px',
       height: '20px'
     }
   }
