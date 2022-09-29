@@ -11,6 +11,10 @@ import {
 import { FormClose, Notification } from 'grommet-icons';
 import React, { useState } from 'react';
 
+// bar chart
+import { MyResponsiveBar } from '../components/barChart';
+import chartData from '../data/chartData.json';
+
 const AppBar = (props) => (
   <Box
     tag="header"
@@ -29,7 +33,7 @@ export const Layout = () => {
   const [showSidebar, setShowSidebar] = useState(false);
 
   return (
-    <Grommet theme={theme} full>
+    <Grommet theme={theme} full themeMode="dark">
       <ResponsiveContext.Consumer>
         {(size) => (
           <Box fill>
@@ -42,9 +46,16 @@ export const Layout = () => {
                 onClick={() => setShowSidebar(!showSidebar)}
               />
             </AppBar>
-            <Box direction="row" flex overflow={{ horizontal: 'hidden' }}>
+            <Box
+              background={'light-2'}
+              direction="row"
+              flex
+              overflow={{ horizontal: 'hidden' }}
+            >
               <Box flex align="center" justify="center">
-                app body
+                <MyResponsiveBar data={chartData} />
+                <MyResponsiveBar data={chartData} />
+                <MyResponsiveBar data={chartData} />
               </Box>
               {!showSidebar || size !== 'small' ? (
                 <Collapsible direction="horizontal" open={showSidebar}>
