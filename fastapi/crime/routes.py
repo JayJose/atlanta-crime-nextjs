@@ -52,3 +52,15 @@ def get_crimes(
     db: Session = Depends(get_db),
 ):
     return crud.get_crimes(skip=skip, limit=limit, db=db)
+
+
+@router.get("/crimes/{neighborhood_id}", response_model=List[schemas.Crime])
+def get_crimes_by_neighborhood_id(
+    neighborhood_id: str,
+    skip: int = 0,
+    limit: int = default_limit,
+    db: Session = Depends(get_db),
+):
+    return crud.get_crimes_by_neighborhood_id(
+        neighborhood_id=neighborhood_id, skip=skip, limit=limit, db=db
+    )

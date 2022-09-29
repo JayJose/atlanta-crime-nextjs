@@ -79,3 +79,33 @@ def get_crimes(db: Session, skip: int, limit: int):
     )
 
     return query.offset(skip).limit(limit).all()
+
+
+def get_crimes_by_neighborhood_id(
+    neighborhood_id: str, db: Session, skip: int, limit: int
+):
+    """GETs a list of crimes for a specific neighborhood"""
+    query = (
+        db.query(
+            Crime.id,
+            Crime.date_id,
+            Crime.beat,
+            Crime.zone,
+            Crime.neighborhood_id,
+            Neighborhood.neighborhood,
+            Neighborhood.npu,
+            Crime.address,
+            Crime.latitude,
+            Crime.longitude,
+            Crime.offense_id,
+            Offense.crime_against,
+            Offense.offense_category,
+            Offense.offense,
+            Crime.created_at,
+        )
+        .filter(Crime.neighborhood_id == neighborhood_id)
+        .join(Offense, Offense.id == Crime.offense_id)
+        .join(Neighborhood, Neighborhood.id == Crime.neighborhood_id)
+    )
+
+    return query.offset(skip).limit(limit).all()
