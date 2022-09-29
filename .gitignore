@@ -24,3 +24,5 @@ yarn-error.log*
 .vscode
 *__pycache__
 *.cypython
+
+/back-end/flows/data/landing/

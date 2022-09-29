@@ -2,7 +2,29 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 
-export default function Home() {
+// bar chart
+import { MyResponsiveBar } from "../components/barChart";
+import chartData from "../data/chartData.json";
+
+// get data from api
+export async function getStaticProps() {
+  // Call an external API endpoint to get posts.
+  // You can use any data fetching library
+  const res = await fetch("http://localhost:8000/crimes");
+  const posts = await res.json();
+
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return {
+    props: {
+      posts,
+    },
+  };
+}
+
+export default function Home({ posts }) {
+  console.log("here are the props");
+  console.log(JSON.stringify(posts));
   return (
     <div className={styles.container}>
       <Head>
@@ -13,6 +35,10 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Crime!</h1>
+        <div className={styles.divchart}>
+          <MyResponsiveBar data={chartData}></MyResponsiveBar>
+          <p>Charts are above</p>
+        </div>
       </main>
     </div>
   );
