@@ -1,12 +1,13 @@
-export const theme = {
+export default {
   global: {
     colors: {
-      brand: "#228BE6",
+      brand: '#6FFFB0',
+      background: '#6FFFB0'
     },
     font: {
-      family: "Roboto",
-      size: "18px",
-      height: "20px",
-    },
-  },
+      family: 'Roboto',
+      size: '18px',
+      height: '20px'
+    }
+  }
 };

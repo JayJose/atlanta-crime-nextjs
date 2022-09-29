@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import styles from '../styles/Home.module.css';
 
 // layout
 import { Layout } from '../components/layout';
@@ -33,7 +32,6 @@ export default function Home(props) {
       </Head>
 
       <Layout></Layout>
-      <p>Charts are above</p>
     </>
   );
 }
