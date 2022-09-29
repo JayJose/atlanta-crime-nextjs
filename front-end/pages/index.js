@@ -29,7 +29,7 @@ export async function getStaticProps() {
 export default function Home(props) {
   //props.neighborhoods
   return (
-    <div className={styles.container}>
+    <>
       <Head>
         <title>Crime!</title>
         <meta name="description" content="A crime app." />
@@ -38,6 +38,6 @@ export default function Home(props) {
 
       <Layout></Layout>
       <p>Charts are above</p>
-    </div>
+    </>
   );
 }
