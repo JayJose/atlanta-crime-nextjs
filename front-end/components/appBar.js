@@ -6,8 +6,8 @@ export const AppBar = (props) => (
     direction="row"
     align="center"
     justify="between"
-    pad={{ left: 'medium', right: 'small', vertical: 'small' }}
-    elevation="medium"
+    pad={{ left: 'medium', right: 'small', vertical: 'xxxsmall' }}
+    elevation="xsmall"
     style={{ zIndex: '1' }}
     {...props}
   />

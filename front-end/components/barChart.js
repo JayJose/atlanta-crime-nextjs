@@ -3,7 +3,6 @@
 import { ResponsiveBar } from '@nivo/bar';
 
 export function MyResponsiveBar({ data, layout = 'vertical' }) {
-  //logic
   if (!data) {
     return null;
   }

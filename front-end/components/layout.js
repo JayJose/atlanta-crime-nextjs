@@ -14,13 +14,19 @@ import theme from '../styles/theme';
 
 // bar chart
 import { MyResponsiveBar } from '../components/barChart';
-import chartData from '../data/chartData.json';
 import { countByCategory } from '../lib/transformData';
+import { MyResponsiveTreeMap } from './treemap';
+
+var treeData = {
+  name: 'crimes',
+  children: [
+    { id: 'property', name: 'property', value: 82 },
+    { id: 'person', name: 'person', value: 18 }
+  ]
+};
 
 export const Layout = (props) => {
   const [showSidebar, setShowSidebar] = useState(false);
-
-  var crimeCounts = countByCategory(props.crimes, 'neighborhood');
 
   return (
     <Grommet theme={theme} full>
@@ -30,7 +36,7 @@ export const Layout = (props) => {
             <Box fill>
               <AppBar background={'brand'}>
                 <Heading level="3" margin="none">
-                  Crime
+                  Crime sucks!
                 </Heading>
                 <Button
                   icon={<Notification />}
@@ -44,18 +50,22 @@ export const Layout = (props) => {
                 overflow={{ horizontal: 'hidden' }}
               >
                 <Box flex align="center" justify="center">
-                  <MyResponsiveBar
+                  {/* <MyResponsiveBar
                     data={countByCategory(props.crimes, 'crime_against')}
                     layout={'horizontal'}
-                  />
-                  <MyResponsiveBar
-                    data={countByCategory(props.crimes, 'offense_category')}
-                    layout={'vertical'}
-                  />
-                  <MyResponsiveBar
-                    data={countByCategory(props.crimes, 'offense')}
-                    layout={'horizontal'}
-                  />
+                  /> */}
+                  <MyResponsiveTreeMap
+                    data={{
+                      name: 'crimes',
+                      children: countByCategory(props.crimes, 'neighborhood')
+                    }}
+                  ></MyResponsiveTreeMap>
+                  {console.log(
+                    JSON.stringify({
+                      name: 'crimes',
+                      children: countByCategory(props.crimes, 'neighborhood')
+                    })
+                  )}
                 </Box>
                 {!showSidebar || size !== 'small' ? (
                   <Collapsible direction="horizontal" open={showSidebar}>
