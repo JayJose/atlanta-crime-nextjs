@@ -10,21 +10,28 @@ import chartData from "../data/chartData.json";
 export async function getStaticProps() {
   // Call an external API endpoint to get posts.
   // You can use any data fetching library
-  const res = await fetch("http://localhost:8000/crimes");
-  const posts = await res.json();
+  const [offenseRes, neighborhoodRes, crimesRes] = await Promise.all([
+    fetch("http://localhost:8000/offenses"),
+    fetch("http://localhost:8000/neighborhoods"),
+    fetch("http://localhost:8000/crimes"),
+  ]);
+
+  const [offenses, neighborhoods, crimes] = await Promise.all([
+    offenseRes.json(),
+    neighborhoodRes.json(),
+    crimesRes.json(),
+  ]);
 
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
-  return {
-    props: {
-      posts,
-    },
-  };
+  return { props: { offenses, neighborhoods } };
 }
 
-export default function Home({ posts }) {
-  console.log("here are the props");
-  console.log(JSON.stringify(posts));
+export default function Home(props) {
+  console.log("here are the neighborhoods");
+  console.log(JSON.stringify(props.neighborhoods));
+  console.log("here are the offenses");
+  console.log(JSON.stringify(props.offenses));
   return (
     <div className={styles.container}>
       <Head>
