@@ -8,8 +8,9 @@ import {
   Layer,
   ResponsiveContext
 } from 'grommet';
-import { FormClose, Sidebar } from 'grommet-icons';
+import { FormClose, Sidebar, Home, LineChart } from 'grommet-icons';
 import { AppBar } from './appBar';
+import Link from 'next/link';
 
 import theme from '../styles/theme';
 
@@ -30,10 +31,15 @@ export function Layout(props) {
                 <Heading level="3" margin="none">
                   Crime sucks!
                 </Heading>
-                <Button
-                  icon={<Sidebar />}
-                  onClick={() => setShowSidebar(!showSidebar)}
-                />
+                <Box direction="row">
+                  <Link href="/">
+                    <Button icon={<Home />} />
+                  </Link>
+                  <Button
+                    icon={<Sidebar />}
+                    onClick={() => setShowSidebar(!showSidebar)}
+                  />
+                </Box>
               </AppBar>
               <Box
                 background={'light-2'}

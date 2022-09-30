@@ -32,7 +32,6 @@ export function MyResponsiveTreeMap({ data }) {
         modifiers: [['darker', 0.1]]
       }}
       onClick={(e) => {
-        let select = e['id'];
         router.push(`/neighborhoods/${e['id']}`);
       }}
     />
