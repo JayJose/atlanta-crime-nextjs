@@ -42,6 +42,8 @@ class Date(BaseModel):
 class Crime(BaseModel):
     id: str
     date_id: date
+    date: date
+    day_name: str
     beat: str
     zone: str
     neighborhood_id: str

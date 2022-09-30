@@ -47,20 +47,29 @@ def get_dates(
 
 @router.get("/crimes", response_model=List[schemas.Crime])
 def get_crimes(
+    start_date: Optional[date] = "2022-01-01",
+    stop_date: Optional[date] = date.today(),
     skip: int = 0,
     limit: int = default_limit,
     db: Session = Depends(get_db),
 ):
-    return crud.get_crimes(skip=skip, limit=limit, db=db)
+    return crud.get_crimes(start_date, stop_date, skip=skip, limit=limit, db=db)
 
 
 @router.get("/crimes/{neighborhood_id}", response_model=List[schemas.Crime])
 def get_crimes_by_neighborhood_id(
     neighborhood_id: str,
+    start_date: Optional[date] = "2022-01-01",
+    stop_date: Optional[date] = date.today(),
     skip: int = 0,
     limit: int = default_limit,
     db: Session = Depends(get_db),
 ):
     return crud.get_crimes_by_neighborhood_id(
-        neighborhood_id=neighborhood_id, skip=skip, limit=limit, db=db
+        neighborhood_id=neighborhood_id,
+        start_date=start_date,
+        stop_date=stop_date,
+        skip=skip,
+        limit=limit,
+        db=db,
     )
