@@ -23,7 +23,7 @@ export function MyResponsiveHeatMap({ data }) {
       }}
       colors={{
         type: 'sequential',
-        scheme: 'reds',
+        scheme: 'blue_purple',
         divergeAt: 0.5
       }}
       emptyColor="#555555"

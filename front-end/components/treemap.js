@@ -1,5 +1,4 @@
 import { ResponsiveTreeMap } from '@nivo/treemap';
-import Link from 'next/link';
 import _ from 'underscore';
 import { useRouter } from 'next/router';
 
@@ -14,8 +13,10 @@ export function MyResponsiveTreeMap({ data }) {
       data={data}
       identity="name"
       value="value"
+      label="id"
+      orientLabel="false"
       valueFormat=".02s"
-      colors={{ scheme: 'red_blue' }}
+      colors={{ scheme: 'pink_yellowGreen' }}
       margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
       labelSkipSize={12}
       labelTextColor={{

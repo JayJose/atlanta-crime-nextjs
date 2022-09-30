@@ -9,16 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@deck.gl/core": "^8.8.11",
+    "@deck.gl/layers": "^8.8.11",
     "@nivo/bar": "^0.80.0",
     "@nivo/core": "^0.80.0",
     "@nivo/geo": "^0.80.0",
     "@nivo/heatmap": "^0.80.0",
     "@nivo/treemap": "^0.80.0",
+    "deck.gl": "^8.8.11",
     "grommet": "^2.26.0",
     "grommet-icons": "^4.8.0",
+    "mapbox-gl": "^2.10.0",
     "next": "12.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-map-gl": "^7.0.19",
     "styled-components": "^5.3.6",
     "underscore": "^1.13.6"
   },

@@ -14,6 +14,9 @@ import Link from 'next/link';
 
 import theme from '../styles/theme';
 
+// temp
+import { MyMap } from './map';
+
 export function Layout({ children }) {
   const [showSidebar, setShowSidebar] = useState(false);
 
@@ -56,7 +59,7 @@ export function Layout({ children }) {
                       align="center"
                       justify="center"
                     >
-                      sidebar
+                      <MyMap></MyMap>
                     </Box>
                   </Collapsible>
                 ) : (
@@ -79,7 +82,7 @@ export function Layout({ children }) {
                       align="center"
                       justify="center"
                     >
-                      sidebar
+                      <MyMap></MyMap>
                     </Box>
                   </Layer>
                 )}
