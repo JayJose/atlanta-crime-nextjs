@@ -3,7 +3,8 @@
       "ALTER TABLE {{this}} ADD PRIMARY KEY (id);"
       "ALTER TABLE {{this}} ADD FOREIGN KEY (offense_id) REFERENCES {{ ref('dim_offenses') }};"
       "ALTER TABLE {{this}} ADD FOREIGN KEY (neighborhood_id) REFERENCES {{ ref('dim_neighborhoods') }};" 
-      "ALTER TABLE {{this}} ADD FOREIGN KEY (date_id) REFERENCES {{ ref('dim_dates') }};"         
+      "ALTER TABLE {{this}} ADD FOREIGN KEY (date_id) REFERENCES {{ ref('dim_dates') }};"
+      "CREATE INDEX ix_neighborhood ON {{this}} (neighborhood_id);"
     ]
 ) }}
 

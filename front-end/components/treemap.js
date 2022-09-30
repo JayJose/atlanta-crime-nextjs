@@ -1,10 +1,13 @@
 import { ResponsiveTreeMap } from '@nivo/treemap';
+import Link from 'next/link';
 import _ from 'underscore';
+import { useRouter } from 'next/router';
 
 export function MyResponsiveTreeMap({ data }) {
   if (!data) return null;
-
   data['children'] = _.sortBy(data['children'], 'value').reverse();
+
+  const router = useRouter();
 
   return (
     <ResponsiveTreeMap
@@ -12,6 +15,7 @@ export function MyResponsiveTreeMap({ data }) {
       identity="name"
       value="value"
       valueFormat=".02s"
+      colors={{ scheme: 'red_blue' }}
       margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
       labelSkipSize={12}
       labelTextColor={{
@@ -29,6 +33,7 @@ export function MyResponsiveTreeMap({ data }) {
       }}
       onClick={(e) => {
         let select = e['id'];
+        router.push(`/neighborhoods/${e['id']}`);
       }}
     />
   );
