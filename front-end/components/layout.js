@@ -8,15 +8,11 @@ import {
   Layer,
   ResponsiveContext
 } from 'grommet';
-import { FormClose, Sidebar, Home, LineChart } from 'grommet-icons';
+import { FormClose, Sidebar, Home } from 'grommet-icons';
 import { AppBar } from './appBar';
 import Link from 'next/link';
 
 import theme from '../styles/theme';
-
-// bar chart
-import { countByCategory } from '../lib/transformData';
-import { MyResponsiveTreeMap } from './treemap';
 
 export function Layout({ children }) {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -33,10 +29,10 @@ export function Layout({ children }) {
                 </Heading>
                 <Box direction="row">
                   <Link href="/">
-                    <Button icon={<Home />} />
+                    <Button icon={<Home color="black" />} />
                   </Link>
                   <Button
-                    icon={<Sidebar />}
+                    icon={<Sidebar color="black" />}
                     onClick={() => setShowSidebar(!showSidebar)}
                   />
                 </Box>

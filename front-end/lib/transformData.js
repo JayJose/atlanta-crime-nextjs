@@ -30,3 +30,17 @@ export function getValuesFromField(obj, field) {
   });
   return arr;
 }
+
+export function genHeatmapData(data, outerCategory, innerCategory) {
+  return _.map(_.groupBy(data, outerCategory), function (value, key) {
+    return {
+      id: key,
+      data: _.map(_.countBy(value, innerCategory), function (value, key) {
+        return {
+          x: key,
+          y: value
+        };
+      })
+    };
+  });
+}

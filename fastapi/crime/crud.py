@@ -43,6 +43,7 @@ def get_dates(start_date: date, stop_date: date, db: Session, skip: int, limit: 
         OccurenceDate.id,
         OccurenceDate.date,
         OccurenceDate.day_name,
+        OccurenceDate.day_of_week,
         OccurenceDate.day_of_year,
         OccurenceDate.month,
         OccurenceDate.month_name,
@@ -62,6 +63,7 @@ def get_crimes(start_date: date, stop_date: date, db: Session, skip: int, limit:
             Crime.date_id,
             OccurenceDate.date,
             OccurenceDate.day_name,
+            OccurenceDate.day_of_week,
             Crime.beat,
             Crime.zone,
             Crime.neighborhood_id,
@@ -95,30 +97,35 @@ def get_crimes_by_neighborhood_id(
 ):
     """GETs a list of crimes for a specific neighborhood"""
     query = (
-        db.query(
-            Crime.id,
-            Crime.date_id,
-            OccurenceDate.date,
-            OccurenceDate.day_name,
-            Crime.beat,
-            Crime.zone,
-            Crime.neighborhood_id,
-            Neighborhood.neighborhood,
-            Neighborhood.npu,
-            Crime.address,
-            Crime.latitude,
-            Crime.longitude,
-            Crime.offense_id,
-            Offense.crime_against,
-            Offense.offense_category,
-            Offense.offense,
-            Crime.created_at,
+        (
+            db.query(
+                Crime.id,
+                Crime.date_id,
+                OccurenceDate.date,
+                OccurenceDate.day_name,
+                OccurenceDate.day_of_week,
+                Crime.beat,
+                Crime.zone,
+                Crime.neighborhood_id,
+                Neighborhood.neighborhood,
+                Neighborhood.npu,
+                Crime.address,
+                Crime.latitude,
+                Crime.longitude,
+                Crime.offense_id,
+                Offense.crime_against,
+                Offense.offense_category,
+                Offense.offense,
+                Crime.created_at,
+            )
+            .filter(OccurenceDate.date.between(start_date, stop_date))
+            .filter(Crime.neighborhood_id == neighborhood_id)
+            .join(Offense, Offense.id == Crime.offense_id)
+            .join(OccurenceDate, OccurenceDate.id == Crime.date_id)
+            .join(Neighborhood, Neighborhood.id == Crime.neighborhood_id)
         )
-        .filter(OccurenceDate.date.between(start_date, stop_date))
-        .filter(Crime.neighborhood_id == neighborhood_id)
-        .join(Offense, Offense.id == Crime.offense_id)
-        .join(OccurenceDate, OccurenceDate.id == Crime.date_id)
-        .join(Neighborhood, Neighborhood.id == Crime.neighborhood_id)
+        .order_by(Offense.offense)
+        .order_by(OccurenceDate.day_of_week)
     )
 
     return query.offset(skip).limit(limit).all()

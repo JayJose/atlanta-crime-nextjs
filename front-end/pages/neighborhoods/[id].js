@@ -11,7 +11,9 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const res = await fetch(`http://localhost:8000/crimes/${params.id}`);
+  const res = await fetch(
+    `http://localhost:8000/crimes/${params.id}?limit=50000`
+  );
   const crimes = await res.json();
 
   return {

@@ -2,7 +2,7 @@ export default {
   global: {
     colors: {
       brand: '#6FFFB0',
-      background: 'light-2',
+      background: 'light-',
       bars: '#FD6FFF',
       bars2: ' #81FCED',
       text: 'black'

@@ -28,6 +28,7 @@ class Date(BaseModel):
     id: date
     date: date
     day_name: str
+    day_of_week: int
     day_of_year: int
     month: int
     month_name: str
@@ -44,6 +45,7 @@ class Crime(BaseModel):
     date_id: date
     date: date
     day_name: str
+    day_of_week: str
     beat: str
     zone: str
     neighborhood_id: str
