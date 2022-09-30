@@ -18,7 +18,7 @@ import theme from '../styles/theme';
 import { countByCategory } from '../lib/transformData';
 import { MyResponsiveTreeMap } from './treemap';
 
-export function Layout(props) {
+export function Layout({ children }) {
   const [showSidebar, setShowSidebar] = useState(false);
 
   return (
@@ -47,13 +47,8 @@ export function Layout(props) {
                 flex
                 overflow={{ horizontal: 'hidden' }}
               >
-                <Box flex align="center" justify="center">
-                  <MyResponsiveTreeMap
-                    data={{
-                      name: 'crimes',
-                      children: countByCategory(props.crimes, 'neighborhood')
-                    }}
-                  ></MyResponsiveTreeMap>
+                <Box flex align="start" justify="center" margin="small">
+                  {children}
                 </Box>
                 {!showSidebar || size !== 'small' ? (
                   <Collapsible direction="horizontal" open={showSidebar}>

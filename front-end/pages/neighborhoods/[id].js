@@ -1,6 +1,6 @@
 import { getAllNeighborhoods } from '../../lib/neighborhoods';
 import { Layout } from '../../components/layout';
-import { MyResponsiveBar } from '../../components/barChart';
+import { NeighborhoodView } from '../../components/neighborhoodView';
 
 export async function getStaticPaths() {
   const paths = getAllNeighborhoods();
@@ -10,15 +10,14 @@ export async function getStaticPaths() {
   };
 }
 
-import { countByCategory } from '../../lib/transformData';
-
 export async function getStaticProps({ params }) {
   const res = await fetch(`http://localhost:8000/crimes/${params.id}`);
   const crimes = await res.json();
 
   return {
     props: {
-      crimes
+      crimes,
+      id: params.id
     }
   };
 }
@@ -26,8 +25,9 @@ export async function getStaticProps({ params }) {
 export default function Neighborhood(props) {
   return (
     <>
-      <Layout>hello</Layout>
-      {JSON.stringify(countByCategory(props.crimes, 'neighborhood'))}
+      <Layout
+        children={<NeighborhoodView {...props}></NeighborhoodView>}
+      ></Layout>
     </>
   );
 }

@@ -3,6 +3,8 @@ import Image from 'next/image';
 
 // layout
 import { Layout } from '../components/layout';
+import { MyResponsiveTreeMap } from '../components/treemap';
+import { countByCategory } from '../lib/transformData';
 
 // get data from api
 export async function getStaticProps() {
@@ -29,7 +31,16 @@ export default function Home(props) {
         <meta name="description" content="A crime app." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout {...props}></Layout>
+      <Layout
+        children={
+          <MyResponsiveTreeMap
+            data={{
+              name: 'crimes',
+              children: countByCategory(props.crimes, 'neighborhood')
+            }}
+          ></MyResponsiveTreeMap>
+        }
+      ></Layout>
     </>
   );
 }
