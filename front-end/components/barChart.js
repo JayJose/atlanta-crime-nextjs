@@ -18,7 +18,7 @@ export function MyResponsiveBar({
       layout={layout}
       height="250"
       indexBy={data.id}
-      margin={{ top: 50, right: 100, bottom: 50, left: 180 }}
+      margin={{ top: 5, right: 100, bottom: 50, left: 180 }}
       padding={0.3}
       valueScale={{ type: 'linear' }}
       indexScale={{ type: 'band', round: true }}

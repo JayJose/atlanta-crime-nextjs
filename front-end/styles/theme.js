@@ -4,12 +4,13 @@ export default {
       brand: '#6FFFB0',
       background: 'light-2',
       bars: '#FD6FFF',
-      bars2: ' #81FCED'
+      bars2: ' #81FCED',
+      text: 'black'
     },
     font: {
       family: 'Helvetica',
-      size: '20px',
-      height: '20px'
+      size: '12px',
+      height: '10px'
     }
   }
 };

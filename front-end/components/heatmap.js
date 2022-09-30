@@ -361,7 +361,7 @@ export const MyResponsiveHeatMap = () => (
     }}
     colors={{
       type: 'diverging',
-      scheme: 'red_yellow_blue',
+      scheme: 'turbo',
       divergeAt: 0.5,
       minValue: -100000,
       maxValue: 100000
