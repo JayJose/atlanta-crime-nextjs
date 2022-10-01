@@ -11,7 +11,7 @@ export async function getStaticProps() {
   const [offenseRes, neighborhoodRes, crimesRes] = await Promise.all([
     fetch('http://localhost:8000/offenses'),
     fetch('http://localhost:8000/neighborhoods'),
-    fetch('http://localhost:8000/crimes?limit=5000') //TODO replace with aggregate
+    fetch(`http://localhost:8000/crimes?limit=${process.env.LIMIT}`) //TODO replace with aggregate
   ]);
 
   const [offenses, neighborhoods, crimes] = await Promise.all([
