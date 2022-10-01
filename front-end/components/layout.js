@@ -8,7 +8,7 @@ import {
   Layer,
   ResponsiveContext
 } from 'grommet';
-import { FormClose, Map, Home } from 'grommet-icons';
+import { FormClose, Sidebar, Home } from 'grommet-icons';
 import { AppBar } from './appBar';
 import Link from 'next/link';
 
@@ -35,7 +35,7 @@ export function Layout({ children }) {
                     <Button icon={<Home color="black" />} />
                   </Link>
                   <Button
-                    icon={<Map color="black" />}
+                    icon={<Sidebar color="black" />}
                     onClick={() => setShowSidebar(!showSidebar)}
                   />
                 </Box>
@@ -59,7 +59,7 @@ export function Layout({ children }) {
                       align="center"
                       justify="center"
                     >
-                      <MyMap></MyMap>
+                      sidebar
                     </Box>
                   </Collapsible>
                 ) : (
@@ -82,7 +82,7 @@ export function Layout({ children }) {
                       align="center"
                       justify="center"
                     >
-                      <MyMap></MyMap>
+                      sidebar
                     </Box>
                   </Layer>
                 )}

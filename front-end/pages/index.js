@@ -1,17 +1,19 @@
 import Head from 'next/head';
-import Image from 'next/image';
 
 // layout
 import { Layout } from '../components/layout';
 import { MyResponsiveTreeMap } from '../components/treemap';
-import { countByCategory } from '../lib/transformData';
+import _ from 'underscore';
+import { MyMap } from '../components/map';
 
 // get data from api
 export async function getStaticProps() {
   const [offenseRes, neighborhoodRes, crimesRes] = await Promise.all([
     fetch('http://localhost:8000/offenses'),
     fetch('http://localhost:8000/neighborhoods'),
-    fetch(`http://localhost:8000/crimes?limit=${process.env.LIMIT}`) //TODO replace with aggregate
+    fetch(
+      `http://localhost:8000/crimes/aggregated/year_and_neighborhood?limit=${process.env.LIMIT}`
+    )
   ]);
 
   const [offenses, neighborhoods, crimes] = await Promise.all([
@@ -34,12 +36,7 @@ export default function Home(props) {
       <Layout
         children={
           <>
-            <MyResponsiveTreeMap
-              data={{
-                name: 'crimes',
-                children: countByCategory(props.crimes, 'neighborhood')
-              }}
-            ></MyResponsiveTreeMap>
+            <MyMap></MyMap>
           </>
         }
       ></Layout>

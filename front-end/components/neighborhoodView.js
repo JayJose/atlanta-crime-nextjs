@@ -1,5 +1,6 @@
 import { MyResponsiveBar } from './barChart';
 import { MyResponsiveHeatMap } from './heatmap';
+import { MyResponsiveTreeMap } from './treemap';
 import { countByCategory, genHeatmapData } from '../lib/transformData';
 import { toTitleCase } from '../lib/transformStrings';
 import _ from 'underscore';
@@ -9,6 +10,19 @@ import theme from '../styles/theme';
 
 export function NeighborhoodView(props) {
   const margin = 'small';
+
+  // var treeMapData = _.map(
+  //   _.filter(props.crimes, function (row) {
+  //     return row.year == '2022';
+  //   }),
+  //   function (value, key) {
+  //     return {
+  //       id: value.neighborhood,
+  //       name: value.neighborhood,
+  //       value: value.value
+  //     };
+  //   }
+  // );
 
   return (
     <>
@@ -21,14 +35,17 @@ export function NeighborhoodView(props) {
       </Paragraph>
       <Box direction="column" fill margin={margin}>
         <Text size="size">Crimes by Offense Category</Text>
-        <MyResponsiveBar
+        {/* <MyResponsiveBar
           data={countByCategory(props.crimes, 'offense_category')}
           layout="horizontal"
           color={theme.global.colors.bars}
-        />
-        <MyResponsiveHeatMap
-          data={genHeatmapData(props.crimes, 'offense', 'day_name')}
-        />
+        /> */}
+        <MyResponsiveTreeMap
+          data={{
+            name: 'crimes',
+            children: countByCategory(props.crimes, 'offense')
+          }}
+        ></MyResponsiveTreeMap>
       </Box>
     </>
   );
