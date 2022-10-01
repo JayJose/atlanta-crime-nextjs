@@ -1,5 +1,8 @@
 from statistics import mode
 from sqlalchemy.orm import Session
+from sqlalchemy import func
+from sqlalchemy.sql.expression import literal
+
 
 from typing import List
 from datetime import date
@@ -126,6 +129,40 @@ def get_crimes_by_neighborhood_id(
         )
         .order_by(Offense.offense)
         .order_by(OccurenceDate.day_of_week)
+    )
+
+    return query.offset(skip).limit(limit).all()
+
+
+#### AGGREGATED QUERIES
+def get_crimes_by_year_and_neighborhood(
+    # start_date: date,
+    # stop_date: date,
+    db: Session,
+    skip: int,
+    limit: int,
+):
+    """GETs a list of crimes for a specific neighborhood"""
+    query = (
+        (
+            db.query(
+                Neighborhood.neighborhood,
+                OccurenceDate.year,
+                func.count(Crime.id).label("value"),
+            )
+            .select_from(Neighborhood)
+            .join(OccurenceDate, literal(True))
+            .join(
+                Crime,
+                (Crime.neighborhood_id == Neighborhood.id)
+                & (Crime.date_id == OccurenceDate.id),
+                isouter=True,
+            )
+            .filter(OccurenceDate.year.between(2021, 2022))
+        )
+        .group_by(Neighborhood.neighborhood, OccurenceDate.year)
+        .order_by(Neighborhood.neighborhood)
+        .order_by(OccurenceDate.year)
     )
 
     return query.offset(skip).limit(limit).all()

@@ -73,3 +73,17 @@ def get_crimes_by_neighborhood_id(
         limit=limit,
         db=db,
     )
+
+
+#### AGGREGATED QUERIES
+@router.get("/crimes/aggregated/year_and_neighborhood")
+def get_crimes_by_year_and_neighborhood(
+    skip: int = 0,
+    limit: int = default_limit,
+    db: Session = Depends(get_db),
+):
+    return crud.get_crimes_by_year_and_neighborhood(
+        skip=skip,
+        limit=limit,
+        db=db,
+    )
