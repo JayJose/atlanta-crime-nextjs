@@ -1,14 +1,7 @@
 // import { DeckGL } from '@deck.gl/react';
 // import { GeoJsonLayer, ArcLayer } from '@deck.gl/layers';
+import { useState } from 'react';
 import { Map } from 'react-map-gl';
-
-// const atlViewState =  const [viewState, setViewState] = useState({
-//   latitude: 33.749,
-//   longitude: 84.388,
-//   zoom: 10,
-//   bearing: 0,
-//   pitch: 30
-// });
 
 // const atlGeoJson = [
 //   {
@@ -75,15 +68,20 @@ import { Map } from 'react-map-gl';
 //   }
 // ];
 
-export const MyMap = () => (
-  <Map
-    initialViewState={{
-      longitude: -100,
-      latitude: 40,
-      zoom: 3.5
-    }}
-    style={{ width: 600, height: 400 }}
-    mapStyle="mapbox://styles/mapbox/streets-v9"
-    mapboxAccessToken="pk.eyJ1IjoiamF5am9zZSIsImEiOiJjbDhwMXdycnkwMXd2M25wYWJhcnRmb3NmIn0.hirmXhYhA1MXl6EKuTYC4w"
-  ></Map>
-);
+export function MyMap() {
+  const [viewState, setViewState] = useState({
+    latitude: 33.749,
+    longitude: -84.388,
+    zoom: 10,
+    bearing: 0,
+    pitch: 30
+  });
+  return (
+    <Map
+      initialViewState={viewState}
+      //style={{ width: 600, height: 400 }}
+      mapStyle="mapbox://styles/mapbox/streets-v9"
+      mapboxAccessToken="pk.eyJ1IjoiamF5am9zZSIsImEiOiJjbDhwMXdycnkwMXd2M25wYWJhcnRmb3NmIn0.hirmXhYhA1MXl6EKuTYC4w"
+    ></Map>
+  );
+}
