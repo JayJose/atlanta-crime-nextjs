@@ -1,13 +1,14 @@
 import { useRouter } from 'next/router';
+
 import { useState } from 'react';
 
 import StaticMap from 'react-map-gl';
 import { BASEMAP } from '@deck.gl/carto';
 import { DeckGL } from '@deck.gl/react';
+
 import { GeoJsonLayer } from '@deck.gl/layers';
 import neighborhoods from '../data/atlantaNeighborhoods.json';
-
-import _ from 'underscore';
+//import neighborhoods from '../data/alabamaSchools.json';
 
 export function MyMap() {
   const router = useRouter();

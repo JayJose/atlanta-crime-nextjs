@@ -7,3 +7,8 @@ export function toTitleCase(str) {
     })
     .join(' ');
 }
+
+export function formatNumbers(str) {
+  let val = str;
+  return Number(val).toLocaleString();
+}

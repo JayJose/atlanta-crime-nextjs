@@ -2,16 +2,20 @@ import { MyResponsiveBar } from './barChart';
 import { MyResponsiveHeatMap } from './heatmap';
 import { MyResponsiveTreeMap } from './treemap';
 import { countByCategory, genHeatmapData } from '../lib/transformData';
-import { toTitleCase } from '../lib/transformStrings';
+import { toTitleCase, formatNumbers } from '../lib/transformStrings';
 import _ from 'underscore';
 import { Box, Heading, Text, Paragraph, Grid } from 'grommet';
 
 import theme from '../styles/theme';
 
 export function NeighborhoodView(props) {
+  //box config
+  const elevation = 'xsmall';
   const margin = 'small';
   const pad = 'small';
   const round = 'small';
+
+  // grid config
   const columns = 'large';
   const rows = 'medium';
   const gap = 'small';
@@ -42,8 +46,8 @@ export function NeighborhoodView(props) {
           {toTitleCase(props.id)}
         </Heading>
         <Paragraph size="xsmall" margin="none">
-          Did you know... {toTitleCase(props.id)}, Atlanta, Georgia, USA is home
-          to 69,420 people?
+          Did you know... that {formatNumbers(props.crimes.length)} crimes have
+          occurred in {toTitleCase(props.id)}, Atlanta as of somedate in 2022!
         </Paragraph>
       </Box>
       <Box direction="column" fill>
@@ -54,7 +58,13 @@ export function NeighborhoodView(props) {
           align="start"
           margin={margin}
         >
-          <Box fill background={'backgroundCharts'} round={round} pad={pad}>
+          <Box
+            fill
+            background={'backgroundCharts'}
+            round={round}
+            pad={pad}
+            elevation={elevation}
+          >
             <Text size="size">Chart1 title</Text>
             <MyResponsiveTreeMap
               data={{
@@ -63,13 +73,25 @@ export function NeighborhoodView(props) {
               }}
             ></MyResponsiveTreeMap>
           </Box>
-          <Box fill background={'backgroundCharts'} round={round} pad={pad}>
+          <Box
+            fill
+            background={'backgroundCharts'}
+            round={round}
+            pad={pad}
+            elevation={elevation}
+          >
             <Text size="size">Chart2 title</Text>
             <MyResponsiveHeatMap
               data={genHeatmapData(props.crimes, 'offense', 'day_name')}
             ></MyResponsiveHeatMap>
           </Box>
-          <Box fill background={'backgroundCharts'} round={round} pad={pad}>
+          <Box
+            fill
+            background={'backgroundCharts'}
+            round={round}
+            pad={pad}
+            elevation={elevation}
+          >
             <Text size="size">Chart3 title</Text>
             <MyResponsiveBar
               data={countByCategory(props.crimes, 'offense_category')}
