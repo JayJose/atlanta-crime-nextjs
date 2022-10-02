@@ -39,8 +39,9 @@ export function NeighborhoodView(props) {
         round={round}
         pad={pad}
         direction="column"
-        background="background"
+        background={'backgroundCharts'}
         margin={{ top: 'none', bottom: 'none', left: margin }}
+        elevation={elevation}
       >
         <Heading level="4" color="black" margin={'none'}>
           {toTitleCase(props.id)}
