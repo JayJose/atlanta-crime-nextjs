@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { DeckGL } from '@deck.gl/react';
 import { GeoJsonLayer } from '@deck.gl/layers';
 
-import { Tip } from 'grommet';
 import { Map } from 'react-map-gl';
 import neighborhoods from '../data/atlantaNeighborhoods.json';
 
@@ -11,9 +10,9 @@ export function MyMap() {
   const router = useRouter();
 
   const [viewState, setViewState] = useState({
-    latitude: 33.754033,
-    longitude: -84.40155, //
-    zoom: 11,
+    latitude: 33.775981,
+    longitude: -84.420527,
+    zoom: 11.5,
     bearing: 0,
     pitch: 20
   });
@@ -38,7 +37,7 @@ export function MyMap() {
         onViewStateChange={updateViewState}
         getTooltip={({ object }) =>
           object && {
-            html: `<Tip>${object.properties.NAME}</Tip>`
+            html: `${object.properties.NAME}`
           }
         }
       >
@@ -47,10 +46,9 @@ export function MyMap() {
           data={neighborhoods}
           filled={true}
           stroked={true}
-          getFillColor={[253, 111, 255, 180]}
-          getLineColor={[0, 0, 0, 190]}
-          getLineWidth={5}
-          getLineWi
+          getFillColor={[253, 111, 255, 220]}
+          getLineColor={[0, 0, 0, 150]}
+          getLineWidth={19}
           pickable={true}
           autoHighlight={true}
           highlightColor={[111, 255, 176, 150]}

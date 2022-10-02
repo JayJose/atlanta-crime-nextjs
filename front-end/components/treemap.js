@@ -12,7 +12,7 @@ export function MyResponsiveTreeMap({ data }) {
       value="value"
       label="id"
       valueFormat=".02s"
-      margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
+      margin={{ top: 10, right: 20, bottom: 20 }}
       labelSkipSize={12}
       labelTextColor={{
         from: 'color',
