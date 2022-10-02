@@ -2,7 +2,6 @@ import Head from 'next/head';
 
 // layout
 import { Layout } from '../components/layout';
-import { MyResponsiveTreeMap } from '../components/treemap';
 import _ from 'underscore';
 import { MyMap } from '../components/map';
 
@@ -26,6 +25,30 @@ export async function getStaticProps() {
 }
 
 export default function Home(props) {
+  // NEW
+  // const { Client } = require('pg');
+  // const client = new Client({
+  //   user: 'admin',
+  //   host: 'localhost',
+  //   database: 'crime',
+  //   password: 'admin',
+  //   port: 5432
+  // });
+
+  // client.connect();
+
+  // const query = `select * from dev.fct_crimes where neighborhood_id = 'midtown' limit 5;`;
+  // client.query(query, (err, res) => {
+  //   if (err) {
+  //     console.error(err);
+  //     return;
+  //   }
+  //   for (let row of res.rows) {
+  //     console.log(row);
+  //   }
+  //   console.log(res.rows);
+  //   client.end();
+  // });
   return (
     <>
       <Head>
