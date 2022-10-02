@@ -41,7 +41,7 @@ export function Layout({ children }) {
                 </Box>
               </AppBar>
               <Box
-                background={'light-2'}
+                background={'background'}
                 direction="row"
                 flex
                 overflow={{ horizontal: 'hidden' }}

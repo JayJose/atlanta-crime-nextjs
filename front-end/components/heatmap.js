@@ -4,8 +4,7 @@ export function MyResponsiveHeatMap({ data }) {
   return (
     <ResponsiveHeatMap
       data={data}
-      margin={{ top: 60, right: 90, bottom: 60, left: 200 }}
-      height={400}
+      margin={{ top: 25, right: 20, bottom: 60, left: 200 }}
       valueFormat=">-.0s"
       axisTop={{
         tickSize: 0,

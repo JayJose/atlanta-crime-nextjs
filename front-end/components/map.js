@@ -1,10 +1,13 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+
+import StaticMap from 'react-map-gl';
+import { BASEMAP } from '@deck.gl/carto';
 import { DeckGL } from '@deck.gl/react';
 import { GeoJsonLayer } from '@deck.gl/layers';
-
-import { Map } from 'react-map-gl';
 import neighborhoods from '../data/atlantaNeighborhoods.json';
+
+import _ from 'underscore';
 
 export function MyMap() {
   const router = useRouter();
@@ -12,7 +15,7 @@ export function MyMap() {
   const [viewState, setViewState] = useState({
     latitude: 33.775981,
     longitude: -84.420527,
-    zoom: 11.5,
+    zoom: 11,
     bearing: 0,
     pitch: 20
   });
@@ -54,11 +57,14 @@ export function MyMap() {
           highlightColor={[111, 255, 176, 150]}
           onClick={onClick}
         />
-        <Map
-          //style={{ width: 600, height: 400 }}
-          mapStyle="mapbox://styles/mapbox/light-v10"
-          mapboxAccessToken="pk.eyJ1IjoiamF5am9zZSIsImEiOiJjbDhwMXdycnkwMXd2M25wYWJhcnRmb3NmIn0.hirmXhYhA1MXl6EKuTYC4w"
-        ></Map>
+
+        <StaticMap
+          reuseMaps
+          mapStyle={BASEMAP.DARK_MATTER}
+          mapboxAccessToken={
+            'pk.eyJ1IjoiamF5am9zZSIsImEiOiJjbDhwMXdycnkwMXd2M25wYWJhcnRmb3NmIn0.hirmXhYhA1MXl6EKuTYC4w'
+          }
+        ></StaticMap>
       </DeckGL>
     </>
   );
