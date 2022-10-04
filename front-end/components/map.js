@@ -63,7 +63,7 @@ export function MyMap() {
           reuseMaps
           mapStyle={BASEMAP.DARK_MATTER}
           mapboxAccessToken={
-            'pk.eyJ1IjoiamF5am9zZSIsImEiOiJjbDhwMXdycnkwMXd2M25wYWJhcnRmb3NmIn0.hirmXhYhA1MXl6EKuTYC4w'
+            'pk.eyJ1IjoiamF5am9zZSIsImEiOiJjbDhzczVoeW4wMGdlM3BuemU0aTh1cXF6In0.P6rxnD9XAxmufeHZRMwGOw'
           }
         ></StaticMap>
       </DeckGL>
