@@ -4,51 +4,46 @@ import Head from 'next/head';
 import { Layout } from '../components/layout';
 import _ from 'underscore';
 import { MyMap } from '../components/map';
+import { useState } from 'react';
 
 // get data from api
 export async function getStaticProps() {
-  const [offenseRes, neighborhoodRes, crimesRes] = await Promise.all([
+  // new ish
+  // NEW
+  const { Client } = require('pg');
+  const client = new Client({
+    user: 'admin',
+    host: 'localhost',
+    database: 'crime',
+    password: 'admin',
+    port: 5432
+  });
+
+  client.connect();
+
+  const query = `select * from dev.fct_crimes where neighborhood_id = 'midtown' limit 1;`;
+  const [offenseRes, neighborhoodRes, crimesRes, dataRes] = await Promise.all([
     fetch('http://localhost:8000/offenses'),
     fetch('http://localhost:8000/neighborhoods'),
     fetch(
       `http://localhost:8000/crimes/aggregated/year_and_neighborhood?limit=${process.env.LIMIT}`
-    )
+    ),
+    client.query(query)
   ]);
 
-  const [offenses, neighborhoods, crimes] = await Promise.all([
+  const [offenses, neighborhoods, crimes, data] = await Promise.all([
     offenseRes.json(),
     neighborhoodRes.json(),
-    crimesRes.json()
+    crimesRes.json(),
+    dataRes.rows
   ]);
 
+  console.log(data);
+  client.end();
   return { props: { offenses, neighborhoods, crimes } };
 }
 
 export default function Home(props) {
-  // NEW
-  // const { Client } = require('pg');
-  // const client = new Client({
-  //   user: 'admin',
-  //   host: 'localhost',
-  //   database: 'crime',
-  //   password: 'admin',
-  //   port: 5432
-  // });
-
-  // client.connect();
-
-  // const query = `select * from dev.fct_crimes where neighborhood_id = 'midtown' limit 5;`;
-  // client.query(query, (err, res) => {
-  //   if (err) {
-  //     console.error(err);
-  //     return;
-  //   }
-  //   for (let row of res.rows) {
-  //     console.log(row);
-  //   }
-  //   console.log(res.rows);
-  //   client.end();
-  // });
   return (
     <>
       <Head>
