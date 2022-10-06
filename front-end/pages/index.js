@@ -4,12 +4,9 @@ import Head from 'next/head';
 import { Layout } from '../components/layout';
 import _ from 'underscore';
 import { MyMap } from '../components/map';
-import { useState } from 'react';
 
 // get data from api
 export async function getStaticProps() {
-  // new ish
-  // NEW
   const { Client } = require('pg');
   const client = new Client({
     user: 'admin',
@@ -21,25 +18,22 @@ export async function getStaticProps() {
 
   client.connect();
 
-  const query = `select * from dev.fct_crimes where neighborhood_id = 'midtown' limit 1;`;
-  const [offenseRes, neighborhoodRes, crimesRes, dataRes] = await Promise.all([
+  const query = `select * from dev.app_crimes_by_neighborhood_and_year order by neighborhood, year`;
+
+  const [offenseRes, neighborhoodRes, crimesRes] = await Promise.all([
     fetch('http://localhost:8000/offenses'),
     fetch('http://localhost:8000/neighborhoods'),
-    fetch(
-      `http://localhost:8000/crimes/aggregated/year_and_neighborhood?limit=${process.env.LIMIT}`
-    ),
     client.query(query)
   ]);
 
-  const [offenses, neighborhoods, crimes, data] = await Promise.all([
+  const [offenses, neighborhoods, crimes] = await Promise.all([
     offenseRes.json(),
     neighborhoodRes.json(),
-    crimesRes.json(),
-    dataRes.rows
+    crimesRes.rows
   ]);
 
-  console.log(data);
   client.end();
+
   return { props: { offenses, neighborhoods, crimes } };
 }
 

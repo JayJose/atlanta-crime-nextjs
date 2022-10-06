@@ -2,7 +2,7 @@
 // yarn add @nivo/core @nivo/bar
 import { ResponsiveBar } from '@nivo/bar';
 
-export function MyResponsiveBar({
+export function MyOldResponsiveBar({
   data,
   layout = 'vertical',
   color = 'black'

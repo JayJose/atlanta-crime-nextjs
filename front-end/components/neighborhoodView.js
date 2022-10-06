@@ -1,6 +1,8 @@
-import { MyResponsiveBar } from './barChart';
 import { MyResponsiveHeatMap } from './heatmap';
 import { MyResponsiveTreeMap } from './treemap';
+import { MyResponsiveRadar } from './radar';
+import { MyResponsiveBars } from './bars';
+import { MyOtherMap } from './map';
 import { countByCategory, genHeatmapData } from '../lib/transformData';
 import { toTitleCase, formatNumbers } from '../lib/transformStrings';
 import _ from 'underscore';
@@ -9,7 +11,7 @@ import { Box, Heading, Text, Paragraph, Grid } from 'grommet';
 import theme from '../styles/theme';
 
 export function NeighborhoodView(props) {
-  //box config
+  // box config
   const elevation = 'xsmall';
   const margin = 'small';
   const pad = 'small';
@@ -17,8 +19,26 @@ export function NeighborhoodView(props) {
 
   // grid config
   const columns = 'large';
-  const rows = 'medium';
+  const rows = 'large';
   const gap = 'small';
+
+  // data trans
+
+  // total crimes by year
+  var years = [2021, 2022];
+  var totalCrimes = {};
+  for (let i = 0; i < years.length; i++) {
+    totalCrimes[years[i]] = _.chain(props.crimes)
+      .filter(function (row) {
+        return row.year == years[i];
+      })
+      .reduce((s, f) => s + parseInt(f.value), 0)
+      .value();
+  }
+
+  var yoy_change = (100 * (totalCrimes[2022] / totalCrimes[2021] - 1)).toFixed(
+    1
+  );
 
   // var treeMapData = _.map(
   //   _.filter(props.crimes, function (row) {
@@ -40,15 +60,17 @@ export function NeighborhoodView(props) {
         pad={pad}
         direction="column"
         background={'backgroundCharts'}
-        margin={{ top: 'none', bottom: 'none', left: margin }}
+        margin={{ top: 'none', bottom: 'none', left: margin, right: margin }}
         elevation={elevation}
       >
         <Heading level="4" color="black" margin={'none'}>
           {toTitleCase(props.id)}
         </Heading>
         <Paragraph size="xsmall" margin="none">
-          Did you know... that {formatNumbers(props.crimes.length)} crimes have
-          occurred in {toTitleCase(props.id)}, Atlanta as of somedate in 2022!
+          Did you know... that {formatNumbers(totalCrimes[2022])} crimes have
+          occurred in {toTitleCase(props.id)} in 2022! That's a{' '}
+          {Math.abs(yoy_change)}% {yoy_change > 0 ? 'increase' : 'decrease'} vs.
+          2021.
         </Paragraph>
       </Box>
       <Box direction="column" fill>
@@ -66,39 +88,28 @@ export function NeighborhoodView(props) {
             pad={pad}
             elevation={elevation}
           >
-            <Text size="size">Chart1 title</Text>
-            <MyResponsiveTreeMap
-              data={{
-                name: 'crimes',
-                children: countByCategory(props.crimes, 'offense')
+            <Text size="size">Total offenses by year</Text>
+            <MyResponsiveBars data={props.bar} />
+          </Box>
+          <Box
+            fill
+            background={'backgroundCharts'}
+            round={round}
+            pad={pad}
+            elevation={elevation}
+          >
+            <Text size="size">Localized crime map</Text>
+            <div
+              style={{
+                height: '100%',
+                width: '100%',
+                position: 'relative',
+                margin: margin,
+                pad: margin
               }}
-            ></MyResponsiveTreeMap>
-          </Box>
-          <Box
-            fill
-            background={'backgroundCharts'}
-            round={round}
-            pad={pad}
-            elevation={elevation}
-          >
-            <Text size="size">Chart2 title</Text>
-            <MyResponsiveHeatMap
-              data={genHeatmapData(props.crimes, 'offense', 'day_name')}
-            ></MyResponsiveHeatMap>
-          </Box>
-          <Box
-            fill
-            background={'backgroundCharts'}
-            round={round}
-            pad={pad}
-            elevation={elevation}
-          >
-            <Text size="size">Chart3 title</Text>
-            <MyResponsiveBar
-              data={countByCategory(props.crimes, 'offense_category')}
-              layout="horizontal"
-              color={theme.global.colors.bars}
-            />
+            >
+              <MyOtherMap />
+            </div>
           </Box>
         </Grid>
       </Box>
