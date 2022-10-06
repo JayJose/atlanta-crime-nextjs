@@ -108,7 +108,7 @@ export function NeighborhoodView(props) {
                 pad: margin
               }}
             >
-              <MyOtherMap />
+              <MyOtherMap neighborhood={props.id} />
             </div>
           </Box>
         </Grid>

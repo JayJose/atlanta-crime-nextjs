@@ -10,6 +10,8 @@ import { GeoJsonLayer } from '@deck.gl/layers';
 import neighborhoods from '../data/atlantaNeighborhoods.json';
 //import neighborhoods from '../data/alabamaSchools.json';
 
+import _ from 'underscore';
+
 export function MyMap() {
   const router = useRouter();
 
@@ -71,9 +73,9 @@ export function MyMap() {
   );
 }
 
-export function MyOtherMap() {
-  const router = useRouter();
+// NEIGHBORHOOD MAP
 
+export function MyOtherMap({ neighborhood }) {
   const [viewState, setViewState] = useState({
     latitude: 33.775981,
     longitude: -84.420527,
@@ -86,13 +88,19 @@ export function MyOtherMap() {
     setViewState(viewState);
   };
 
-  const onClick = (info) => {
-    if (info.object) {
-      let name = info.object.properties.NAME.toLowerCase();
-      //TODO logic to associate GeoJSON names with crime data names
-      router.push(`/neighborhoods/${name}`);
-    }
-  };
+  const myNeighborhood = _.filter(neighborhoods.features, function (row) {
+    return row.properties.NAME.toLowerCase() === neighborhood;
+  });
+
+  console.log(myNeighborhood);
+
+  // const onClick = (info) => {
+  //   if (info.object) {
+  //     let name = info.object.properties.NAME.toLowerCase();
+  //     //TODO logic to associate GeoJSON names with crime data names
+  //     router.push(`/neighborhoods/${name}`);
+  //   }
+  // };
 
   return (
     <>
@@ -108,16 +116,16 @@ export function MyOtherMap() {
       >
         <GeoJsonLayer
           id="id"
-          data={neighborhoods}
+          data={myNeighborhood}
           filled={true}
           stroked={true}
-          getFillColor={[253, 111, 255, 220]}
-          getLineColor={[0, 0, 0, 150]}
-          getLineWidth={19}
+          getLineColor={[253, 111, 255, 220]}
+          getFillColor={[0, 0, 0, 0]}
+          getLineWidth={22}
           pickable={true}
           autoHighlight={true}
-          highlightColor={[111, 255, 176, 150]}
-          onClick={onClick}
+          highlightColor={[253, 111, 255, 220]}
+          // onClick={onClick}
         />
 
         <StaticMap
