@@ -22,7 +22,11 @@ export function NeighborhoodView(props) {
   const rows = 'large';
   const gap = 'small';
 
-  // data trans
+  // add coordinate array
+  props.map.forEach(
+    (row) =>
+      (row.coordinates = [parseFloat(row.longitude), parseFloat(row.latitude)])
+  );
 
   // total crimes by year
   var years = [2021, 2022];
@@ -108,7 +112,7 @@ export function NeighborhoodView(props) {
                 pad: margin
               }}
             >
-              <MyOtherMap neighborhood={props.id} />
+              <MyOtherMap neighborhood={props.id} mapData={props.map} />
             </div>
           </Box>
         </Grid>

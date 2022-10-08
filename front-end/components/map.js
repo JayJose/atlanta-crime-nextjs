@@ -5,15 +5,15 @@ import { useState } from 'react';
 import StaticMap from 'react-map-gl';
 import { BASEMAP } from '@deck.gl/carto';
 import { DeckGL } from '@deck.gl/react';
-
-import { GeoJsonLayer } from '@deck.gl/layers';
+import { GeoJsonLayer, ScatterplotLayer } from '@deck.gl/layers';
+import { HeatmapLayer } from '@deck.gl/aggregation-layers';
 import neighborhoods from '../data/atlantaNeighborhoods.json';
 //import neighborhoods from '../data/alabamaSchools.json';
+import * as turf from '@turf/turf';
 
 import _ from 'underscore';
 
-import * as turf from '@turf/turf'; // TODO optimize this
-
+/** Create a map */
 export function MyMap() {
   const router = useRouter();
 
@@ -77,7 +77,7 @@ export function MyMap() {
 
 // NEIGHBORHOOD MAP
 
-export function MyOtherMap({ neighborhood }) {
+export function MyOtherMap({ neighborhood, mapData }) {
   const myNeighborhood = _.filter(neighborhoods.features, function (row) {
     return row.properties.NAME.toLowerCase() === neighborhood;
   });
@@ -105,32 +105,57 @@ export function MyOtherMap({ neighborhood }) {
   //   }
   // };
 
+  // LAYERS
+  const jsonLayer = new GeoJsonLayer({
+    id: 'geojson-layer',
+    data: myNeighborhood,
+    filled: false,
+    stroked: true,
+    getLineColor: [253, 111, 255, 220],
+    getFillColor: [0, 0, 0, 0],
+    getLineWidth: 10,
+    pickable: false,
+    autoHighlight: true,
+    highlightColor: [253, 111, 255, 220]
+  });
+
+  const scatterLayer = new ScatterplotLayer({
+    id: 'scatterplot-layer',
+    data: mapData,
+    pickable: true,
+    opacity: 0.75,
+    stroked: true,
+    filled: true,
+    radiusScale: 6,
+    radiusMinPixels: 5,
+    radiusMaxPixels: 100,
+    lineWidthMinPixels: 1,
+    getPosition: (d) => d.coordinates,
+    getFillColor: (d) => [111, 255, 176],
+    getLineColor: (d) => [0, 0, 0]
+  });
+
+  const heatmapLayer = new HeatmapLayer({
+    id: 'heatmap-layer',
+    data: mapData,
+    getPosition: (d) => d.coordinates,
+    // getWeight: d => d.WEIGHT,
+    aggregation: 'SUM'
+  });
+
   return (
     <>
       <DeckGL
+        layers={[jsonLayer, heatmapLayer]}
         controller={true}
         initialViewState={viewState}
         onViewStateChange={updateViewState}
         getTooltip={({ object }) =>
           object && {
-            html: `${object.properties.NAME}`
+            html: `${object.offense}`
           }
         }
       >
-        <GeoJsonLayer
-          id="id"
-          data={myNeighborhood}
-          filled={true}
-          stroked={true}
-          getLineColor={[253, 111, 255, 220]}
-          getFillColor={[0, 0, 0, 0]}
-          getLineWidth={22}
-          pickable={true}
-          autoHighlight={true}
-          highlightColor={[253, 111, 255, 220]}
-          // onClick={onClick}
-        />
-
         <StaticMap
           reuseMaps
           mapStyle={BASEMAP.DARK_MATTER}
