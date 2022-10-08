@@ -188,6 +188,8 @@ export function MyOtherMap({ neighborhood, mapData }) {
  * Clicking a neighborhood routes the user to a drill down
  */
 export function MyMegaMap({ mapData }) {
+  const router = useRouter();
+
   mapData.forEach(
     (row) =>
       (row.coordinates = [parseFloat(row.longitude), parseFloat(row.latitude)])
@@ -213,13 +215,19 @@ export function MyMegaMap({ mapData }) {
     setViewState(viewState);
   };
 
-  // const onClick = (info) => {
-  //   if (info.object) {
-  //     let name = info.object.properties.NAME.toLowerCase();
-  //     //TODO logic to associate GeoJSON names with crime data names
-  //     router.push(`/neighborhoods/${name}`);
-  //   }
-  // };
+  const onClick = (info) => {
+    if (info.object) {
+      let name = info.object.properties.NAME.toLowerCase();
+      //TODO logic to associate GeoJSON names with crime data names
+      router.push(`/neighborhoods/${name}`);
+    }
+  };
+
+  const onHover = (info) => {
+    info && {
+      html: `${info.object.properties.NAME}`
+    };
+  };
 
   // LAYERS
   const jsonAlpha = 255;
@@ -230,10 +238,11 @@ export function MyMegaMap({ mapData }) {
     getFillColor: [0, 0, 0, 0],
     stroked: true,
     getLineWidth: 30,
-    getLineColor: [253, 111, 255, jsonAlpha],
+    getLineColor: [0, 0, 0, jsonAlpha],
     pickable: true,
     autoHighlight: true,
-    highlightColor: [253, 111, 255, jsonAlpha]
+    highlightColor: [253, 111, 255, jsonAlpha],
+    onClick: onClick
   });
 
   const scatterLayer = new ScatterplotLayer({
@@ -258,7 +267,7 @@ export function MyMegaMap({ mapData }) {
     data: mapData,
     pickable: false,
     extruded: true,
-    radius: 200,
+    radius: 150,
     elevationScale: 4,
     getPosition: (d) => d.coordinates,
     // colorbrewer: 4-class greys
@@ -295,7 +304,7 @@ export function MyMegaMap({ mapData }) {
           onViewStateChange={updateViewState}
           getTooltip={({ object }) =>
             object && {
-              html: `${object.offense}`
+              html: `${object.properties.NAME} 000 crimes in 2022`
             }
           }
         >
