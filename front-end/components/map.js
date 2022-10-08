@@ -12,6 +12,8 @@ import neighborhoods from '../data/atlantaNeighborhoods.json';
 
 import _ from 'underscore';
 
+import * as turf from '@turf/turf'; // TODO optimize this
+
 export function MyMap() {
   const router = useRouter();
 
@@ -76,23 +78,24 @@ export function MyMap() {
 // NEIGHBORHOOD MAP
 
 export function MyOtherMap({ neighborhood }) {
+  const myNeighborhood = _.filter(neighborhoods.features, function (row) {
+    return row.properties.NAME.toLowerCase() === neighborhood;
+  });
+
+  // TODO save centroids for each object rather than calculating each time
+  var myCentroid = turf.centroid(myNeighborhood[0]);
+
   const [viewState, setViewState] = useState({
-    latitude: 33.775981,
-    longitude: -84.420527,
-    zoom: 11,
+    latitude: myCentroid.geometry.coordinates[1],
+    longitude: myCentroid.geometry.coordinates[0],
+    zoom: 13.5,
     bearing: 0,
-    pitch: 20
+    pitch: 40
   });
 
   const updateViewState = ({ viewState }) => {
     setViewState(viewState);
   };
-
-  const myNeighborhood = _.filter(neighborhoods.features, function (row) {
-    return row.properties.NAME.toLowerCase() === neighborhood;
-  });
-
-  console.log(myNeighborhood);
 
   // const onClick = (info) => {
   //   if (info.object) {

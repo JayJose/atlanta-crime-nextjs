@@ -81,7 +81,7 @@ export function NeighborhoodView(props) {
           align="start"
           margin={margin}
         >
-          <Box
+          {/* <Box
             fill
             background={'backgroundCharts'}
             round={round}
@@ -90,7 +90,7 @@ export function NeighborhoodView(props) {
           >
             <Text size="size">Total offenses by year</Text>
             <MyResponsiveBars data={props.bar} />
-          </Box>
+          </Box> */}
           <Box
             fill
             background={'backgroundCharts'}
