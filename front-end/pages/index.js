@@ -3,7 +3,7 @@ import Head from 'next/head';
 // layout
 import { Layout } from '../components/layout';
 import _ from 'underscore';
-import { MyMap } from '../components/map';
+import { MyMegaMap } from '../components/map';
 
 // get data from api
 export async function getStaticProps() {
@@ -18,7 +18,7 @@ export async function getStaticProps() {
 
   client.connect();
 
-  const query = `select * from dev.app_crimes_by_neighborhood_and_year order by neighborhood, year`;
+  const query = `select * from dev.app_map where date_part('year',cast(date as date)) = 2022 order by neighborhood`;
 
   const [offenseRes, neighborhoodRes, crimesRes] = await Promise.all([
     fetch('http://localhost:8000/offenses'),
@@ -48,7 +48,7 @@ export default function Home(props) {
       <Layout
         children={
           <>
-            <MyMap></MyMap>
+            <MyMegaMap mapData={props.crimes}></MyMegaMap>
           </>
         }
       ></Layout>
