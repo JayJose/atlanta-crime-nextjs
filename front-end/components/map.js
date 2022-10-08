@@ -39,38 +39,48 @@ export function MyMap() {
 
   return (
     <>
-      <DeckGL
-        controller={true}
-        initialViewState={viewState}
-        onViewStateChange={updateViewState}
-        getTooltip={({ object }) =>
-          object && {
-            html: `${object.properties.NAME}`
-          }
-        }
+      <div
+        style={{
+          height: '100%',
+          width: '100%',
+          position: 'relative',
+          margin: 'small',
+          pad: 'small'
+        }}
       >
-        <GeoJsonLayer
-          id="id"
-          data={neighborhoods}
-          filled={true}
-          stroked={true}
-          getFillColor={[253, 111, 255, 220]}
-          getLineColor={[0, 0, 0, 150]}
-          getLineWidth={19}
-          pickable={true}
-          autoHighlight={true}
-          highlightColor={[111, 255, 176, 150]}
-          onClick={onClick}
-        />
-
-        <StaticMap
-          reuseMaps
-          mapStyle={BASEMAP.DARK_MATTER}
-          mapboxAccessToken={
-            'pk.eyJ1IjoiamF5am9zZSIsImEiOiJjbDhzczVoeW4wMGdlM3BuemU0aTh1cXF6In0.P6rxnD9XAxmufeHZRMwGOw'
+        <DeckGL
+          controller={true}
+          initialViewState={viewState}
+          onViewStateChange={updateViewState}
+          getTooltip={({ object }) =>
+            object && {
+              html: `${object.properties.NAME}`
+            }
           }
-        ></StaticMap>
-      </DeckGL>
+        >
+          <GeoJsonLayer
+            id="id"
+            data={neighborhoods}
+            filled={true}
+            stroked={true}
+            getFillColor={[253, 111, 255, 220]}
+            getLineColor={[0, 0, 0, 150]}
+            getLineWidth={19}
+            pickable={true}
+            autoHighlight={true}
+            highlightColor={[111, 255, 176, 150]}
+            onClick={onClick}
+          />
+
+          <StaticMap
+            reuseMaps
+            mapStyle={BASEMAP.DARK_MATTER}
+            mapboxAccessToken={
+              'pk.eyJ1IjoiamF5am9zZSIsImEiOiJjbDhzczVoeW4wMGdlM3BuemU0aTh1cXF6In0.P6rxnD9XAxmufeHZRMwGOw'
+            }
+          ></StaticMap>
+        </DeckGL>
+      </div>
     </>
   );
 }
@@ -145,25 +155,35 @@ export function MyOtherMap({ neighborhood, mapData }) {
 
   return (
     <>
-      <DeckGL
-        layers={[jsonLayer, heatmapLayer]}
-        controller={true}
-        initialViewState={viewState}
-        onViewStateChange={updateViewState}
-        getTooltip={({ object }) =>
-          object && {
-            html: `${object.offense}`
-          }
-        }
+      <div
+        style={{
+          height: '100%',
+          width: '100%',
+          position: 'relative',
+          margin: 'small',
+          pad: 'small'
+        }}
       >
-        <StaticMap
-          reuseMaps
-          mapStyle={BASEMAP.DARK_MATTER}
-          mapboxAccessToken={
-            'pk.eyJ1IjoiamF5am9zZSIsImEiOiJjbDhzczVoeW4wMGdlM3BuemU0aTh1cXF6In0.P6rxnD9XAxmufeHZRMwGOw'
+        <DeckGL
+          layers={[jsonLayer, scatterLayer]}
+          controller={true}
+          initialViewState={viewState}
+          onViewStateChange={updateViewState}
+          getTooltip={({ object }) =>
+            object && {
+              html: `${object.offense}`
+            }
           }
-        ></StaticMap>
-      </DeckGL>
+        >
+          <StaticMap
+            reuseMaps
+            mapStyle={BASEMAP.DARK_MATTER}
+            mapboxAccessToken={
+              'pk.eyJ1IjoiamF5am9zZSIsImEiOiJjbDhzczVoeW4wMGdlM3BuemU0aTh1cXF6In0.P6rxnD9XAxmufeHZRMwGOw'
+            }
+          ></StaticMap>
+        </DeckGL>
+      </div>
     </>
   );
 }

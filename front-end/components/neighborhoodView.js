@@ -103,17 +103,7 @@ export function NeighborhoodView(props) {
             elevation={elevation}
           >
             <Text size="size">Localized crime map</Text>
-            <div
-              style={{
-                height: '100%',
-                width: '100%',
-                position: 'relative',
-                margin: margin,
-                pad: margin
-              }}
-            >
-              <MyOtherMap neighborhood={props.id} mapData={props.map} />
-            </div>
+            <MyOtherMap neighborhood={props.id} mapData={props.map} />
           </Box>
         </Grid>
       </Box>

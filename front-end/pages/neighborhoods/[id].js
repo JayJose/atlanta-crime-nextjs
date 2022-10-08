@@ -24,7 +24,7 @@ export async function getStaticProps({ params }) {
 
   const query = `select * from dev.app_nhood_view where neighborhood = '${params.id}'`;
   const barQuery = `select * from dev.app_radar where neighborhood = '${params.id}' order by _2022 asc`;
-  const mapQuery = `select * from dev.app_map where neighborhood = '${params.id}' order by offense`;
+  const mapQuery = `select * from dev.app_map where date_part('year',cast(date as date)) = 2022 and neighborhood = '${params.id}' order by offense`;
 
   const [crimesRes, mapRes, barRes] = await Promise.all([
     client.query(query),
