@@ -8,7 +8,8 @@ import { DeckGL } from '@deck.gl/react';
 import { GeoJsonLayer, ScatterplotLayer } from '@deck.gl/layers';
 import { HeatmapLayer, HexagonLayer } from '@deck.gl/aggregation-layers';
 import neighborhoods from '../data/atlantaNeighborhoods.json';
-import * as turf from '@turf/turf';
+import centroids from '../data/atlantaNeighborhoodCentroids.json';
+//import * as turf from '@turf/turf';
 
 import _ from 'underscore';
 
@@ -89,12 +90,10 @@ export function MyOtherMap({ neighborhood, mapData }) {
     return row.properties.NAME.toLowerCase() === neighborhood;
   });
 
-  // TODO save centroids for each object rather than calculating each time
-  var myCentroid = turf.centroid(myNeighborhood[0]);
-
+  let myCentroid = centroids[neighborhood];
   const [viewState, setViewState] = useState({
-    latitude: myCentroid.geometry.coordinates[1],
-    longitude: myCentroid.geometry.coordinates[0],
+    latitude: parseFloat(myCentroid[1]),
+    longitude: parseFloat(myCentroid[0]),
     zoom: 13.5,
     bearing: 0,
     pitch: 40
@@ -208,7 +207,7 @@ export function MyMegaMap({ mapData }) {
     longitude: -84.42,
     zoom: 11,
     bearing: 0,
-    pitch: 20
+    pitch: 35
   });
 
   const updateViewState = ({ viewState }) => {

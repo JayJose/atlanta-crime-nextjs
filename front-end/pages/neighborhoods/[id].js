@@ -22,29 +22,19 @@ export async function getStaticProps({ params }) {
 
   client.connect();
 
-  const query = `select * from dev.app_nhood_view where neighborhood = '${params.id}'`;
-  const barQuery = `select * from dev.app_radar where neighborhood = '${params.id}' order by _2022 asc`;
-  const mapQuery = `select * from dev.app_map where date_part('year',cast(date as date)) = 2022 and neighborhood = '${params.id}' order by offense`;
+  // const query = `select * from dev.app_nhood_view where neighborhood = '${params.id}'`;
+  // const barQuery = `select * from dev.app_radar where neighborhood = '${params.id}' order by _2022 asc`;
+  const mapQuery = `select * from dev.app_map where year = 2022 and neighborhood = '${params.id}'`;
 
-  const [crimesRes, mapRes, barRes] = await Promise.all([
-    client.query(query),
-    client.query(mapQuery),
-    client.query(barQuery)
-  ]);
+  const [mapRes] = await Promise.all([client.query(mapQuery)]);
 
-  const [crimes, map, bar] = await Promise.all([
-    crimesRes.rows,
-    mapRes.rows,
-    barRes.rows
-  ]);
+  const [map] = await Promise.all([mapRes.rows]);
 
   client.end();
 
   return {
     props: {
-      crimes,
       map,
-      bar,
       id: params.id
     }
   };
