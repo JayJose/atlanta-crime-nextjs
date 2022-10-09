@@ -18,7 +18,7 @@ export async function getStaticProps() {
 
   client.connect();
 
-  const query = `select * from dev.app_map where year = 2022 order by neighborhood`;
+  const query = `select * from dev.app_map where year = 2022`;
 
   const [offenseRes, neighborhoodRes, crimesRes] = await Promise.all([
     fetch('http://localhost:8000/offenses'),
