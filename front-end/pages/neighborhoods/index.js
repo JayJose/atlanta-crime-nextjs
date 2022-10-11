@@ -1,42 +1,40 @@
+import { supabase } from '../../lib/supabase';
 import Link from 'next/link';
 import { Layout } from '../../components/layout';
-import neighborhoods from '../api/lists/neighborhoods';
 
-// export async function getData() {
-//   const response = await fetch(/* external API endpoint */)
-//   const jsonData = await response.json()
-//   return jsonData
-// }
+export const getStaticProps = async () => {
+  const { data: neighborhoods } = await supabase
+    .from('dim_neighborhoods')
+    .select('id')
+    .order('id', { ascending: true });
 
-// export default async function handler(req, res) {
-//   const jsonData = await getData()
-//   res.status(200).json(jsonData)
-// }
+  return {
+    props: {
+      neighborhoods
+    }
+  };
+};
 
-function Menu() {
-  console.log(neighborhoods);
+function Menu({ data }) {
   return (
     <>
       <ul>
-        <li>
-          <Link href="/neighborhoods/downtown">
-            <a>Downtown</a>
-          </Link>
-        </li>
-        <li>
-          <Link href="/neighborhoods/midtown">
-            <a>Midtown</a>
-          </Link>
-        </li>
+        {data.map((e) => (
+          <li>
+            <Link href={`/neighborhoods/${e.id}`}>
+              <a>{e.id}</a>
+            </Link>
+          </li>
+        ))}
       </ul>
     </>
   );
 }
 
-export default function Neighborhoods() {
+export default function Neighborhoods(props) {
   return (
     <>
-      <Layout children={<Menu />}></Layout>
+      <Layout children={<Menu data={props.neighborhoods} />}></Layout>
     </>
   );
 }

@@ -21,7 +21,6 @@ export const getStaticProps = async () => {
 };
 
 export default function Home(props) {
-  console.log(props.crimes.length);
   return (
     <>
       <Head>
