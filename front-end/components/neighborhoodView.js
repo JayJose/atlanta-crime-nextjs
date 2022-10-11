@@ -63,7 +63,7 @@ export function NeighborhoodView(props) {
         </Heading>
         <Paragraph size="xsmall" margin="none">
           Did you know... that {formatNumbers(currentCount)} crimes have
-          occurred in {toTitleCase(props.id)} in {years.current}! That's a{' '}
+          occurred in {toTitleCase(props.id)} in {years.current}! That is a{' '}
           {Math.abs(yoy_change)}% {yoy_change > 0 ? 'increase' : 'decrease'} vs.
           2021.
         </Paragraph>

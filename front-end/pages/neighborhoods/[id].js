@@ -37,9 +37,9 @@ export const getStaticProps = async ({ params }) => {
 export default function Neighborhood(props) {
   return (
     <>
-      <Layout
-        children={<NeighborhoodView {...props}></NeighborhoodView>}
-      ></Layout>
+      <Layout>
+        <NeighborhoodView {...props}></NeighborhoodView>
+      </Layout>
     </>
   );
 }

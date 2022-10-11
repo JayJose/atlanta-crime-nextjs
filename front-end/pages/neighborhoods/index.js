@@ -20,8 +20,8 @@ function Menu({ data }) {
     <>
       <ul>
         {data.map((e) => (
-          <li>
-            <Link href={`/neighborhoods/${e.id}`}>
+          <li key={e.id}>
+            <Link key={e.id} href={`/neighborhoods/${e.id}`}>
               <a>{e.id}</a>
             </Link>
           </li>
@@ -34,7 +34,9 @@ function Menu({ data }) {
 export default function Neighborhoods(props) {
   return (
     <>
-      <Layout children={<Menu data={props.neighborhoods} />}></Layout>
+      <Layout>
+        <Menu data={props.neighborhoods} />
+      </Layout>
     </>
   );
 }

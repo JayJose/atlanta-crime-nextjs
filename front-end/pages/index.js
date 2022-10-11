@@ -28,13 +28,9 @@ export default function Home(props) {
         <meta name="description" content="A crime app." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout
-        children={
-          <>
-            <MyCityMap mapData={props.crimes}></MyCityMap>
-          </>
-        }
-      ></Layout>
+      <Layout>
+        <MyCityMap mapData={props.crimes}></MyCityMap>
+      </Layout>
     </>
   );
 }
