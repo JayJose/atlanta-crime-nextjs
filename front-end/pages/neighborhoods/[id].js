@@ -1,17 +1,24 @@
 import { supabase } from '../../lib/supabase';
 
-import { getAllNeighborhoods } from '../../lib/neighborhoods';
-
 import { Layout } from '../../components/layout';
 import { NeighborhoodView } from '../../components/neighborhoodView';
 
-export async function getStaticPaths() {
-  const paths = getAllNeighborhoods();
+export const getStaticPaths = async () => {
+  const { data: neighborhoods } = await supabase
+    .from('dim_neighborhoods')
+    .select('id');
+
+  const paths = neighborhoods.map(({ id }) => ({
+    params: {
+      id: id.toString()
+    }
+  }));
+
   return {
     paths,
     fallback: false
   };
-}
+};
 
 export const getStaticProps = async ({ params }) => {
   const { data: crimes } = await supabase
