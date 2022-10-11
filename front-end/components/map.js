@@ -9,83 +9,11 @@ import { GeoJsonLayer, ScatterplotLayer } from '@deck.gl/layers';
 import { HeatmapLayer, HexagonLayer } from '@deck.gl/aggregation-layers';
 import neighborhoods from '../data/atlantaNeighborhoods.json';
 import centroids from '../data/atlantaNeighborhoodCentroids.json';
-//import * as turf from '@turf/turf';
 
 import _ from 'underscore';
 
-/** Create a map */
-export function MyMap() {
-  const router = useRouter();
-
-  const [viewState, setViewState] = useState({
-    latitude: 33.775981,
-    longitude: -84.420527,
-    zoom: 11,
-    bearing: 0,
-    pitch: 20
-  });
-
-  const updateViewState = ({ viewState }) => {
-    setViewState(viewState);
-  };
-
-  const onClick = (info) => {
-    if (info.object) {
-      let name = info.object.properties.NAME.toLowerCase();
-      //TODO logic to associate GeoJSON names with crime data names
-      router.push(`/neighborhoods/${name}`);
-    }
-  };
-
-  return (
-    <>
-      <div
-        style={{
-          height: '100%',
-          width: '100%',
-          position: 'relative',
-          margin: 'small',
-          pad: 'small'
-        }}
-      >
-        <DeckGL
-          controller={true}
-          initialViewState={viewState}
-          onViewStateChange={updateViewState}
-          getTooltip={({ object }) =>
-            object && {
-              html: `${object.properties.NAME}`
-            }
-          }
-        >
-          <GeoJsonLayer
-            id="id"
-            data={neighborhoods}
-            filled={true}
-            stroked={true}
-            getFillColor={[253, 111, 255, 220]}
-            getLineColor={[0, 0, 0, 150]}
-            getLineWidth={19}
-            pickable={true}
-            autoHighlight={true}
-            highlightColor={[111, 255, 176, 150]}
-            onClick={onClick}
-          />
-
-          <StaticMap
-            reuseMaps
-            mapStyle={BASEMAP.DARK_MATTER}
-            mapboxAccessToken={process.env.mapboxAccessToken}
-          ></StaticMap>
-        </DeckGL>
-      </div>
-    </>
-  );
-}
-
-// NEIGHBORHOOD MAP
-
-export function MyOtherMap({ neighborhood, mapData }) {
+/**Create a neighborhood-specific map */
+export function MyNeighborhoodMap({ neighborhood, mapData }) {
   const myNeighborhood = _.filter(neighborhoods.features, function (row) {
     return row.properties.NAME.toLowerCase() === neighborhood;
   });
@@ -182,24 +110,17 @@ export function MyOtherMap({ neighborhood, mapData }) {
   );
 }
 
-/** Generate a mega map
+/** Generate a map of Atlanta
  * Display a map of all crimes in Atlanta with outlines by neighborhood
  * Clicking a neighborhood routes the user to a drill down
  */
-export function MyMegaMap({ mapData }) {
+export function MyCityMap({ mapData }) {
   const router = useRouter();
 
   mapData.forEach(
     (row) =>
       (row.coordinates = [parseFloat(row.longitude), parseFloat(row.latitude)])
   );
-
-  // const myNeighborhood = _.filter(neighborhoods.features, function (row) {
-  //   return row.properties.NAME.toLowerCase() === neighborhood;
-  // });
-
-  // // TODO save centroids for each object rather than calculating each time
-  // var myCentroid = turf.centroid(myNeighborhood[0]);
 
   // set the initial view state to the middle-ish of Atlanta city proper)
   const [viewState, setViewState] = useState({
@@ -303,7 +224,7 @@ export function MyMegaMap({ mapData }) {
           onViewStateChange={updateViewState}
           getTooltip={({ object }) =>
             object && {
-              html: `${object.properties.NAME} 000 crimes in 2022`
+              html: `${object.properties.NAME}`
             }
           }
         >

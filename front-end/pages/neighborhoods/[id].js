@@ -1,4 +1,6 @@
+import { createClient } from '../../lib/client';
 import { getAllNeighborhoods } from '../../lib/neighborhoods';
+
 import { Layout } from '../../components/layout';
 import { NeighborhoodView } from '../../components/neighborhoodView';
 
@@ -11,15 +13,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const { Client } = require('pg');
-  const client = new Client({
-    user: 'admin',
-    host: 'localhost',
-    database: 'crime',
-    password: 'admin',
-    port: 5432
-  });
-
+  const client = createClient();
   client.connect();
 
   // const query = `select * from dev.app_nhood_view where neighborhood = '${params.id}'`;
