@@ -35,8 +35,8 @@ services:
   dbt:
     container_name: dbt
     build: ./back-end/dbt
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
     env_file:
       - .env
     ports:
@@ -50,8 +50,8 @@ services:
   flows:
     container_name: flows
     build: ./back-end/flows
-    depends_on:
-        - db
+    # depends_on:
+    #     - db
     env_file:
       - .env
     ports:
