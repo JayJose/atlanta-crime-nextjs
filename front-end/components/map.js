@@ -101,7 +101,7 @@ export function MyNeighborhoodMap({ neighborhood, mapData }) {
         >
           <StaticMap
             reuseMaps
-            mapStyle={BASEMAP.DARK_MATTER}
+            mapStyle={BASEMAP.POSITRON}
             mapboxAccessToken={process.env.mapboxAccessToken}
           ></StaticMap>
         </DeckGL>

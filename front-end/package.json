@@ -19,6 +19,7 @@
     "@nivo/heatmap": "^0.80.0",
     "@nivo/radar": "^0.80.0",
     "@nivo/treemap": "^0.80.0",
+    "@supabase/supabase-js": "^2.0.0",
     "@turf/centroid": "^6.5.0",
     "@turf/turf": "^6.5.0",
     "deck.gl": "^8.8.11",

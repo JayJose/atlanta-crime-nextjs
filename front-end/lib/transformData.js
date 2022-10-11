@@ -44,3 +44,14 @@ export function genHeatmapData(data, outerCategory, innerCategory) {
     };
   });
 }
+
+// var years = [2021, 2022];
+// var totalCrimes = {};
+// for (let i = 0; i < years.length; i++) {
+//   totalCrimes[years[i]] = _.chain(props.crimes)
+//     .filter(function (row) {
+//       return row.year == years[i];
+//     })
+//     .reduce((s, f) => s + parseInt(f.value), 0)
+//     .value();
+// }

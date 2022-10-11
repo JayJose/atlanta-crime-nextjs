@@ -8,8 +8,6 @@ import { toTitleCase, formatNumbers } from '../lib/transformStrings';
 import _ from 'underscore';
 import { Box, Heading, Text, Paragraph, Grid } from 'grommet';
 
-import theme from '../styles/theme';
-
 export function NeighborhoodView(props) {
   // box config
   const elevation = 'xsmall';
@@ -23,26 +21,19 @@ export function NeighborhoodView(props) {
   const gap = 'small';
 
   // add coordinate array
-  props.map.forEach(
+  props.crimes.forEach(
     (row) =>
       (row.coordinates = [parseFloat(row.longitude), parseFloat(row.latitude)])
   );
 
   // total crimes by year
-  var years = [2021, 2022];
-  var totalCrimes = {};
-  for (let i = 0; i < years.length; i++) {
-    totalCrimes[years[i]] = _.chain(props.crimes)
-      .filter(function (row) {
-        return row.year == years[i];
-      })
-      .reduce((s, f) => s + parseInt(f.value), 0)
-      .value();
-  }
+  var years = { current: 2022, prior: 2021 };
+  var myCounts = countByCategory(props.crimes, 'year');
+  //TODO handle missing values
+  var currentCount = myCounts.find((e) => e.id == years.current)['value'];
+  var priorCount = myCounts.find((e) => e.id == years.prior)['value'];
 
-  var yoy_change = (100 * (totalCrimes[2022] / totalCrimes[2021] - 1)).toFixed(
-    1
-  );
+  var yoy_change = 100 * (currentCount / priorCount - 1).toFixed(2);
 
   // var treeMapData = _.map(
   //   _.filter(props.crimes, function (row) {
@@ -71,8 +62,8 @@ export function NeighborhoodView(props) {
           {toTitleCase(props.id)}
         </Heading>
         <Paragraph size="xsmall" margin="none">
-          Did you know... that {formatNumbers(totalCrimes[2022])} crimes have
-          occurred in {toTitleCase(props.id)} in 2022! That's a{' '}
+          Did you know... that {formatNumbers(currentCount)} crimes have
+          occurred in {toTitleCase(props.id)} in {years.current}! That's a{' '}
           {Math.abs(yoy_change)}% {yoy_change > 0 ? 'increase' : 'decrease'} vs.
           2021.
         </Paragraph>
@@ -102,8 +93,16 @@ export function NeighborhoodView(props) {
             pad={pad}
             elevation={elevation}
           >
-            <Text size="size">Localized crime map</Text>
-            <MyNeighborhoodMap neighborhood={props.id} mapData={props.map} />
+            <Text size="size" margin={{ bottom: 'xxsmall' }}>
+              A map of crimes occuring in {toTitleCase(props.id)}, Atlanta in{' '}
+              {years.current}.
+            </Text>
+            <MyNeighborhoodMap
+              neighborhood={props.id}
+              mapData={_.filter(props.crimes, function (row) {
+                return row.year === years.current;
+              })}
+            />
           </Box>
         </Grid>
       </Box>

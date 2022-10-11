@@ -1,37 +1,27 @@
 import Head from 'next/head';
 
-import { createClient } from '../lib/client';
+import { supabase } from '../lib/supabase';
 
 import { Layout } from '../components/layout';
 import { MyCityMap } from '../components/map';
 
 import _ from 'underscore';
 
-// get data from api
-export async function getStaticProps() {
-  const client = createClient();
-  client.connect();
+export const getStaticProps = async () => {
+  const { data: crimes } = await supabase
+    .from('app_map')
+    .select('*')
+    .eq('year', 2022);
 
-  const query = `select * from dev.app_map where year = 2022`;
-
-  const [offenseRes, neighborhoodRes, crimesRes] = await Promise.all([
-    fetch('http://localhost:8000/offenses'),
-    fetch('http://localhost:8000/neighborhoods'),
-    client.query(query)
-  ]);
-
-  const [offenses, neighborhoods, crimes] = await Promise.all([
-    offenseRes.json(),
-    neighborhoodRes.json(),
-    crimesRes.rows
-  ]);
-
-  client.end();
-
-  return { props: { offenses, neighborhoods, crimes } };
-}
+  return {
+    props: {
+      crimes
+    }
+  };
+};
 
 export default function Home(props) {
+  console.log(props.crimes.length);
   return (
     <>
       <Head>

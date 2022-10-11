@@ -1,4 +1,5 @@
-import { createClient } from '../../lib/client';
+import { supabase } from '../../lib/supabase';
+
 import { getAllNeighborhoods } from '../../lib/neighborhoods';
 
 import { Layout } from '../../components/layout';
@@ -12,25 +13,19 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({ params }) {
-  const client = createClient();
-  client.connect();
-
-  // const query = `select * from dev.app_nhood_view where neighborhood = '${params.id}'`;
-  // const barQuery = `select * from dev.app_radar where neighborhood = '${params.id}' order by _2022 asc`;
-  const mapQuery = `select * from dev.app_map where year = 2022`;
-  const [mapRes] = await Promise.all([client.query(mapQuery)]);
-  const [map] = await Promise.all([mapRes.rows]);
-
-  client.end();
+export const getStaticProps = async ({ params }) => {
+  const { data: crimes } = await supabase
+    .from('app_map')
+    .select('*')
+    .eq('neighborhood', params.id);
 
   return {
     props: {
-      map,
+      crimes,
       id: params.id
     }
   };
-}
+};
 
 export default function Neighborhood(props) {
   return (
