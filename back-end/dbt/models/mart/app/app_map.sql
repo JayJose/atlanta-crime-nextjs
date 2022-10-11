@@ -1,3 +1,10 @@
+{{ config(
+    post_hook=[
+      "DROP INDEX IF EXISTS ix_map_neighborhood;"
+      "CREATE INDEX ix_map_neighborhood ON {{this}} (neighborhood);"
+    ]
+) }}
+
 with cutoff as (
     select day_of_year
     from {{ ref('dim_dates') }}
@@ -5,6 +12,8 @@ with cutoff as (
 )
 select n.neighborhood,
     o.offense,
+    o.offense_category,
+    d.year,
     cast(d.date as varchar(50)) as date,
     f.latitude,
     f.longitude

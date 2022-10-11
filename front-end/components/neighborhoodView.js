@@ -2,7 +2,7 @@ import { MyResponsiveHeatMap } from './heatmap';
 import { MyResponsiveTreeMap } from './treemap';
 import { MyResponsiveRadar } from './radar';
 import { MyResponsiveBars } from './bars';
-import { MyOtherMap } from './map';
+import { MyNeighborhoodMap } from './map';
 import { countByCategory, genHeatmapData } from '../lib/transformData';
 import { toTitleCase, formatNumbers } from '../lib/transformStrings';
 import _ from 'underscore';
@@ -103,7 +103,7 @@ export function NeighborhoodView(props) {
             elevation={elevation}
           >
             <Text size="size">Localized crime map</Text>
-            <MyOtherMap neighborhood={props.id} mapData={props.map} />
+            <MyNeighborhoodMap neighborhood={props.id} mapData={props.map} />
           </Box>
         </Grid>
       </Box>

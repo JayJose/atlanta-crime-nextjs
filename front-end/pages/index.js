@@ -1,24 +1,18 @@
 import Head from 'next/head';
 
-// layout
+import { createClient } from '../lib/client';
+
 import { Layout } from '../components/layout';
+import { MyCityMap } from '../components/map';
+
 import _ from 'underscore';
-import { MyMap } from '../components/map';
 
 // get data from api
 export async function getStaticProps() {
-  const { Client } = require('pg');
-  const client = new Client({
-    user: 'admin',
-    host: 'localhost',
-    database: 'crime',
-    password: 'admin',
-    port: 5432
-  });
-
+  const client = createClient();
   client.connect();
 
-  const query = `select * from dev.app_crimes_by_neighborhood_and_year order by neighborhood, year`;
+  const query = `select * from dev.app_map where year = 2022`;
 
   const [offenseRes, neighborhoodRes, crimesRes] = await Promise.all([
     fetch('http://localhost:8000/offenses'),
@@ -48,7 +42,7 @@ export default function Home(props) {
       <Layout
         children={
           <>
-            <MyMap></MyMap>
+            <MyCityMap mapData={props.crimes}></MyCityMap>
           </>
         }
       ></Layout>
