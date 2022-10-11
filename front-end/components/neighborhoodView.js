@@ -28,10 +28,10 @@ export function NeighborhoodView(props) {
 
   // total crimes by year
   var years = { current: 2022, prior: 2021 };
-  var myCounts = countByCategory(props.crimes, 'year');
-  //TODO handle missing values
-  var currentCount = myCounts.find((e) => e.id == years.current)['value'];
-  var priorCount = myCounts.find((e) => e.id == years.prior)['value'];
+  var myCounts = _.countBy(props.crimes, 'year');
+
+  var currentCount = 0 ?? myCounts[years.current];
+  var priorCount = 0 ?? myCounts[years.prior];
 
   var yoy_change = 100 * (currentCount / priorCount - 1).toFixed(2);
 
@@ -62,10 +62,11 @@ export function NeighborhoodView(props) {
           {toTitleCase(props.id)}
         </Heading>
         <Paragraph size="xsmall" margin="none">
-          Did you know... that {formatNumbers(currentCount)} crimes have
+          Did you know... that {formatNumbers(currentCount)} crimes{' '}
+          {currentCount === 1 ? 'has ' : 'have '}
           occurred in {toTitleCase(props.id)} in {years.current}! That is a{' '}
           {Math.abs(yoy_change)}% {yoy_change > 0 ? 'increase' : 'decrease'} vs.
-          2021.
+          2021. /*TODO use switch statement to help build text */
         </Paragraph>
       </Box>
       <Box direction="column" fill>
