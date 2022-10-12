@@ -8,14 +8,18 @@ import {
   Layer,
   ResponsiveContext
 } from 'grommet';
-import { FormClose, Sidebar, Home } from 'grommet-icons';
+import { FormClose, Code, Home } from 'grommet-icons';
 import { AppBar } from './appBar';
 import Link from 'next/link';
 
 import theme from '../styles/theme';
+import { useRouter } from 'next/router';
 
 export function Layout({ children }) {
   const [showSidebar, setShowSidebar] = useState(false);
+
+  const { asPath } = useRouter();
+  console.log(asPath);
 
   return (
     <Grommet theme={theme} full>
@@ -28,12 +32,14 @@ export function Layout({ children }) {
                   Crime sucks!
                 </Heading>
                 <Box direction="row">
-                  <Link href="/">
-                    <Button icon={<Home color="black" />} />
-                  </Link>
+                  {asPath !== '/' ? (
+                    <Link href="/">
+                      <Button icon={<Home color="black" />} />
+                    </Link>
+                  ) : null}
                   <Button
-                    icon={<Sidebar color="black" />}
-                    onClick={() => setShowSidebar(!showSidebar)}
+                    icon={<Code color="black" />}
+                    href="https://github.com/JayJose/atlanta-crime-nextjs#readme"
                   />
                 </Box>
               </AppBar>

@@ -2,6 +2,7 @@ import { MyResponsiveHeatMap } from './heatmap';
 import { MyResponsiveTreeMap } from './treemap';
 import { MyResponsiveRadar } from './radar';
 import { MyResponsiveBars } from './bars';
+import { MyResponsiveLine } from './trends';
 import { MyNeighborhoodMap } from './map';
 import { countByCategory, genHeatmapData } from '../lib/transformData';
 import { toTitleCase, formatNumbers } from '../lib/transformStrings';
@@ -17,9 +18,11 @@ export function NeighborhoodView(props) {
   const round = 'small';
 
   // grid config
-  const columns = 'large';
-  const rows = 'large';
+  const columns = 'medium';
+  const rows = 'medium';
   const gap = 'small';
+
+  var myTrendsData = genHeatmapData(props.crimes, 'year', 'month');
 
   // add coordinate array
   props.crimes.forEach(
@@ -82,16 +85,16 @@ export function NeighborhoodView(props) {
           align="start"
           margin={margin}
         >
-          {/* <Box
+          <Box
             fill
             background={'backgroundCharts'}
             round={round}
             pad={pad}
             elevation={elevation}
           >
-            <Text size="size">Total offenses by year</Text>
-            <MyResponsiveBars data={props.bar} />
-          </Box> */}
+            <Text size="size">A trend chart</Text>
+            <MyResponsiveLine data={myTrendsData} />
+          </Box>
           <Box
             fill
             background={'backgroundCharts'}
