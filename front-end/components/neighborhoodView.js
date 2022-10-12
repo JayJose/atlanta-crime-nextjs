@@ -6,7 +6,8 @@ import { MyNeighborhoodMap } from './map';
 import { countByCategory, genHeatmapData } from '../lib/transformData';
 import { toTitleCase, formatNumbers } from '../lib/transformStrings';
 import _ from 'underscore';
-import { Box, Heading, Text, Paragraph, Grid } from 'grommet';
+import { Box, Heading, Text, Tip, Paragraph, Grid } from 'grommet';
+import { CircleInformation } from 'grommet-icons';
 
 export function NeighborhoodView(props) {
   // box config
@@ -66,8 +67,11 @@ export function NeighborhoodView(props) {
           Did you know... that {formatNumbers(currentCount)} crimes{' '}
           {currentCount === 1 ? 'has ' : 'have '}
           occurred in {toTitleCase(props.id)} in {years.current}! That is a{' '}
-          {Math.abs(yoy_change)}% {yoy_change > 0 ? 'increase' : 'decrease'} vs.
-          2021.
+          {Math.abs(yoy_change)}%{' '}
+          <span style={{ fontWeight: yoy_change > 0 ? 'bold' : 'normal' }}>
+            {yoy_change > 0 ? 'increase' : 'decrease'}{' '}
+          </span>
+          compared to {years.prior}.
         </Paragraph>
       </Box>
       <Box direction="column" fill>
@@ -95,10 +99,20 @@ export function NeighborhoodView(props) {
             pad={pad}
             elevation={elevation}
           >
-            <Text size="size" margin={{ bottom: 'xxsmall' }}>
-              A map of crimes occuring in {toTitleCase(props.id)}, Atlanta in{' '}
-              {years.current}.
-            </Text>
+            <Box
+              direction="row"
+              align="center"
+              justify="between"
+              margin={{ bottom: 'xsmall' }}
+            >
+              <Text size="size">
+                A map of crimes occuring in {toTitleCase(props.id)}, Atlanta in{' '}
+                {years.current}.
+              </Text>
+              <Tip content="Additional information here.">
+                <CircleInformation color="black" size="medium" />
+              </Tip>
+            </Box>
             <MyNeighborhoodMap
               neighborhood={props.id}
               mapData={_.filter(props.crimes, function (row) {

@@ -1,3 +1,5 @@
+import { Tip } from 'grommet';
+
 export default {
   global: {
     colors: {
@@ -10,7 +12,7 @@ export default {
     },
     font: {
       family: 'Helvetica',
-      size: '12px',
+      size: '14px',
       height: '10px'
     }
   }
