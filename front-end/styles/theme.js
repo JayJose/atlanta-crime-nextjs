@@ -3,8 +3,8 @@ import { Tip } from 'grommet';
 export default {
   global: {
     colors: {
-      brand: '#6FFFB0',
-      background: 'light-2',
+      brand: 'accent-1',
+      background: 'accent-2',
       backgroundCharts: 'white',
       bars: '#FD6FFF',
       bars2: ' #81FCED',
