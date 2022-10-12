@@ -6,7 +6,8 @@ import { NeighborhoodView } from '../../components/neighborhoodView';
 export const getStaticPaths = async () => {
   const { data: neighborhoods } = await supabase
     .from('dim_neighborhoods')
-    .select('id');
+    .select('id')
+    .in('id', ['midtown', 'downtown', 'inman park', 'poncey-highland']);
 
   const paths = neighborhoods.map(({ id }) => ({
     params: {
