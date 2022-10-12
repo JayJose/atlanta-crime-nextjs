@@ -7,7 +7,14 @@ export const getStaticPaths = async () => {
   const { data: neighborhoods } = await supabase
     .from('dim_neighborhoods')
     .select('id')
-    .in('id', ['midtown', 'downtown', 'inman park', 'poncey-highland']);
+    .in('id', [
+      'midtown',
+      'downtown',
+      'inman park',
+      'poncey-highland',
+      'grant park',
+      'brookhaven'
+    ]);
 
   const paths = neighborhoods.map(({ id }) => ({
     params: {

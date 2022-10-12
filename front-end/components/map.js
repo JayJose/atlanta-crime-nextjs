@@ -31,14 +31,6 @@ export function MyNeighborhoodMap({ neighborhood, mapData }) {
     setViewState(viewState);
   };
 
-  // const onClick = (info) => {
-  //   if (info.object) {
-  //     let name = info.object.properties.NAME.toLowerCase();
-  //     //TODO logic to associate GeoJSON names with crime data names
-  //     router.push(`/neighborhoods/${name}`);
-  //   }
-  // };
-
   // LAYERS
   const jsonLayer = new GeoJsonLayer({
     id: 'geojson-layer',
@@ -101,7 +93,7 @@ export function MyNeighborhoodMap({ neighborhood, mapData }) {
         >
           <StaticMap
             reuseMaps
-            mapStyle={BASEMAP.POSITRON}
+            mapStyle={BASEMAP.DARK_MATTER}
             mapboxAccessToken={process.env.mapboxAccessToken}
           ></StaticMap>
         </DeckGL>
@@ -150,7 +142,7 @@ export function MyCityMap({ mapData }) {
   };
 
   // LAYERS
-  const jsonAlpha = 255;
+  const jsonAlpha = 150;
   const jsonLayer = new GeoJsonLayer({
     id: 'neighborhoods-layer',
     data: 'https://raw.githubusercontent.com/JayJose/needs-more-polygons/main/data/atlantaNeighborhoods.json',
@@ -181,7 +173,7 @@ export function MyCityMap({ mapData }) {
     getLineColor: (d) => [0, 0, 0]
   });
 
-  const hexAlpha = 200;
+  const hexAlpha = 150;
   const hexLayer = new HexagonLayer({
     id: 'hexagon-layer',
     data: mapData,

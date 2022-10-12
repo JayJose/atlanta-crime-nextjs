@@ -31,10 +31,10 @@ export function Layout({ children }) {
                   <Link href="/">
                     <Button icon={<Home color="black" />} />
                   </Link>
-                  {/* <Button
+                  <Button
                     icon={<Sidebar color="black" />}
                     onClick={() => setShowSidebar(!showSidebar)}
-                  /> */}
+                  />
                 </Box>
               </AppBar>
               <Box

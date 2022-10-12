@@ -27,3 +27,4 @@ yarn-error.log*
 *.cypython
 
 /back-end/flows/data/landing/
+front-end/package-lock.json
