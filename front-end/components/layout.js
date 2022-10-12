@@ -8,7 +8,7 @@ import {
   Layer,
   ResponsiveContext
 } from 'grommet';
-import { FormClose, Code, Home } from 'grommet-icons';
+import { FormClose, Code, Home, Map } from 'grommet-icons';
 import { AppBar } from './appBar';
 import Link from 'next/link';
 
@@ -16,10 +16,11 @@ import theme from '../styles/theme';
 import { useRouter } from 'next/router';
 
 export function Layout({ children }) {
-  const [showSidebar, setShowSidebar] = useState(false);
+  const [showMap, setShowMap] = useState(false);
 
   const { asPath } = useRouter();
-  console.log(asPath);
+  const showHomeIcon = asPath.match(/^\/$/) ? false : true;
+  const showMapIcon = asPath.match(/neighborhoods\/[a-z]+/) ? true : false;
 
   return (
     <Grommet theme={theme} full>
@@ -32,10 +33,16 @@ export function Layout({ children }) {
                   Crime sucks!
                 </Heading>
                 <Box direction="row">
-                  {asPath !== '/' ? (
+                  {showHomeIcon ? (
                     <Link href="/">
                       <Button icon={<Home color="black" />} />
                     </Link>
+                  ) : null}
+                  {showMapIcon ? (
+                    <Button
+                      icon={<Map color="black" />}
+                      onClick={() => setShowMap(true)}
+                    />
                   ) : null}
                   <Button
                     icon={<Code color="black" />}
@@ -52,20 +59,7 @@ export function Layout({ children }) {
                 <Box flex align="start" justify="center" margin="small">
                   {children}
                 </Box>
-                {!showSidebar || size !== 'small' ? (
-                  <Collapsible direction="horizontal" open={showSidebar}>
-                    <Box
-                      flex
-                      width="medium"
-                      background="light-2"
-                      elevation="small"
-                      align="center"
-                      justify="center"
-                    >
-                      sidebar
-                    </Box>
-                  </Collapsible>
-                ) : (
+                {showMap ? (
                   <Layer>
                     <Box
                       background="light-2"
@@ -76,7 +70,7 @@ export function Layout({ children }) {
                     >
                       <Button
                         icon={<FormClose />}
-                        onClick={() => setShowSidebar(false)}
+                        onClick={() => setShowMap(false)}
                       />
                     </Box>
                     <Box
@@ -88,7 +82,7 @@ export function Layout({ children }) {
                       sidebar
                     </Box>
                   </Layer>
-                )}
+                ) : null}
               </Box>
             </Box>
           </>
