@@ -1,9 +1,17 @@
+import { useState } from 'react';
 import Head from 'next/head';
 
 import { supabase } from '../lib/supabase';
 
+import {
+  Accordion,
+  AccordionPanel,
+  Box,
+  Select,
+  SelectMultiple,
+  Text
+} from 'grommet';
 import { Layout } from '../components/layout';
-import { Box, Heading } from 'grommet';
 import { MyCityMap } from '../components/map';
 
 import _ from 'underscore';
@@ -13,11 +21,24 @@ export const getStaticProps = async () => {
   const { data: crimes } = await supabase
     .from('app_map')
     .select('*')
-    .eq('year', 2022);
+    .eq('year', 2022)
+    .single();
+
+  const { data: neighborhoods } = await supabase
+    .from('dim_neighborhoods')
+    .select('*')
+    .order('neighborhood', { ascending: true });
+
+  const { data: offenses } = await supabase
+    .from('dim_offenses')
+    .select('*')
+    .order('offense', { ascending: true });
 
   return {
     props: {
-      crimes
+      crimes,
+      neighborhoods,
+      offenses
     }
   };
 };
@@ -29,6 +50,9 @@ export default function Home(props) {
   const pad = 'small';
   const round = 'small';
 
+  const [neighborhood, setNeighborhood] = useState([]);
+  const [offense, setOffense] = useState([]);
+
   return (
     <>
       <Head>
@@ -37,7 +61,38 @@ export default function Home(props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        <MyCityMap mapData={props.crimes}></MyCityMap>
+        <Accordion>
+          <AccordionPanel label="Filter the data">
+            <Box pad="medium" background="light-2" gap="xsmall">
+              <SelectMultiple
+                clear
+                placeholder="Select a neighborhood."
+                options={props.neighborhoods}
+                valueKey={{
+                  key: 'neighborhood',
+                  reduce: true
+                }}
+                onChange={({ value, option }) => setNeighborhood(value)}
+              />
+              <SelectMultiple
+                clear
+                placeholder="Select an offense."
+                options={props.offenses}
+                valueKey={{
+                  key: 'offense',
+                  reduce: true
+                }}
+                onChange={({ value, option }) => setOffense(value)}
+              />
+            </Box>
+          </AccordionPanel>
+        </Accordion>
+        <Box>
+          <Text>
+            The current value of neighborhood is {JSON.stringify(neighborhood)}
+          </Text>
+          <Text>The current value of offense is {JSON.stringify(offense)}</Text>
+        </Box>
       </Layout>
     </>
   );
