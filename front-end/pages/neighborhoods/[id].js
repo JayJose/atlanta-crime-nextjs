@@ -36,8 +36,8 @@ export const getStaticProps = async ({ params }) => {
 
   return {
     props: {
-      crimes,
-      id: params.id
+      id: params.id,
+      crimes
     }
   };
 };
