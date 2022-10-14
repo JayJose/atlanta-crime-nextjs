@@ -205,7 +205,7 @@ export function MyCityMap({ mapData }) {
           height: '100%',
           width: '100%',
           position: 'relative',
-          margin: 'small',
+          margin: 'large',
           pad: 'small'
         }}
       >

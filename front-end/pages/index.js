@@ -3,13 +3,16 @@ import Head from 'next/head';
 
 import { supabase } from '../lib/supabase';
 
-import { Accordion, AccordionPanel, Box, SelectMultiple, Text } from 'grommet';
-import { Layout } from '../components/layout';
 import { MyCityMap } from '../components/map';
-import { Filter, CaretUpFill, CaretDownFill } from 'grommet-icons';
 
 import _ from 'underscore';
 import { toTitleCase } from '../lib/transformStrings';
+
+// NEW
+import { MyHeader } from '../components/chakra/header';
+import { MyLayout } from '../components/chakra/layout';
+import { Container, Box, Flex, HStack, Text, VStack } from '@chakra-ui/react';
+import { TriangleUpIcon, TriangleDownIcon } from '@chakra-ui/icons';
 
 export const getStaticProps = async () => {
   const { data: crimes } = await supabase
@@ -112,41 +115,45 @@ export default function Home(props) {
         <meta name="description" content="A crime app." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout>
-        <Box flex margin="xsmall" wrap>
-          <Accordion>
-            <AccordionPanel label={<Filter color="black" />}>
-              <Box pad="medium" background="light-2" gap="xsmall">
-                <SelectMultiple
-                  clear
-                  placeholder="Select a neighborhood."
-                  options={props.neighborhoods}
-                  valueKey={{
-                    key: 'neighborhood',
-                    reduce: true
-                  }}
-                  dropHeight="medium"
-                  onChange={({ value, option }) => setNeighborhood(value)}
-                />
-                <SelectMultiple
-                  clear
-                  placeholder="Select an offense."
-                  options={props.offenses}
-                  valueKey={{
-                    key: 'offense',
-                    reduce: true
-                  }}
-                  dropHeight="medium"
-                  onChange={({ value, option }) => setOffense(value)}
-                />
-              </Box>
-            </AccordionPanel>
-          </Accordion>
-        </Box>
-        <Box fill align="start" justify="center" margin="small">
-          <MyCityMap mapData={props.map}></MyCityMap>
-        </Box>
-      </Layout>
+      <Container maxW="container.xl" p={4} background={'#6FFFB0'}>
+        <Flex
+          h={{ base: 'auto', md: '100vh' }}
+          py={[0, 0, 0]}
+          px={[0, 0, 0]}
+          direction={{ base: 'column', md: 'row' }}
+        >
+          <VStack
+            w="100%"
+            h="full"
+            p={1}
+            spacing={5}
+            align="stretch"
+            bg={'black'}
+            borderRadius={'10px'}
+          >
+            <MyHeader></MyHeader>
+            <HStack spacing={5}>
+              <Text>
+                {currentCount.toLocaleString()} crimes in {years.current}
+              </Text>
+              <Text>
+                {yoy_change > 0 ? (
+                  <TriangleUpIcon color="red" mb={1} mr={1} />
+                ) : (
+                  <TriangleDownIcon color="green" />
+                )}
+                {yoy_change.toLocaleString('en-US', {
+                  style: 'percent'
+                })}{' '}
+                compared to {years.prior}
+              </Text>
+            </HStack>
+            <Box w="100%" h="75vh">
+              <MyCityMap mapData={props.map}></MyCityMap>
+            </Box>
+          </VStack>
+        </Flex>
+      </Container>
     </>
   );
 }
