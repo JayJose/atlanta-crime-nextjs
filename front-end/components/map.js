@@ -106,7 +106,7 @@ export function MyNeighborhoodMap({ neighborhood, mapData }) {
  * Display a map of all crimes in Atlanta with outlines by neighborhood
  * Clicking a neighborhood routes the user to a drill down
  */
-export function MyCityMap({ mapData }) {
+export function MyCityMap({ mapData, setNeighborhood }) {
   const router = useRouter();
 
   mapData.forEach(
@@ -131,7 +131,16 @@ export function MyCityMap({ mapData }) {
     if (info.object) {
       let name = info.object.properties.NAME.toLowerCase();
       //TODO logic to associate GeoJSON names with crime data names
-      router.push(`/neighborhoods/${name}`);
+      //router.push(`/neighborhoods/${name}`);
+      let myCentroid = centroids[name];
+      setViewState({
+        latitude: parseFloat(myCentroid[1]),
+        longitude: parseFloat(myCentroid[0]),
+        zoom: 12.5,
+        bearing: 0,
+        pitch: 40
+      });
+      setNeighborhood([name]);
     }
   };
 

@@ -44,13 +44,14 @@ export function MyHeader({ openDrawer, openModal }) {
                   background="#6FFFB0"
                   textColor={'black'}
                 >
-                  <MenuItem onClick={openModal}>View data</MenuItem>
-                  <MenuItem onClick={openDrawer}>
-                    View student & teacher demographics
-                  </MenuItem>
                   <MenuItem>
                     <Link href="https://arkspecialists.com">
                       ARK Specialists <ExternalLinkIcon />
+                    </Link>
+                  </MenuItem>
+                  <MenuItem>
+                    <Link href="https://github.com/JayJose/atlanta-crime-nextjs">
+                      View the repo <ExternalLinkIcon />
                     </Link>
                   </MenuItem>
                 </MenuList>

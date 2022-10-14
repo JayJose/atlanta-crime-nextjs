@@ -23,8 +23,8 @@ export const getStaticProps = async () => {
   const { data: map } = await supabase
     .from('app_map')
     .select('*')
-    .eq('year', 2022)
-    .eq('neighborhood', 'midtown');
+    .eq('year', 2022);
+  //.eq('neighborhood', 'midtown');
 
   const { data: neighborhoods } = await supabase
     .from('dim_neighborhoods')
@@ -149,7 +149,10 @@ export default function Home(props) {
               </Text>
             </HStack>
             <Box w="100%" h="75vh">
-              <MyCityMap mapData={props.map}></MyCityMap>
+              <MyCityMap
+                mapData={props.map}
+                setNeighborhood={setNeighborhood}
+              ></MyCityMap>
             </Box>
           </VStack>
         </Flex>
