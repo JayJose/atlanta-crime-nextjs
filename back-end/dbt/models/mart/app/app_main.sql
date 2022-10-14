@@ -6,6 +6,7 @@ with cutoff as (
 select d.year,
     n.neighborhood,
     o.offense,
+    o.crime_against,
     count(f.crime_tk) as value
 from {{ ref('dim_dates') }} as d
     inner join {{ ref('fct_crimes') }} as f on f.date_id = d.id
@@ -15,11 +16,13 @@ from {{ ref('dim_dates') }} as d
 where d.year in (2021, 2022)
 group by d.year,
     n.neighborhood,
-    o.offense
+    o.offense,
+    o.crime_against
 UNION
 select d.year,
     'all' as neighborhood,
     o.offense,
+    o.crime_against,
     count(f.crime_tk) as value
 from {{ ref('dim_dates') }} as d
     inner join {{ ref('fct_crimes') }} as f on f.date_id = d.id
@@ -28,4 +31,5 @@ from {{ ref('dim_dates') }} as d
     inner join {{ ref('dim_neighborhoods') }} as n on n.id = f.neighborhood_id
 where d.year in (2021, 2022)
 group by d.year,
-    o.offense
+    o.offense,
+    o.crime_against

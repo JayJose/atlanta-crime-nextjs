@@ -3,17 +3,10 @@ import Head from 'next/head';
 
 import { supabase } from '../lib/supabase';
 
-import {
-  Accordion,
-  AccordionPanel,
-  Box,
-  Select,
-  SelectMultiple,
-  Text
-} from 'grommet';
+import { Accordion, AccordionPanel, Box, SelectMultiple, Text } from 'grommet';
 import { Layout } from '../components/layout';
 import { MyCityMap } from '../components/map';
-import { Filter } from 'grommet-icons';
+import { Filter, CaretUpFill, CaretDownFill } from 'grommet-icons';
 
 import _ from 'underscore';
 import { toTitleCase } from '../lib/transformStrings';
@@ -23,6 +16,12 @@ export const getStaticProps = async () => {
     .from('app_main')
     .select('*')
     .eq('neighborhood', 'all');
+
+  const { data: map } = await supabase
+    .from('app_map')
+    .select('*')
+    .eq('year', 2022)
+    .eq('neighborhood', 'midtown');
 
   const { data: neighborhoods } = await supabase
     .from('dim_neighborhoods')
@@ -37,6 +36,7 @@ export const getStaticProps = async () => {
   return {
     props: {
       crimes,
+      map,
       neighborhoods,
       offenses
     }
@@ -59,29 +59,28 @@ export default function Home(props) {
   const [offense, setOffense] = useState([]);
   const [crimes, setCrimes] = useState(props.crimes);
 
+  // count crimes by year
   var years = { current: 2022, prior: 2021 };
-  var currentCount = crimes.find((e) => e.year === years.current).value ?? 0;
-  var priorCount = crimes.find((e) => e.year === years.prior).value ?? 0;
-
-  var yoy_change = (currentCount / priorCount - 1).toLocaleString('en-US', {
-    style: 'percent'
+  let currentCount = 0;
+  let priorCount = 0;
+  crimes.forEach((e) => {
+    if (e.year === years.current) {
+      currentCount += e.value;
+    }
+    if (e.year === years.prior) {
+      priorCount += e.value;
+    }
   });
+
+  var yoy_change = currentCount / priorCount - 1;
 
   useEffect(() => {
     if (isMounted.current) {
       getData();
-      //filterOffenses();
     } else {
       isMounted.current = true;
     }
   }, [neighborhood]);
-
-  const filterOffenses = () => {
-    let filteredData = _.filter(crimes, function (row) {
-      return row.offense === offense;
-    });
-    setCrimes(filteredData);
-  };
 
   const getData = async () => {
     try {
@@ -114,7 +113,7 @@ export default function Home(props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        <Box flex align="start" justify="start" margin="xxsmall">
+        <Box flex margin="xsmall" wrap>
           <Accordion>
             <AccordionPanel label={<Filter color="black" />}>
               <Box pad="medium" background="light-2" gap="xsmall">
@@ -143,20 +142,9 @@ export default function Home(props) {
               </Box>
             </AccordionPanel>
           </Accordion>
-
-          <Box>
-            <Text>
-              The current value of neighborhood is{' '}
-              {JSON.stringify(neighborhood)}
-            </Text>
-            <Text>
-              The current value of offense is {JSON.stringify(offense)}
-            </Text>
-            <Text>current crimes is {JSON.stringify(currentCount)}</Text>
-            <Text>prior crimes is {JSON.stringify(priorCount)}</Text>
-            <Text>yoy crimes is {yoy_change}</Text>
-            <Text>{JSON.stringify(crimes)}</Text>
-          </Box>
+        </Box>
+        <Box fill align="start" justify="center" margin="small">
+          <MyCityMap mapData={props.map}></MyCityMap>
         </Box>
       </Layout>
     </>
