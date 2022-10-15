@@ -56,9 +56,8 @@ export function Layout({ children }) {
                 flex
                 overflow={{ horizontal: 'hidden' }}
               >
-                <Box flex align="start" justify="center" margin="small">
-                  {children}
-                </Box>
+                {children}
+
                 {showMap ? (
                   <Layer>
                     <Box

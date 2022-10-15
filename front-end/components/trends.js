@@ -12,6 +12,7 @@ export function MyResponsiveLine({ data }) {
   return (
     <ResponsiveLine
       data={data}
+      height="200"
       margin={{ top: 40, right: 40, bottom: 50, left: 60 }}
       xScale={{
         type: 'linear',

@@ -1,7 +1,7 @@
 with cutoff as (
     select day_of_year
     from {{ ref('dim_dates') }}
-    where date = '2022-08-15'
+    where date = '2022-09-30'
 )
 select n.neighborhood,
     o.crime_against,

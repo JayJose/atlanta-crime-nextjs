@@ -13,7 +13,7 @@ import centroids from '../data/atlantaNeighborhoodCentroids.json';
 import _ from 'underscore';
 
 /**Create a neighborhood-specific map */
-export function MyNeighborhoodMap({ neighborhood, mapData }) {
+export function MyNeighborhoodMap({ neighborhood, data }) {
   const myNeighborhood = _.filter(neighborhoods.features, function (row) {
     return row.properties.NAME.toLowerCase() === neighborhood;
   });
@@ -47,7 +47,7 @@ export function MyNeighborhoodMap({ neighborhood, mapData }) {
 
   const scatterLayer = new ScatterplotLayer({
     id: 'scatterplot-layer',
-    data: mapData,
+    data: data,
     pickable: true,
     opacity: 0.75,
     stroked: true,
@@ -63,7 +63,7 @@ export function MyNeighborhoodMap({ neighborhood, mapData }) {
 
   const heatmapLayer = new HeatmapLayer({
     id: 'heatmap-layer',
-    data: mapData,
+    data: data,
     getPosition: (d) => d.coordinates,
     // getWeight: d => d.WEIGHT,
     aggregation: 'SUM'
@@ -106,22 +106,13 @@ export function MyNeighborhoodMap({ neighborhood, mapData }) {
  * Display a map of all crimes in Atlanta with outlines by neighborhood
  * Clicking a neighborhood routes the user to a drill down
  */
-export function MyCityMap({ mapData }) {
+export function MyCityMap({ data, setNeighborhood, setViewState, viewState }) {
   const router = useRouter();
 
-  mapData.forEach(
+  data.forEach(
     (row) =>
       (row.coordinates = [parseFloat(row.longitude), parseFloat(row.latitude)])
   );
-
-  // set the initial view state to the middle-ish of Atlanta city proper)
-  const [viewState, setViewState] = useState({
-    latitude: 33.74,
-    longitude: -84.42,
-    zoom: 11,
-    bearing: 0,
-    pitch: 35
-  });
 
   const updateViewState = ({ viewState }) => {
     setViewState(viewState);
@@ -131,7 +122,16 @@ export function MyCityMap({ mapData }) {
     if (info.object) {
       let name = info.object.properties.NAME.toLowerCase();
       //TODO logic to associate GeoJSON names with crime data names
-      router.push(`/neighborhoods/${name}`);
+      //router.push(`/neighborhoods/${name}`);
+      let myCentroid = centroids[name];
+      setViewState({
+        latitude: parseFloat(myCentroid[1]),
+        longitude: parseFloat(myCentroid[0]),
+        zoom: 12.5,
+        bearing: 0,
+        pitch: 20
+      });
+      setNeighborhood([name]);
     }
   };
 
@@ -159,7 +159,7 @@ export function MyCityMap({ mapData }) {
 
   const scatterLayer = new ScatterplotLayer({
     id: 'crime-layer',
-    data: mapData,
+    data: data,
     pickable: true,
     opacity: 0.75,
     stroked: true,
@@ -176,7 +176,7 @@ export function MyCityMap({ mapData }) {
   const hexAlpha = 150;
   const hexLayer = new HexagonLayer({
     id: 'hexagon-layer',
-    data: mapData,
+    data: data,
     pickable: false,
     extruded: true,
     radius: 150,
@@ -193,7 +193,7 @@ export function MyCityMap({ mapData }) {
 
   const heatmapLayer = new HeatmapLayer({
     id: 'heatmap-layer',
-    data: mapData,
+    data: data,
     getPosition: (d) => d.coordinates,
     aggregation: 'SUM'
   });
@@ -205,7 +205,7 @@ export function MyCityMap({ mapData }) {
           height: '100%',
           width: '100%',
           position: 'relative',
-          margin: 'small',
+          margin: 'large',
           pad: 'small'
         }}
       >
