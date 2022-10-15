@@ -1,4 +1,19 @@
-with b as (
+with categories as (
+    select distinct offense_category from {{ ref('dim_offenses') }}
+    union all
+    select 'all' as offense_category
+),
+neighborhoods as (
+    select distinct neighborhood from {{ ref('dim_neighborhoods') }}
+    union all
+    select 'all' as neighborhood
+),
+dense as (
+    select *
+    from neighborhoods
+    cross join categories
+),
+b as (
     select coalesce(offense_category, 'all') as offense_category,
         neighborhood,
         sum(value) as _2022
@@ -30,11 +45,14 @@ a as (
     where year = 2021
     group by rollup (offense_category)
 )
-select b.neighborhood
-    , b.offense_category
-    , b._2022
+select d.neighborhood
+    , d.offense_category
+    , coalesce(b._2022, 0) as _2022
     , coalesce(a._2021, 0) as _2021
-from b
+from dense as d
+left join b
+    on b.neighborhood = d.neighborhood
+    and b.offense_category = d.offense_category
 left join a as a
-    on a.neighborhood = b.neighborhood
-    and a.offense_category = b.offense_category
+    on a.neighborhood = d.neighborhood
+    and a.offense_category = d.offense_category

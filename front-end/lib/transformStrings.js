@@ -1,9 +1,11 @@
 import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
   SmallAddIcon,
   TriangleDownIcon,
   TriangleUpIcon
 } from '@chakra-ui/icons';
-import { HStack, Text } from '@chakra-ui/react';
+import { Box, HStack, Text } from '@chakra-ui/react';
 
 export function toTitleCase(str) {
   return str
