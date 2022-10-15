@@ -7,7 +7,7 @@ import { supabase } from '../lib/supabase';
 import { MyCityMap } from '../components/map';
 
 import _ from 'underscore';
-import { toTitleCase } from '../lib/transformStrings';
+import { toTitleCase, getYoyChange } from '../lib/transformStrings';
 
 // NEW
 import { MyHeader } from '../components/chakra/header';
@@ -27,7 +27,6 @@ import {
   Th,
   Td
 } from '@chakra-ui/react';
-import { RepeatIcon, TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
 
 export const getStaticProps = async () => {
   const { data: crimes } = await supabase
@@ -35,11 +34,16 @@ export const getStaticProps = async () => {
     .select('*')
     .eq('neighborhood', 'all');
 
+  const { data: table } = await supabase
+    .from('app_table')
+    .select('*')
+    .eq('neighborhood', 'all')
+    .order('offense_category', { ascending: true });
+
   const { data: map } = await supabase
     .from('app_map')
     .select('*')
-    .eq('year', 2022)
-    .in('neighborhood', ['midtown', 'downtown', 'grant park']);
+    .eq('year', 2022);
 
   const { data: neighborhoods } = await supabase
     .from('dim_neighborhoods')
@@ -54,6 +58,7 @@ export const getStaticProps = async () => {
   return {
     props: {
       crimes,
+      table,
       map,
       neighborhoods,
       offenses
@@ -92,8 +97,6 @@ export default function Home(props) {
     }
   });
 
-  var yoy_change = currentCount / priorCount - 1;
-
   useEffect(() => {
     if (isMounted.current) {
       getData();
@@ -111,12 +114,22 @@ export default function Home(props) {
         .select('*')
         .in('neighborhood', neighborhood.length === 0 ? ['all'] : neighborhood);
 
+      let { data: tableData } = await supabase
+        .from('app_table')
+        .select('*')
+        .eq('neighborhood', neighborhood.length === 0 ? ['all'] : neighborhood)
+        .order('offense_category', { ascending: true });
+
       if (error && status !== 406) {
         throw error;
       }
 
       if (data) {
         setCrimes(data);
+      }
+
+      if (tableData) {
+        setTableData(tableData);
       }
     } catch (error) {
       alert(error.message);
@@ -128,7 +141,7 @@ export default function Home(props) {
   const indexViewState = {
     latitude: 33.74,
     longitude: -84.42,
-    zoom: 11,
+    zoom: 10.5,
     bearing: 0,
     pitch: 35
   };
@@ -144,6 +157,8 @@ export default function Home(props) {
     });
   }
 
+  const [tableData, setTableData] = useState(props.table);
+
   return (
     <>
       <Head>
@@ -151,7 +166,7 @@ export default function Home(props) {
         <meta name="description" content="A crime app." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Container maxW="container.xl" p={4} background={'#6FFFB0'}>
+      <Container maxW="container.xl" p={3} background={'#6FFFB0'}>
         <Flex
           h={{ base: 'auto', md: '100vh' }}
           py={[0, 0, 0]}
@@ -168,92 +183,42 @@ export default function Home(props) {
             borderRadius={'10px'}
           >
             <MyHeader></MyHeader>
-            <Text>Value of offense is {offense}.</Text>
-            <Box overflowY="auto">
-              <Table variant="striped" colorScheme="black">
+            <Box>
+              <Table variant="simple" colorScheme="black" size={'sm'}>
                 <Thead position="sticky" top={0} bgColor="black">
                   <Tr>
                     <Th color={'white'}>Offense</Th>
-                    <Th color={'white'}>Crimes in 2022</Th>
+                    <Th color={'white'}>Crimes in 2022 (2021)</Th>
                     <Th color={'white'}>YoY Change</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  <Tr>
-                    <Td
-                      onClick={(e) => {
-                        setOffense([e.target.innerText]);
-                      }}
-                      style={{
-                        whiteSpace: 'nowrap',
-                        textOverflow: 'ellipsis',
-                        overflow: 'hidden',
-                        maxWidth: '1px'
-                      }}
-                    >
-                      assault offenses
-                    </Td>
-                    <Td>{currentCount.toLocaleString()}</Td>
-                    <Td>
-                      {yoy_change > 0 ? (
-                        <TriangleUpIcon color="red" mb={1} mr={1} />
-                      ) : (
-                        <TriangleDownIcon color="green" />
-                      )}
-                      {yoy_change.toLocaleString('en-US', {
-                        style: 'percent'
-                      })}
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    <Td>motor vehicle theft</Td>
-                    <Td>{currentCount.toLocaleString()}</Td>
-                    <Td>
-                      {yoy_change > 0 ? (
-                        <TriangleUpIcon color="red" mb={1} mr={1} />
-                      ) : (
-                        <TriangleDownIcon color="green" />
-                      )}
-                      {yoy_change.toLocaleString('en-US', {
-                        style: 'percent'
-                      })}
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    <Td>larceny / theft offenses</Td>
-                    <Td>{currentCount.toLocaleString()}</Td>
-                    <Td>
-                      {yoy_change > 0 ? (
-                        <TriangleUpIcon color="red" mb={1} mr={1} />
-                      ) : (
-                        <TriangleDownIcon color="green" />
-                      )}
-                      {yoy_change.toLocaleString('en-US', {
-                        style: 'percent'
-                      })}
-                    </Td>
-                  </Tr>
+                  {tableData.map((o) => (
+                    <Tr key={o.offense_category}>
+                      <Td
+                        onClick={(e) => {
+                          let v = e.target.innerText.toLowerCase();
+                          setOffense(v === 'all' ? [] : [v]);
+                        }}
+                        style={{
+                          whiteSpace: 'nowrap',
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden',
+                          maxWidth: '1px'
+                        }}
+                      >
+                        {toTitleCase(o.offense_category)}
+                      </Td>
+                      <Td>
+                        {o._2022.toLocaleString()} ({o._2021.toLocaleString()})
+                      </Td>
+                      <Td>{getYoyChange(o._2021, o._2022)}</Td>
+                    </Tr>
+                  ))}
                 </Tbody>
               </Table>
             </Box>
             <VStack align="stretch">
-              <HStack spacing={5}>
-                <Text>
-                  {/* {neighborhood.length === 0 ? 'Atlanta' : neighborhood}:{' '} */}
-                  {currentCount.toLocaleString()} crimes in {years.current}
-                </Text>
-                <Text>
-                  {yoy_change > 0 ? (
-                    <TriangleUpIcon color="red" mb={1} mr={1} />
-                  ) : (
-                    <TriangleDownIcon color="green" />
-                  )}
-                  {yoy_change.toLocaleString('en-US', {
-                    style: 'percent'
-                  })}{' '}
-                  compared to {years.prior}
-                </Text>
-              </HStack>
               <HStack spacing={2}>
                 <Button
                   bg={'#6FFFB0'}

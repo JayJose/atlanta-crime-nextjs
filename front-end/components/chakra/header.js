@@ -19,8 +19,10 @@ export function MyHeader({ openDrawer, openModal }) {
     <>
       <Flex width={'100%'}>
         <Box p="0">
-          <Heading fontWeight={300}>Crime sucks!</Heading>
-          <Text fontWeight={200}>Crime in Atlanta, Georgia, USA</Text>
+          <Heading size="lg" fontWeight={300}>
+            Crime sucks!
+          </Heading>
+          <Text fontWeight={300}>Crime in Atlanta, Georgia, USA</Text>
         </Box>
         <Spacer />
         <Box>
