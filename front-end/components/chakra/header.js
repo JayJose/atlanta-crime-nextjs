@@ -54,6 +54,11 @@ export function MyHeader({ openDrawer, openModal }) {
                       View the repo <ExternalLinkIcon />
                     </Link>
                   </MenuItem>
+                  <MenuItem>
+                    <Link href="https://www.atlantapd.org/i-want-to/crime-data-downloads">
+                      Get the data <ExternalLinkIcon />
+                    </Link>
+                  </MenuItem>
                 </MenuList>
               </>
             )}

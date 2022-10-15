@@ -16,9 +16,16 @@ import {
   Box,
   Button,
   Flex,
+  Heading,
   HStack,
   Text,
-  VStack
+  VStack,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td
 } from '@chakra-ui/react';
 import { RepeatIcon, TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
 
@@ -31,8 +38,8 @@ export const getStaticProps = async () => {
   const { data: map } = await supabase
     .from('app_map')
     .select('*')
-    .eq('year', 2022);
-  //.eq('neighborhood', 'midtown');
+    .eq('year', 2022)
+    .in('neighborhood', ['midtown', 'downtown', 'grant park']);
 
   const { data: neighborhoods } = await supabase
     .from('dim_neighborhoods')
@@ -128,6 +135,15 @@ export default function Home(props) {
 
   const [viewState, setViewState] = useState(indexViewState);
 
+  var mapData;
+  if (offense.length === 0) {
+    mapData = props.map;
+  } else {
+    mapData = _.filter(props.map, function (row) {
+      return row.offense_category === offense[0];
+    });
+  }
+
   return (
     <>
       <Head>
@@ -152,6 +168,74 @@ export default function Home(props) {
             borderRadius={'10px'}
           >
             <MyHeader></MyHeader>
+            <Text>Value of offense is {offense}.</Text>
+            <Box overflowY="auto">
+              <Table variant="striped" colorScheme="black">
+                <Thead position="sticky" top={0} bgColor="black">
+                  <Tr>
+                    <Th color={'white'}>Offense</Th>
+                    <Th color={'white'}>Crimes in 2022</Th>
+                    <Th color={'white'}>YoY Change</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  <Tr>
+                    <Td
+                      onClick={(e) => {
+                        setOffense([e.target.innerText]);
+                      }}
+                      style={{
+                        whiteSpace: 'nowrap',
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        maxWidth: '1px'
+                      }}
+                    >
+                      assault offenses
+                    </Td>
+                    <Td>{currentCount.toLocaleString()}</Td>
+                    <Td>
+                      {yoy_change > 0 ? (
+                        <TriangleUpIcon color="red" mb={1} mr={1} />
+                      ) : (
+                        <TriangleDownIcon color="green" />
+                      )}
+                      {yoy_change.toLocaleString('en-US', {
+                        style: 'percent'
+                      })}
+                    </Td>
+                  </Tr>
+                  <Tr>
+                    <Td>motor vehicle theft</Td>
+                    <Td>{currentCount.toLocaleString()}</Td>
+                    <Td>
+                      {yoy_change > 0 ? (
+                        <TriangleUpIcon color="red" mb={1} mr={1} />
+                      ) : (
+                        <TriangleDownIcon color="green" />
+                      )}
+                      {yoy_change.toLocaleString('en-US', {
+                        style: 'percent'
+                      })}
+                    </Td>
+                  </Tr>
+                  <Tr>
+                    <Td>larceny / theft offenses</Td>
+                    <Td>{currentCount.toLocaleString()}</Td>
+                    <Td>
+                      {yoy_change > 0 ? (
+                        <TriangleUpIcon color="red" mb={1} mr={1} />
+                      ) : (
+                        <TriangleDownIcon color="green" />
+                      )}
+                      {yoy_change.toLocaleString('en-US', {
+                        style: 'percent'
+                      })}
+                    </Td>
+                  </Tr>
+                </Tbody>
+              </Table>
+            </Box>
             <VStack align="stretch">
               <HStack spacing={5}>
                 <Text>
@@ -180,12 +264,13 @@ export default function Home(props) {
                 >
                   Show me more.
                 </Button>
-                {neighborhood.length !== 0 ? (
+                {(neighborhood.length !== 0) | (offense.length !== 0) ? (
                   <Button
                     bg={'#6FFFB0'}
                     textColor={'black'}
                     onClick={() => {
                       setNeighborhood([]);
+                      setOffense([]);
                       setViewState(indexViewState);
                     }}
                   >
@@ -196,7 +281,7 @@ export default function Home(props) {
             </VStack>
             <Box w="100%" h="75vh">
               <MyCityMap
-                mapData={props.map}
+                data={mapData}
                 setNeighborhood={setNeighborhood}
                 viewState={viewState}
                 setViewState={setViewState}
