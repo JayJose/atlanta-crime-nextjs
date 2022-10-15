@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 
 import { supabase } from '../lib/supabase';
@@ -10,9 +11,16 @@ import { toTitleCase } from '../lib/transformStrings';
 
 // NEW
 import { MyHeader } from '../components/chakra/header';
-import { MyLayout } from '../components/chakra/layout';
-import { Container, Box, Flex, HStack, Text, VStack } from '@chakra-ui/react';
-import { TriangleUpIcon, TriangleDownIcon } from '@chakra-ui/icons';
+import {
+  Container,
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Text,
+  VStack
+} from '@chakra-ui/react';
+import { RepeatIcon, TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
 
 export const getStaticProps = async () => {
   const { data: crimes } = await supabase
@@ -48,6 +56,8 @@ export const getStaticProps = async () => {
 
 export default function Home(props) {
   const isMounted = useRef(false);
+
+  const router = useRouter();
 
   // box config
   const elevation = 'xsmall';
@@ -108,6 +118,16 @@ export default function Home(props) {
     }
   };
 
+  const indexViewState = {
+    latitude: 33.74,
+    longitude: -84.42,
+    zoom: 11,
+    bearing: 0,
+    pitch: 35
+  };
+
+  const [viewState, setViewState] = useState(indexViewState);
+
   return (
     <>
       <Head>
@@ -125,33 +145,61 @@ export default function Home(props) {
           <VStack
             w="100%"
             h="full"
-            p={1}
+            p={3}
             spacing={5}
             align="stretch"
             bg={'black'}
             borderRadius={'10px'}
           >
             <MyHeader></MyHeader>
-            <HStack spacing={5}>
-              <Text>
-                {currentCount.toLocaleString()} crimes in {years.current}
-              </Text>
-              <Text>
-                {yoy_change > 0 ? (
-                  <TriangleUpIcon color="red" mb={1} mr={1} />
-                ) : (
-                  <TriangleDownIcon color="green" />
-                )}
-                {yoy_change.toLocaleString('en-US', {
-                  style: 'percent'
-                })}{' '}
-                compared to {years.prior}
-              </Text>
-            </HStack>
+            <VStack align="stretch">
+              <HStack spacing={5}>
+                <Text>
+                  {/* {neighborhood.length === 0 ? 'Atlanta' : neighborhood}:{' '} */}
+                  {currentCount.toLocaleString()} crimes in {years.current}
+                </Text>
+                <Text>
+                  {yoy_change > 0 ? (
+                    <TriangleUpIcon color="red" mb={1} mr={1} />
+                  ) : (
+                    <TriangleDownIcon color="green" />
+                  )}
+                  {yoy_change.toLocaleString('en-US', {
+                    style: 'percent'
+                  })}{' '}
+                  compared to {years.prior}
+                </Text>
+              </HStack>
+              <HStack spacing={2}>
+                <Button
+                  bg={'#6FFFB0'}
+                  textColor={'black'}
+                  onClick={() =>
+                    router.push(`/neighborhoods/${neighborhood[0]}`)
+                  }
+                >
+                  Show me more.
+                </Button>
+                {neighborhood.length !== 0 ? (
+                  <Button
+                    bg={'#6FFFB0'}
+                    textColor={'black'}
+                    onClick={() => {
+                      setNeighborhood([]);
+                      setViewState(indexViewState);
+                    }}
+                  >
+                    Reset the map.
+                  </Button>
+                ) : null}
+              </HStack>
+            </VStack>
             <Box w="100%" h="75vh">
               <MyCityMap
                 mapData={props.map}
                 setNeighborhood={setNeighborhood}
+                viewState={viewState}
+                setViewState={setViewState}
               ></MyCityMap>
             </Box>
           </VStack>

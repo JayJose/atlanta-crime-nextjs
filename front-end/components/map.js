@@ -106,22 +106,18 @@ export function MyNeighborhoodMap({ neighborhood, mapData }) {
  * Display a map of all crimes in Atlanta with outlines by neighborhood
  * Clicking a neighborhood routes the user to a drill down
  */
-export function MyCityMap({ mapData, setNeighborhood }) {
+export function MyCityMap({
+  mapData,
+  setNeighborhood,
+  setViewState,
+  viewState
+}) {
   const router = useRouter();
 
   mapData.forEach(
     (row) =>
       (row.coordinates = [parseFloat(row.longitude), parseFloat(row.latitude)])
   );
-
-  // set the initial view state to the middle-ish of Atlanta city proper)
-  const [viewState, setViewState] = useState({
-    latitude: 33.74,
-    longitude: -84.42,
-    zoom: 11,
-    bearing: 0,
-    pitch: 35
-  });
 
   const updateViewState = ({ viewState }) => {
     setViewState(viewState);
