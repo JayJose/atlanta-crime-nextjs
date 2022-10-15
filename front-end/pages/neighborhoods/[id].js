@@ -92,19 +92,6 @@ export default function Neighborhood(props) {
             <MyResponsiveLine data={myTrendsData} />
             <MyResponsiveLine data={myTrendsData} />
             <MyResponsiveLine data={myTrendsData} />
-            <MyResponsiveLine data={myTrendsData} />
-            <MyResponsiveLine data={myTrendsData} />
-            <MyResponsiveLine data={myTrendsData} />
-            <MyResponsiveLine data={myTrendsData} />
-            <MyResponsiveLine data={myTrendsData} />
-            <MyResponsiveLine data={myTrendsData} />
-            <MyResponsiveLine data={myTrendsData} />
-            <MyResponsiveLine data={myTrendsData} />
-            <MyResponsiveLine data={myTrendsData} />
-            <MyResponsiveLine data={myTrendsData} />
-            <MyResponsiveLine data={myTrendsData} />
-            <MyResponsiveLine data={myTrendsData} />
-            <MyResponsiveLine data={myTrendsData} />
           </VStack>
         </Flex>
       </Container>

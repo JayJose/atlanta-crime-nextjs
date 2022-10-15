@@ -148,6 +148,7 @@ export default function Home(props) {
 
   const [viewState, setViewState] = useState(indexViewState);
 
+  //TODO update map to include neighborhood and offense values
   var mapData;
   if (offense.length === 0) {
     mapData = props.map;
@@ -177,7 +178,7 @@ export default function Home(props) {
             w="100%"
             h="full"
             p={3}
-            spacing={5}
+            spacing={3}
             align="stretch"
             bg={'black'}
             borderRadius={'10px'}
@@ -188,7 +189,7 @@ export default function Home(props) {
                 <Thead position="sticky" top={0} bgColor="black">
                   <Tr>
                     <Th color={'white'}>Offense</Th>
-                    <Th color={'white'}>Crimes in 2022 (2021)</Th>
+                    <Th color={'white'}>Crimes in 2022</Th>
                     <Th color={'white'}>YoY Change</Th>
                   </Tr>
                 </Thead>
@@ -209,41 +210,43 @@ export default function Home(props) {
                       >
                         {toTitleCase(o.offense_category)}
                       </Td>
-                      <Td>
-                        {o._2022.toLocaleString()} ({o._2021.toLocaleString()})
-                      </Td>
+                      <Td>{o._2022.toLocaleString()}</Td>
                       <Td>{getYoyChange(o._2021, o._2022)}</Td>
                     </Tr>
                   ))}
                 </Tbody>
               </Table>
             </Box>
-            <VStack align="stretch">
-              <HStack spacing={2}>
+
+            <HStack spacing={2}>
+              <Button
+                bg={'#6FFFB0'}
+                textColor={'black'}
+                onClick={() => router.push(`/neighborhoods/${neighborhood[0]}`)}
+              >
+                Show me more.
+              </Button>
+              {(neighborhood.length !== 0) | (offense.length !== 0) ? (
                 <Button
                   bg={'#6FFFB0'}
                   textColor={'black'}
-                  onClick={() =>
-                    router.push(`/neighborhoods/${neighborhood[0]}`)
-                  }
+                  onClick={() => {
+                    setNeighborhood([]);
+                    setOffense([]);
+                    setViewState(indexViewState);
+                  }}
                 >
-                  Show me more.
+                  Reset the map.
                 </Button>
-                {(neighborhood.length !== 0) | (offense.length !== 0) ? (
-                  <Button
-                    bg={'#6FFFB0'}
-                    textColor={'black'}
-                    onClick={() => {
-                      setNeighborhood([]);
-                      setOffense([]);
-                      setViewState(indexViewState);
-                    }}
-                  >
-                    Reset the map.
-                  </Button>
-                ) : null}
-              </HStack>
-            </VStack>
+              ) : null}
+            </HStack>
+            <Text size={'lg'}>
+              Viewing {offense.length === 0 ? 'All' : toTitleCase(offense[0])}{' '}
+              crimes in{' '}
+              {neighborhood.length === 0
+                ? 'Atlanta'
+                : toTitleCase(neighborhood[0])}
+            </Text>
             <Box w="100%" h="75vh">
               <MyCityMap
                 data={mapData}
