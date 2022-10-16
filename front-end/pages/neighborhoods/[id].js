@@ -107,7 +107,7 @@ export default function Neighborhood(props) {
               gap={1}
               columns={{ base: 1, md: 3 }}
               width={'100%'}
-              height={'100%'}
+              height={'500px'}
             >
               {offenseCategories.map((o) => {
                 let data = props.trends.filter((c) => c.offense_category === o);
