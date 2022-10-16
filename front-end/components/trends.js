@@ -1,23 +1,26 @@
 import { ResponsiveLine } from '@nivo/line';
+import { toTitleCase } from '../lib/transformStrings';
 
-// make sure parent container have a defined height when using
-// responsive component, otherwise height will be 0 and
-// no chart will be rendered.
-// website examples showcase many properties,
-// you'll often use just a few of them.
+const theme = {
+  theme: {
+    fontSize: '10px',
+    textColor: 'white'
+  }
+};
+
 export function MyResponsiveLine({ data, y_label = 'Crimes' }) {
   data[0]['color'] = 'gray';
   data[1]['color'] = '#6FFFB0';
 
   return (
     <ResponsiveLine
+      theme={theme.theme}
       data={data}
       height="200"
-      margin={{ top: 40, right: 40, bottom: 50, left: 60 }}
+      margin={{ top: 40, right: 75, bottom: 50, left: 50 }}
       xScale={{
         type: 'linear',
-        min: 1,
-        max: 35 // fix this
+        min: 1
       }}
       yScale={{
         type: 'linear'
@@ -38,11 +41,12 @@ export function MyResponsiveLine({ data, y_label = 'Crimes' }) {
       axisLeft={{
         orient: 'left',
         tickSize: 0,
-        tickPadding: 5,
+        tickPadding: 10,
         tickRotation: 0,
-        legend: y_label,
+        legend: toTitleCase(y_label),
         legendOffset: -40,
-        legendPosition: 'middle'
+        legendPosition: 'middle',
+        format: (e) => Math.floor(e) === e && e
       }}
       pointSize={0}
       pointBorderWidth={1}

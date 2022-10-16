@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 
 import { HamburgerIcon, ExternalLinkIcon } from '@chakra-ui/icons';
+import { Home } from 'grommet-icons';
 import { toTitleCase } from '../../lib/transformStrings';
 
 export function MyHeader({ openDrawer, openModal, title = 'Atlanta' }) {

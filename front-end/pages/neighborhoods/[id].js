@@ -13,7 +13,8 @@ import {
 } from '@chakra-ui/react';
 import { MyResponsiveLine } from '../../components/trends';
 
-import { genHeatmapData } from '../../lib/transformData';
+import { genHeatmapData, genTrendData } from '../../lib/transformData';
+import _ from 'underscore';
 
 export const getStaticPaths = async () => {
   const { data: neighborhoods } = await supabase
@@ -25,7 +26,8 @@ export const getStaticPaths = async () => {
       'inman park',
       'poncey-highland',
       'grant park',
-      'brookhaven'
+      'brookhaven',
+      'kirkwood'
     ]);
 
   const paths = neighborhoods.map(({ id }) => ({
@@ -46,6 +48,12 @@ export const getStaticProps = async ({ params }) => {
     .select('*')
     .eq('neighborhood', params.id);
 
+  const { data: trends } = await supabase
+    .from('app_trends')
+    .select('*')
+    .eq('neighborhood', params.id)
+    .order('offense_category', { ascending: true });
+
   const { data: offenses } = await supabase
     .from('dim_offenses')
     .select('*')
@@ -55,17 +63,16 @@ export const getStaticProps = async ({ params }) => {
     props: {
       id: params.id,
       crimes,
+      trends,
       offenses
     }
   };
 };
 
 export default function Neighborhood(props) {
-  var myTrendsData = genHeatmapData(props.crimes, 'year', 'week_of_year');
-
   const offenseCategories = [
     ...new Set(props.crimes.map((e) => e.offense_category))
-  ];
+  ].sort();
 
   return (
     <>
@@ -93,9 +100,9 @@ export default function Neighborhood(props) {
           >
             <MyHeader title={props.id}></MyHeader>
             {offenseCategories.map((o) => {
-              let data = props.crimes.filter((c) => c.offense_category === o);
-              let chartData = genHeatmapData(data, 'year', 'week_of_year');
-
+              let data = props.trends.filter((c) => c.offense_category === o);
+              let chartData = genTrendData(data, 'year', 'week_of_year');
+              console.log(chartData);
               return <MyResponsiveLine key={o} data={chartData} y_label={o} />;
             })}
           </VStack>
