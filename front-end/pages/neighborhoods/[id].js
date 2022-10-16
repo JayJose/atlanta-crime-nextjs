@@ -114,7 +114,7 @@ export default function Neighborhood(props) {
                 let chartData = genTrendData(data, 'year', 'week_of_year');
                 console.log(chartData);
                 return (
-                  <GridItem>
+                  <GridItem key={o}>
                     <MyResponsiveLine key={o} data={chartData} y_label={o} />
                   </GridItem>
                 );
