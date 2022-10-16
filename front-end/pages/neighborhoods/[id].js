@@ -74,7 +74,7 @@ export const getStaticProps = async ({ params }) => {
 
 export default function Neighborhood(props) {
   const offenseCategories = [
-    ...new Set(props.crimes.map((e) => e.offense_category))
+    ...new Set(props.offenses.map((e) => e.offense_category))
   ].sort();
 
   return (
@@ -105,7 +105,7 @@ export default function Neighborhood(props) {
             <Heading size={'sm'}>Cumulative counts by year</Heading>
             <SimpleGrid
               gap={1}
-              columns={{ md: 3 }}
+              columns={{ base: 1, md: 3 }}
               width={'100%'}
               height={'100%'}
             >
