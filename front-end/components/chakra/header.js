@@ -13,16 +13,17 @@ import {
 } from '@chakra-ui/react';
 
 import { HamburgerIcon, ExternalLinkIcon } from '@chakra-ui/icons';
+import { toTitleCase } from '../../lib/transformStrings';
 
-export function MyHeader({ openDrawer, openModal }) {
+export function MyHeader({ openDrawer, openModal, title = 'Atlanta' }) {
   return (
     <>
-      <Flex width={'100%'}>
+      <Flex width={'100%'} borderBottom={'2px solid #6FFFB0'}>
         <Box p="0">
           <Heading size="lg" fontWeight={300}>
             Crime sucks!
           </Heading>
-          <Text fontWeight={300}>Crime in Atlanta, Georgia, USA</Text>
+          <Text fontWeight={300}>Crime in {toTitleCase(title)}</Text>
         </Box>
         <Spacer />
         <Box>

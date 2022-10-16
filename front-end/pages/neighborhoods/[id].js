@@ -46,16 +46,26 @@ export const getStaticProps = async ({ params }) => {
     .select('*')
     .eq('neighborhood', params.id);
 
+  const { data: offenses } = await supabase
+    .from('dim_offenses')
+    .select('*')
+    .order('offense', { ascending: true });
+
   return {
     props: {
       id: params.id,
-      crimes
+      crimes,
+      offenses
     }
   };
 };
 
 export default function Neighborhood(props) {
-  var myTrendsData = genHeatmapData(props.crimes, 'year', 'month');
+  var myTrendsData = genHeatmapData(props.crimes, 'year', 'week_of_year');
+
+  const offenseCategories = [
+    ...new Set(props.crimes.map((e) => e.offense_category))
+  ];
 
   return (
     <>
@@ -64,12 +74,7 @@ export default function Neighborhood(props) {
         <meta name="description" content="A crime app." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Container
-        maxW="container.lg"
-        p={5}
-        background={'#6FFFB0'}
-        borderRadius={'10px'}
-      >
+      <Container maxW="container.lg" p={1} background={'#6FFFB0'}>
         <Flex
           h={{ base: 'auto', md: '100vh' }}
           py={[0, 0, 0]}
@@ -78,7 +83,7 @@ export default function Neighborhood(props) {
         >
           <VStack
             w="100%"
-            h="auto"
+            h="100vh" // watch this
             overflowY={'auto'}
             p={3}
             spacing={5}
@@ -86,12 +91,13 @@ export default function Neighborhood(props) {
             bg={'black'}
             borderRadius={'10px'}
           >
-            <MyHeader></MyHeader>
-            <MyResponsiveLine data={myTrendsData} />
-            <MyResponsiveLine data={myTrendsData} />
-            <MyResponsiveLine data={myTrendsData} />
-            <MyResponsiveLine data={myTrendsData} />
-            <MyResponsiveLine data={myTrendsData} />
+            <MyHeader title={props.id}></MyHeader>
+            {offenseCategories.map((o) => {
+              let data = props.crimes.filter((c) => c.offense_category === o);
+              let chartData = genHeatmapData(data, 'year', 'week_of_year');
+
+              return <MyResponsiveLine key={o} data={chartData} y_label={o} />;
+            })}
           </VStack>
         </Flex>
       </Container>
