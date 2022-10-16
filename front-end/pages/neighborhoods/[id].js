@@ -7,9 +7,12 @@ import {
   Box,
   Button,
   Flex,
+  Heading,
   HStack,
   Text,
-  VStack
+  VStack,
+  SimpleGrid,
+  GridItem
 } from '@chakra-ui/react';
 import { MyResponsiveLine } from '../../components/trends';
 
@@ -99,12 +102,24 @@ export default function Neighborhood(props) {
             borderRadius={'10px'}
           >
             <MyHeader title={props.id}></MyHeader>
-            {offenseCategories.map((o) => {
-              let data = props.trends.filter((c) => c.offense_category === o);
-              let chartData = genTrendData(data, 'year', 'week_of_year');
-              console.log(chartData);
-              return <MyResponsiveLine key={o} data={chartData} y_label={o} />;
-            })}
+            <Heading>Weekly trends by Offense</Heading>
+            <SimpleGrid
+              gap={1}
+              columns={{ md: 3 }}
+              width={'100%'}
+              height={'100%'}
+            >
+              {offenseCategories.map((o) => {
+                let data = props.trends.filter((c) => c.offense_category === o);
+                let chartData = genTrendData(data, 'year', 'week_of_year');
+                console.log(chartData);
+                return (
+                  <GridItem>
+                    <MyResponsiveLine key={o} data={chartData} y_label={o} />
+                  </GridItem>
+                );
+              })}
+            </SimpleGrid>
           </VStack>
         </Flex>
       </Container>
