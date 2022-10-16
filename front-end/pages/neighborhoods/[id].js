@@ -81,7 +81,7 @@ export default function Neighborhood(props) {
         <meta name="description" content="A crime app." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Container maxW="container.lg" p={1} background={'#6FFFB0'}>
+      <Container maxW="container.xl" p={1} background={'#6FFFB0'}>
         <Flex
           h={{ base: 'auto', md: '100vh' }}
           py={[0, 0, 0]}

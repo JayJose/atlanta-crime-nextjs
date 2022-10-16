@@ -11,6 +11,7 @@ import { toTitleCase, getYoyChange } from '../lib/transformStrings';
 
 // NEW
 import { MyHeader } from '../components/chakra/header';
+import { MyVerticalTable } from '../components/chakra/verticalTable';
 import {
   Container,
   Box,
@@ -18,11 +19,13 @@ import {
   Flex,
   Heading,
   HStack,
+  Stack,
   Text,
   VStack,
   Table,
   Thead,
   Tbody,
+  Tooltip,
   Tr,
   Th,
   Td
@@ -167,7 +170,7 @@ export default function Home(props) {
         <meta name="description" content="A crime app." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Container maxW="container.xl" p={3} background={'#6FFFB0'}>
+      <Container maxW="container.xl" p={1} background={'#6FFFB0'}>
         <Flex
           h={{ base: 'auto', md: '100vh' }}
           py={[0, 0, 0]}
@@ -217,7 +220,6 @@ export default function Home(props) {
                 </Tbody>
               </Table>
             </Box>
-
             <HStack spacing={2}>
               <Button
                 bg={'#6FFFB0'}
