@@ -27,7 +27,7 @@ dense as (
     from neighborhoods
     cross join offenses
     cross join periods
-)
+), final as (
 select d.neighborhood,
     d.offense_category,
     d.year,
@@ -42,3 +42,7 @@ group by d.neighborhood,
     d.offense_category,
     d.year,
     d.week_of_year
+)
+select *,
+    sum(value) OVER (partition by neighborhood, offense_category, year ORDER BY week_of_year) as cum_value
+from final

@@ -52,7 +52,7 @@ export function genTrendData(data, outerCategory, innerCategory) {
       data: _.map(_.groupBy(value, innerCategory), function (value, key) {
         return {
           x: key,
-          y: value[0].value
+          y: value[0].cum_value
         };
       })
     };

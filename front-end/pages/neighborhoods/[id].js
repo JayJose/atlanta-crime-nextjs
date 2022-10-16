@@ -102,7 +102,7 @@ export default function Neighborhood(props) {
             borderRadius={'10px'}
           >
             <MyHeader title={props.id}></MyHeader>
-            <Heading>Weekly trends by Offense</Heading>
+            <Heading size={'sm'}>Cumulative counts by year</Heading>
             <SimpleGrid
               gap={1}
               columns={{ md: 3 }}
