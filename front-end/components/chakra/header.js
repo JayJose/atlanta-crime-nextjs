@@ -19,7 +19,15 @@ import { toTitleCase } from '../../lib/transformStrings';
 export function MyHeader({ openDrawer, openModal, title = 'Atlanta' }) {
   return (
     <>
-      <Flex width={'100%'} borderBottom={'2px solid #6FFFB0'}>
+      <Flex
+        width={'100%'}
+        top="0"
+        position="sticky"
+        zIndex={1}
+        p={2}
+        background={'black'}
+        borderBottom={'2px solid #6FFFB0'}
+      >
         <Box p="0">
           <Heading size="lg" fontWeight={300}>
             Crime sucks!

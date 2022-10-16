@@ -170,7 +170,8 @@ export default function Home(props) {
         <meta name="description" content="A crime app." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Container maxW="container.xl" p={1} background={'#6FFFB0'}>
+      <MyHeader></MyHeader>
+      <Container maxW="container.xl" p={1} background={'black'}>
         <Flex
           h={{ base: 'auto', md: '100vh' }}
           py={[0, 0, 0]}
@@ -186,7 +187,6 @@ export default function Home(props) {
             bg={'black'}
             borderRadius={'10px'}
           >
-            <MyHeader></MyHeader>
             <Box>
               <Table variant="simple" colorScheme="black" size={'sm'}>
                 <Thead position="sticky" top={0} bgColor="black">
