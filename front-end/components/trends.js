@@ -1,5 +1,6 @@
 import { ResponsiveLine } from '@nivo/line';
 import { toTitleCase } from '../lib/transformStrings';
+import { getYoyChange } from '../lib/transformStrings';
 
 const theme = {
   theme: {
@@ -27,6 +28,18 @@ const theme = {
           fill: 'white'
         }
       }
+    },
+    legends: {
+      text: {
+        fontSize: 12
+      }
+    },
+    tooltip: {
+      container: {
+        background: '#ffffff',
+        color: '#333333',
+        fontSize: 11
+      }
     }
   }
 };
@@ -39,8 +52,37 @@ export function MyResponsiveLine({ data, y_label = 'Crimes' }) {
     <ResponsiveLine
       theme={theme.theme}
       data={data}
-      tooltip={() => <></>}
-      margin={{ top: 40, right: 20, bottom: 50, left: 50 }}
+      enableSlices="x"
+      sliceTooltip={({ slice }) => {
+        var pts = slice.points.map((point) => point.data.y);
+        console.log(pts);
+        return (
+          <div
+            style={{
+              background: 'black',
+              padding: '9px 12px',
+              border: '1px solid #ccc'
+            }}
+          >
+            <div>Week {slice.points[0].data.x}</div>
+            {slice.points.map((point) => {
+              return (
+                <div
+                  key={point.id}
+                  style={{
+                    color: point.serieColor,
+                    padding: '3px 0'
+                  }}
+                >
+                  {point.serieId}: {point.data.yFormatted}
+                </div>
+              );
+            })}
+            <div>{getYoyChange(pts[1], pts[0])}</div>
+          </div>
+        );
+      }}
+      margin={{ top: 50, right: 20, bottom: 50, left: 50 }}
       xScale={{
         type: 'linear',
         min: 1
@@ -85,7 +127,7 @@ export function MyResponsiveLine({ data, y_label = 'Crimes' }) {
           direction: 'row',
           justify: false,
           translateX: 0,
-          translateY: -10,
+          translateY: -20,
           itemsSpacing: -30,
           itemDirection: 'left-to-right',
           itemWidth: 80,
