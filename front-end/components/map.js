@@ -22,9 +22,9 @@ export function MyNeighborhoodMap({ neighborhood, data }) {
   const [viewState, setViewState] = useState({
     latitude: parseFloat(myCentroid[1]),
     longitude: parseFloat(myCentroid[0]),
-    zoom: 13.5,
+    zoom: 12,
     bearing: 0,
-    pitch: 40
+    pitch: 0
   });
 
   const updateViewState = ({ viewState }) => {

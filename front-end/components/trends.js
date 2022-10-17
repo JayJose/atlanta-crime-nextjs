@@ -3,8 +3,31 @@ import { toTitleCase } from '../lib/transformStrings';
 
 const theme = {
   theme: {
-    fontSize: '10px',
-    textColor: 'white'
+    fontSize: 10,
+    textColor: 'white',
+    axis: {
+      domain: {
+        line: {
+          //stroke: '#777777',
+          strokeWidth: 1
+        }
+      },
+      legend: {
+        text: {
+          fontSize: 11
+        }
+      },
+      ticks: {
+        line: {
+          stroke: '#777777',
+          strokeWidth: 0
+        },
+        text: {
+          fontSize: 10,
+          fill: 'white'
+        }
+      }
+    }
   }
 };
 
@@ -16,6 +39,7 @@ export function MyResponsiveLine({ data, y_label = 'Crimes' }) {
     <ResponsiveLine
       theme={theme.theme}
       data={data}
+      tooltip={() => <></>}
       margin={{ top: 40, right: 20, bottom: 50, left: 50 }}
       xScale={{
         type: 'linear',
@@ -43,9 +67,10 @@ export function MyResponsiveLine({ data, y_label = 'Crimes' }) {
         tickPadding: 10,
         tickRotation: 0,
         legend: toTitleCase(y_label),
-        legendOffset: -40,
+        legendOffset: -20,
         legendPosition: 'middle',
-        format: (e) => Math.floor(e) === e && e
+        format: () => ''
+        // format: (e) => Math.floor(e) === e && e
       }}
       pointSize={0}
       pointBorderWidth={1}
@@ -60,15 +85,15 @@ export function MyResponsiveLine({ data, y_label = 'Crimes' }) {
           direction: 'row',
           justify: false,
           translateX: 0,
-          translateY: -30,
+          translateY: -10,
           itemsSpacing: -30,
           itemDirection: 'left-to-right',
           itemWidth: 80,
           itemHeight: 20,
           itemOpacity: 1,
           itemTextColor: 'white',
-          symbolSize: 10,
-          symbolShape: 'circle',
+          symbolSize: 7,
+          symbolShape: 'square',
           symbolBorderColor: 'rgba(0, 0, 0, .5)',
           effects: [
             {
