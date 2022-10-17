@@ -1,19 +1,24 @@
-import { Tip } from 'grommet';
+import { extendTheme } from '@chakra-ui/react';
 
-export default {
-  global: {
-    colors: {
-      brand: 'accent-1',
-      background: 'accent-2',
-      backgroundCharts: 'white',
-      bars: '#FD6FFF',
-      bars2: ' #81FCED',
-      text: 'black'
-    },
-    font: {
-      family: 'Helvetica',
-      size: '14px',
-      height: '10px'
+const myTheme = extendTheme({
+  colors: {
+    secondaryFontColor: 'white',
+    brand: {
+      900: '#1a365d',
+      800: '#153e75',
+      700: '#2a69ac'
     }
+  },
+  fonts: {
+    body: 'Monserrat, serif',
+    heading: 'Monserrat, serif',
+    mono: 'Menlo, monospace'
+  },
+  fontColors: {
+    primary: 'blackAlpha.800',
+    secondary: 'blackAlpha.500',
+    placeholder: 'blackAlpha.300'
   }
-};
+});
+
+export default myTheme;

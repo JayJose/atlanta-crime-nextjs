@@ -13,16 +13,26 @@ import {
 } from '@chakra-ui/react';
 
 import { HamburgerIcon, ExternalLinkIcon } from '@chakra-ui/icons';
+import { Home } from 'grommet-icons';
+import { toTitleCase } from '../../lib/transformStrings';
 
-export function MyHeader({ openDrawer, openModal }) {
+export function MyHeader({ openDrawer, openModal, title = 'Atlanta' }) {
   return (
     <>
-      <Flex width={'100%'}>
-        <Box p="0">
+      <Flex
+        width={'100%'}
+        top="0"
+        position="sticky"
+        zIndex={1}
+        p={2}
+        background={'black'}
+        borderBottom={'2px solid #6FFFB0'}
+      >
+        <Box p="0" color="brand.0">
           <Heading size="lg" fontWeight={300}>
             Crime sucks!
           </Heading>
-          <Text fontWeight={300}>Crime in Atlanta, Georgia, USA</Text>
+          <Text fontWeight={300}>Crime in {toTitleCase(title)}</Text>
         </Box>
         <Spacer />
         <Box>
@@ -32,7 +42,7 @@ export function MyHeader({ openDrawer, openModal }) {
                 <MenuButton
                   as={IconButton}
                   aria-label="Options"
-                  icon={<HamburgerIcon w={6} h={6} color="#6FFFB0" />}
+                  icon={<HamburgerIcon w={6} h={6} color="brand.100" />}
                   mr={4}
                   mt={4}
                   background={'black'}
@@ -43,7 +53,7 @@ export function MyHeader({ openDrawer, openModal }) {
                 <MenuList
                   fontSize={'14px'}
                   fontWeight={200}
-                  background="#6FFFB0"
+                  background="brand.200"
                   textColor={'black'}
                 >
                   <MenuItem>

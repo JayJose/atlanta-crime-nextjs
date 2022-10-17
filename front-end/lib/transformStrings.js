@@ -25,9 +25,9 @@ export function formatNumbers(str) {
 export function getYoyChange(a, b) {
   function getIcon(value, icon) {
     if ((icon === 'triangle') & (value > 0)) {
-      return <TriangleUpIcon color="red" />;
+      return <TriangleUpIcon color="#FD6FFF" />;
     } else if ((icon === 'triangle') & (value <= 0)) {
-      return <TriangleDownIcon color="green" />;
+      return <TriangleDownIcon color="#6FFFB0" />;
     } else if (icon === 'plus') {
       return <SmallAddIcon color="white" />;
     }

@@ -16,6 +16,7 @@ select n.neighborhood,
     d.year,
     d.month,
     d.month_name_abbreviated,
+    d.week_of_year,
     cast(d.date as varchar(50)) as date,
     f.latitude,
     f.longitude
