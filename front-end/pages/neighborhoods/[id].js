@@ -124,7 +124,7 @@ export default function Neighborhood(props) {
         >
           <VStack
             w="100%"
-            h="full" // watch this
+            //h="full" // watch this
             overflowY={'auto'}
             p={3}
             spacing={5}
@@ -132,7 +132,11 @@ export default function Neighborhood(props) {
             bg={'black'}
             borderRadius={'10px'}
           >
-            <Stack direction={{ base: 'column', md: 'row' }} w="100%" h="50vh">
+            <Stack
+              direction={{ base: 'column', md: 'row' }}
+              width="100%"
+              height="50vh"
+            >
               <Table variant="simple" colorScheme="black" size={'sm'}>
                 <colgroup>
                   <col span="1" style={{ width: '50%' }} />
@@ -178,7 +182,7 @@ export default function Neighborhood(props) {
               gap={1}
               columns={{ base: 1, md: 3 }}
               width={'100%'}
-              height={'75vh'}
+              height={'100vh'}
             >
               {offenseCategories.map((o) => {
                 let data = props.trends.filter((c) => c.offense_category === o);

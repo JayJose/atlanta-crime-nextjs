@@ -42,7 +42,7 @@ export function MyHeader({ openDrawer, openModal, title = 'Atlanta' }) {
                 <MenuButton
                   as={IconButton}
                   aria-label="Options"
-                  icon={<HamburgerIcon w={6} h={6} color="#6FFFB0" />}
+                  icon={<HamburgerIcon w={6} h={6} color="brand.100" />}
                   mr={4}
                   mt={4}
                   background={'black'}
@@ -53,7 +53,7 @@ export function MyHeader({ openDrawer, openModal, title = 'Atlanta' }) {
                 <MenuList
                   fontSize={'14px'}
                   fontWeight={200}
-                  background="#6FFFB0"
+                  background="brand.200"
                   textColor={'black'}
                 >
                   <MenuItem>

@@ -9,7 +9,7 @@ const theme = extendTheme({
     brand: {
       0: '#FFFFFF',
       100: '#6FFFB0',
-      900: '#FD6FFF'
+      200: '#FD6FFF'
     }
   },
   fonts: {
