@@ -22,9 +22,9 @@ export function MyNeighborhoodMap({ neighborhood, data }) {
   const [viewState, setViewState] = useState({
     latitude: parseFloat(myCentroid[1]),
     longitude: parseFloat(myCentroid[0]),
-    zoom: 13.5,
+    zoom: 12,
     bearing: 0,
-    pitch: 40
+    pitch: 0
   });
 
   const updateViewState = ({ viewState }) => {
@@ -39,7 +39,7 @@ export function MyNeighborhoodMap({ neighborhood, data }) {
     stroked: true,
     getLineColor: [253, 111, 255, 220],
     getFillColor: [0, 0, 0, 0],
-    getLineWidth: 10,
+    getLineWidth: 12,
     pickable: false,
     autoHighlight: true,
     highlightColor: [253, 111, 255, 220]
@@ -53,8 +53,8 @@ export function MyNeighborhoodMap({ neighborhood, data }) {
     stroked: true,
     filled: true,
     radiusScale: 6,
-    radiusMinPixels: 5,
-    radiusMaxPixels: 100,
+    radiusMinPixels: 3,
+    radiusMaxPixels: 6,
     lineWidthMinPixels: 1,
     getPosition: (d) => d.coordinates,
     getFillColor: (d) => [111, 255, 176],

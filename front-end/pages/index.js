@@ -11,6 +11,7 @@ import { toTitleCase, getYoyChange } from '../lib/transformStrings';
 
 // NEW
 import { MyHeader } from '../components/chakra/header';
+import { MyVerticalTable } from '../components/chakra/verticalTable';
 import {
   Container,
   Box,
@@ -18,11 +19,13 @@ import {
   Flex,
   Heading,
   HStack,
+  Stack,
   Text,
   VStack,
   Table,
   Thead,
   Tbody,
+  Tooltip,
   Tr,
   Th,
   Td
@@ -167,7 +170,13 @@ export default function Home(props) {
         <meta name="description" content="A crime app." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Container maxW="container.xl" p={3} background={'#6FFFB0'}>
+      <MyHeader></MyHeader>
+      <Container
+        maxW="container.xl"
+        p={{ base: 0, md: 3 }}
+        background={'black'}
+        color="brand.0"
+      >
         <Flex
           h={{ base: 'auto', md: '100vh' }}
           py={[0, 0, 0]}
@@ -183,9 +192,13 @@ export default function Home(props) {
             bg={'black'}
             borderRadius={'10px'}
           >
-            <MyHeader></MyHeader>
             <Box>
               <Table variant="simple" colorScheme="black" size={'sm'}>
+                <colgroup>
+                  <col span="1" style={{ width: '40%' }} />
+                  <col span="1" style={{ width: '30%' }} />
+                  <col span="1" style={{ width: '30%' }} />
+                </colgroup>
                 <Thead position="sticky" top={0} bgColor="black">
                   <Tr>
                     <Th color={'white'}>Offense</Th>
@@ -210,14 +223,13 @@ export default function Home(props) {
                       >
                         {toTitleCase(o.offense_category)}
                       </Td>
-                      <Td>{o._2022.toLocaleString()}</Td>
+                      <Td textAlign={'right'}>{o._2022.toLocaleString()}</Td>
                       <Td>{getYoyChange(o._2021, o._2022)}</Td>
                     </Tr>
                   ))}
                 </Tbody>
               </Table>
             </Box>
-
             <HStack spacing={2}>
               <Button
                 bg={'#6FFFB0'}
