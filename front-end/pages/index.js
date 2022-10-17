@@ -171,7 +171,11 @@ export default function Home(props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MyHeader></MyHeader>
-      <Container maxW="container.xl" p={1} background={'black'}>
+      <Container
+        maxW="container.xl"
+        p={{ base: 0, md: 3 }}
+        background={'black'}
+      >
         <Flex
           h={{ base: 'auto', md: '100vh' }}
           py={[0, 0, 0]}
@@ -189,6 +193,11 @@ export default function Home(props) {
           >
             <Box>
               <Table variant="simple" colorScheme="black" size={'sm'}>
+                <colgroup>
+                  <col span="1" style={{ width: '40%' }} />
+                  <col span="1" style={{ width: '30%' }} />
+                  <col span="1" style={{ width: '30%' }} />
+                </colgroup>
                 <Thead position="sticky" top={0} bgColor="black">
                   <Tr>
                     <Th color={'white'}>Offense</Th>
@@ -213,7 +222,7 @@ export default function Home(props) {
                       >
                         {toTitleCase(o.offense_category)}
                       </Td>
-                      <Td>{o._2022.toLocaleString()}</Td>
+                      <Td textAlign={'right'}>{o._2022.toLocaleString()}</Td>
                       <Td>{getYoyChange(o._2021, o._2022)}</Td>
                     </Tr>
                   ))}
