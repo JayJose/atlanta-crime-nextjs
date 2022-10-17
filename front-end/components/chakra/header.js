@@ -30,7 +30,7 @@ export function MyHeader({ openDrawer, openModal, title = 'Atlanta' }) {
       >
         <Box p="0" color="brand.0">
           <Heading size="lg" fontWeight={300}>
-            Crime sucks!
+            Atlanta Crime
           </Heading>
           <Text fontWeight={300}>Crime in {toTitleCase(title)}</Text>
         </Box>
