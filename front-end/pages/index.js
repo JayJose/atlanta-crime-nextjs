@@ -175,6 +175,7 @@ export default function Home(props) {
         maxW="container.xl"
         p={{ base: 0, md: 3 }}
         background={'black'}
+        color="brand.0"
       >
         <Flex
           h={{ base: 'auto', md: '100vh' }}

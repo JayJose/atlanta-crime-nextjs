@@ -6,11 +6,10 @@ import '../styles/styles.css';
 
 const theme = extendTheme({
   colors: {
-    secondaryFontColor: 'white',
     brand: {
-      900: '#1a365d',
-      800: '#153e75',
-      700: '#2a69ac'
+      0: '#FFFFFF',
+      100: '#6FFFB0',
+      900: '#FD6FFF'
     }
   },
   fonts: {

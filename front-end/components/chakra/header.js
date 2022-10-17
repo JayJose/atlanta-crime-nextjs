@@ -28,7 +28,7 @@ export function MyHeader({ openDrawer, openModal, title = 'Atlanta' }) {
         background={'black'}
         borderBottom={'2px solid #6FFFB0'}
       >
-        <Box p="0">
+        <Box p="0" color="brand.0">
           <Heading size="lg" fontWeight={300}>
             Crime sucks!
           </Heading>
