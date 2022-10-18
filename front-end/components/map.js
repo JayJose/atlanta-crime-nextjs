@@ -95,6 +95,7 @@ export function MyNeighborhoodMap({ neighborhood, data }) {
             reuseMaps
             mapStyle={BASEMAP.DARK_MATTER}
             mapboxAccessToken={process.env.mapboxAccessToken}
+            attributionControl={false}
           ></StaticMap>
         </DeckGL>
       </div>
