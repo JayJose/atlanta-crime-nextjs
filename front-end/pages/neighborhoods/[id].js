@@ -144,30 +144,34 @@ export default function Neighborhood(props) {
             //h="full" // watch this
             overflowY={'auto'}
             p={1}
-            spacing={1}
+            spacing={2}
             align="stretch"
             bg={'black'}
             borderRadius={'10px'}
           >
-            <SimpleGrid columns={2} width="50%">
-              <GridItem>
-                <Text color="brand.0" mt={0.5} mb={2} columnGap={0}>
+            <SimpleGrid columns={6} width="100%">
+              <GridItem colSpan={1}>
+                <Text color="brand.0" mt={0.5} mb={2}>
                   Crime in{' '}
                 </Text>
               </GridItem>
-              <GridItem>
+              <GridItem colSpan={5}>
                 <Select
-                  placeholder={toTitleCase(props.id)}
                   display={'inline'}
                   size={'sm'}
                   variant={'filled'}
                   color={'brand.200'}
                   bg={'black'}
                   fontSize={'16px'}
-                  value={props.id}
+                  value={toTitleCase(props.id)}
+                  placeholder={toTitleCase(props.id)}
                   onChange={(e) => {
-                    let value = e.target.value;
-                    router.push('/neighborhoods/' + encodeURIComponent(value));
+                    let value = e.target.value.toLowerCase();
+                    if (value !== props.id) {
+                      router.push(
+                        '/neighborhoods/' + encodeURIComponent(value)
+                      );
+                    }
                   }}
                 >
                   {props.neighborhoods.map((n) => {
@@ -196,7 +200,7 @@ export default function Neighborhood(props) {
                 </colgroup>
                 <Thead bgColor="black">
                   <Tr>
-                    <Th color={'white'}>Offense</Th>
+                    <Th color={'white'}>Crime</Th>
                     <Th color={'white'}>Crimes in 2022</Th>
                     <Th color={'white'}>YoY Change</Th>
                   </Tr>
@@ -225,7 +229,12 @@ export default function Neighborhood(props) {
                 data={props.crimes}
               ></MyNeighborhoodMap>
             </Stack>
+            <Box mt={4}></Box>
+            <Divider></Divider>
 
+            <Text fontSize={'14px'} fontStyle={'italic'}>
+              Cumulative crime counts comparison
+            </Text>
             <SimpleGrid
               gap={1}
               columns={{ base: 1, md: 3 }}
