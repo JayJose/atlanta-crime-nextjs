@@ -1,20 +1,21 @@
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { supabase } from '../../lib/supabase';
 
 import { MyHeader } from '../../components/chakra/header';
 import {
-  Container,
   Box,
-  Button,
+  Container,
+  Divider,
   Flex,
-  Heading,
-  HStack,
-  Text,
-  Stack,
-  VStack,
-  SimpleGrid,
   GridItem,
+  HStack,
+  Select,
+  SimpleGrid,
+  Stack,
+  Text,
+  VStack,
   Table,
   Thead,
   Tbody,
@@ -40,7 +41,8 @@ export const getStaticPaths = async () => {
       'poncey-highland',
       'grant park',
       'brookhaven',
-      'kirkwood'
+      'kirkwood',
+      'morningside/lenox park'
     ]);
 
   const paths = neighborhoods.map(({ id }) => ({
@@ -78,26 +80,41 @@ export const getStaticProps = async ({ params }) => {
     .select('*')
     .order('offense', { ascending: true });
 
+  const { data: neighborhoods } = await supabase
+    .from('dim_neighborhoods')
+    .select('*')
+    .in('id', [
+      'midtown',
+      'downtown',
+      'inman park',
+      'poncey-highland',
+      'grant park',
+      'brookhaven',
+      'kirkwood',
+      'morningside/lenox park'
+    ])
+    .order('neighborhood', { ascending: true });
+
   return {
     props: {
       id: params.id,
       crimes,
       trends,
       table,
-      offenses
+      offenses,
+      neighborhoods
     }
   };
 };
 
 export default function Neighborhood(props) {
+  const router = useRouter();
+
   const offenseCategories = [
     ...new Set(props.offenses.map((e) => e.offense_category))
   ].sort();
 
-  const [tableData, setTableData] = useState(props.table);
-  const [mapData, setMapData] = useState(props.crimes);
-
-  mapData.forEach(
+  props.crimes.forEach(
     (row) =>
       (row.coordinates = [parseFloat(row.longitude), parseFloat(row.latitude)])
   );
@@ -132,15 +149,46 @@ export default function Neighborhood(props) {
             bg={'black'}
             borderRadius={'10px'}
           >
-            <Text m={0} p={0} spacing={0} fontWeight={300}>
-              Crime in {toTitleCase(props.id)}
-            </Text>
+            <SimpleGrid columns={2} width="50%">
+              <GridItem>
+                <Text color="brand.0" mt={0.5} mb={2} columnGap={0}>
+                  Crime in{' '}
+                </Text>
+              </GridItem>
+              <GridItem>
+                <Select
+                  placeholder={toTitleCase(props.id)}
+                  display={'inline'}
+                  size={'sm'}
+                  variant={'filled'}
+                  color={'brand.200'}
+                  bg={'black'}
+                  fontSize={'16px'}
+                  value={props.id}
+                  onChange={(e) => {
+                    let value = e.target.value;
+                    router.push('/neighborhoods/' + encodeURIComponent(value));
+                  }}
+                >
+                  {props.neighborhoods.map((n) => {
+                    return (
+                      <option key={n.id} value={n.id}>
+                        {toTitleCase(n.neighborhood)}
+                      </option>
+                    );
+                  })}
+                </Select>
+              </GridItem>
+            </SimpleGrid>
+            <Divider></Divider>
+            <Box></Box>
             <Stack
               direction={{ base: 'column', md: 'row' }}
               width="100%"
               height="70vh"
+              mb={10}
             >
-              <Table variant="simple" colorScheme="black" size={'sm'} mt={0}>
+              <Table variant="simple" colorScheme="black" size={'sm'}>
                 <colgroup>
                   <col span="1" style={{ width: '50%' }} />
                   <col span="1" style={{ width: '25%' }} />
@@ -154,13 +202,9 @@ export default function Neighborhood(props) {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {tableData.map((o) => (
+                  {props.table.map((o) => (
                     <Tr key={o.offense_category}>
                       <Td
-                        // onClick={(e) => {
-                        //   let v = e.target.innerText.toLowerCase();
-                        //   setOffense(v === 'all' ? [] : [v]);
-                        // }}
                         style={{
                           whiteSpace: 'nowrap',
                           textOverflow: 'ellipsis',
@@ -178,9 +222,10 @@ export default function Neighborhood(props) {
               </Table>
               <MyNeighborhoodMap
                 neighborhood={props.id}
-                data={mapData}
+                data={props.crimes}
               ></MyNeighborhoodMap>
             </Stack>
+
             <SimpleGrid
               gap={1}
               columns={{ base: 1, md: 3 }}
