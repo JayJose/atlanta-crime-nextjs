@@ -135,7 +135,7 @@ export default function Neighborhood(props) {
             <Stack
               direction={{ base: 'column', md: 'row' }}
               width="100%"
-              height="50vh"
+              height="70vh"
             >
               <Table variant="simple" colorScheme="black" size={'sm'}>
                 <colgroup>
@@ -143,7 +143,7 @@ export default function Neighborhood(props) {
                   <col span="1" style={{ width: '25%' }} />
                   <col span="1" style={{ width: '25%' }} />
                 </colgroup>
-                <Thead position="sticky" top={0} bgColor="black">
+                <Thead bgColor="black">
                   <Tr>
                     <Th color={'white'}>Offense</Th>
                     <Th color={'white'}>Crimes in 2022</Th>
