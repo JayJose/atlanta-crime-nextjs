@@ -126,18 +126,21 @@ export default function Neighborhood(props) {
             w="100%"
             //h="full" // watch this
             overflowY={'auto'}
-            p={3}
-            spacing={5}
+            p={1}
+            spacing={1}
             align="stretch"
             bg={'black'}
             borderRadius={'10px'}
           >
+            <Text m={0} p={0} spacing={0} fontWeight={300}>
+              Crime in {toTitleCase(props.id)}
+            </Text>
             <Stack
               direction={{ base: 'column', md: 'row' }}
               width="100%"
               height="70vh"
             >
-              <Table variant="simple" colorScheme="black" size={'sm'}>
+              <Table variant="simple" colorScheme="black" size={'sm'} mt={0}>
                 <colgroup>
                   <col span="1" style={{ width: '50%' }} />
                   <col span="1" style={{ width: '25%' }} />
