@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 
 import { MyHeader } from '../../components/chakra/header';
@@ -173,9 +173,18 @@ export default function Neighborhood(props) {
                   onChange={(e) => {
                     let value = e.target.value.toLowerCase();
                     if (value !== props.id) {
+                      let myCentroid = centroids[value];
+
                       router.push(
                         '/neighborhoods/' + encodeURIComponent(value)
                       );
+                      // setViewState({
+                      //   latitude: parseFloat(myCentroid[1]),
+                      //   longitude: parseFloat(myCentroid[0]),
+                      //   zoom: 12,
+                      //   bearing: 0,
+                      //   pitch: 0
+                      // });
                     }
                   }}
                 >
@@ -230,6 +239,7 @@ export default function Neighborhood(props) {
                 </Tbody>
               </Table>
               <MyNeighborhoodMap
+                key={props.id}
                 neighborhood={props.id}
                 data={props.crimes}
               ></MyNeighborhoodMap>
