@@ -30,6 +30,8 @@ import { genHeatmapData, genTrendData } from '../../lib/transformData';
 import { getYoyChange, toTitleCase } from '../../lib/transformStrings';
 import _ from 'underscore';
 
+import centroids from '../../data/atlantaNeighborhoodCentroids.json';
+
 export const getStaticPaths = async () => {
   const { data: neighborhoods } = await supabase
     .from('dim_neighborhoods')
@@ -114,6 +116,9 @@ export default function Neighborhood(props) {
     ...new Set(props.offenses.map((e) => e.offense_category))
   ].sort();
 
+  // map
+
+  // add coordinates
   props.crimes.forEach(
     (row) =>
       (row.coordinates = [parseFloat(row.longitude), parseFloat(row.latitude)])
@@ -233,7 +238,7 @@ export default function Neighborhood(props) {
             <Divider></Divider>
 
             <Text fontSize={'14px'} fontStyle={'italic'}>
-              Cumulative crime counts comparison
+              Cumulative crimes comparisons (2022 vs. 2021)
             </Text>
             <SimpleGrid
               gap={1}
