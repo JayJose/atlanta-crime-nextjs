@@ -178,13 +178,6 @@ export default function Neighborhood(props) {
                       router.push(
                         '/neighborhoods/' + encodeURIComponent(value)
                       );
-                      // setViewState({
-                      //   latitude: parseFloat(myCentroid[1]),
-                      //   longitude: parseFloat(myCentroid[0]),
-                      //   zoom: 12,
-                      //   bearing: 0,
-                      //   pitch: 0
-                      // });
                     }
                   }}
                 >
@@ -200,11 +193,11 @@ export default function Neighborhood(props) {
             </SimpleGrid>
             <Divider></Divider>
             <Box></Box>
+            <Box></Box>
             <Stack
               direction={{ base: 'column', md: 'row' }}
               width="100%"
               height="70vh"
-              mb={10}
             >
               <Table variant="simple" colorScheme="black" size={'sm'}>
                 <colgroup>
@@ -245,8 +238,8 @@ export default function Neighborhood(props) {
               ></MyNeighborhoodMap>
             </Stack>
             <Box mt={4}></Box>
-            <Divider></Divider>
-
+            <Box></Box>
+            <Box></Box>
             <Text fontSize={'14px'} fontStyle={'italic'}>
               Cumulative crimes comparisons (2022 vs. 2021)
             </Text>
