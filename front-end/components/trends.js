@@ -83,7 +83,7 @@ export function MyResponsiveLine({ data, y_label = 'Crimes' }) {
           </div>
         );
       }}
-      margin={{ top: 50, right: 20, bottom: 50, left: 50 }}
+      margin={{ top: 40, right: 20, bottom: 50, left: 50 }}
       xScale={{
         type: 'linear',
         min: 1

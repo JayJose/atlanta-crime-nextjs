@@ -16,7 +16,7 @@ import { HamburgerIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import { Home } from 'grommet-icons';
 import { toTitleCase } from '../../lib/transformStrings';
 
-export function MyHeader({ openDrawer, openModal, title = 'Atlanta' }) {
+export function MyHeader({ openDrawer, openModal }) {
   return (
     <>
       <Flex
@@ -30,9 +30,8 @@ export function MyHeader({ openDrawer, openModal, title = 'Atlanta' }) {
       >
         <Box p="0" color="brand.0">
           <Heading size="lg" fontWeight={300}>
-            Crime sucks!
+            Atlanta Crime
           </Heading>
-          <Text fontWeight={300}>Crime in {toTitleCase(title)}</Text>
         </Box>
         <Spacer />
         <Box>
@@ -44,7 +43,7 @@ export function MyHeader({ openDrawer, openModal, title = 'Atlanta' }) {
                   aria-label="Options"
                   icon={<HamburgerIcon w={6} h={6} color="brand.100" />}
                   mr={4}
-                  mt={4}
+                  mt={0}
                   background={'black'}
                   maxH={7}
                 >

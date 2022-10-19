@@ -1,20 +1,21 @@
 import Head from 'next/head';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 
 import { MyHeader } from '../../components/chakra/header';
 import {
-  Container,
   Box,
-  Button,
+  Container,
+  Divider,
   Flex,
-  Heading,
-  HStack,
-  Text,
-  Stack,
-  VStack,
-  SimpleGrid,
   GridItem,
+  HStack,
+  Select,
+  SimpleGrid,
+  Stack,
+  Text,
+  VStack,
   Table,
   Thead,
   Tbody,
@@ -29,6 +30,8 @@ import { genHeatmapData, genTrendData } from '../../lib/transformData';
 import { getYoyChange, toTitleCase } from '../../lib/transformStrings';
 import _ from 'underscore';
 
+import centroids from '../../data/atlantaNeighborhoodCentroids.json';
+
 export const getStaticPaths = async () => {
   const { data: neighborhoods } = await supabase
     .from('dim_neighborhoods')
@@ -40,7 +43,8 @@ export const getStaticPaths = async () => {
       'poncey-highland',
       'grant park',
       'brookhaven',
-      'kirkwood'
+      'kirkwood',
+      'morningside/lenox park'
     ]);
 
   const paths = neighborhoods.map(({ id }) => ({
@@ -78,26 +82,44 @@ export const getStaticProps = async ({ params }) => {
     .select('*')
     .order('offense', { ascending: true });
 
+  const { data: neighborhoods } = await supabase
+    .from('dim_neighborhoods')
+    .select('*')
+    .in('id', [
+      'midtown',
+      'downtown',
+      'inman park',
+      'poncey-highland',
+      'grant park',
+      'brookhaven',
+      'kirkwood',
+      'morningside/lenox park'
+    ])
+    .order('neighborhood', { ascending: true });
+
   return {
     props: {
       id: params.id,
       crimes,
       trends,
       table,
-      offenses
+      offenses,
+      neighborhoods
     }
   };
 };
 
 export default function Neighborhood(props) {
+  const router = useRouter();
+
   const offenseCategories = [
     ...new Set(props.offenses.map((e) => e.offense_category))
   ].sort();
 
-  const [tableData, setTableData] = useState(props.table);
-  const [mapData, setMapData] = useState(props.crimes);
+  // map
 
-  mapData.forEach(
+  // add coordinates
+  props.crimes.forEach(
     (row) =>
       (row.coordinates = [parseFloat(row.longitude), parseFloat(row.latitude)])
   );
@@ -126,16 +148,56 @@ export default function Neighborhood(props) {
             w="100%"
             //h="full" // watch this
             overflowY={'auto'}
-            p={3}
-            spacing={5}
+            p={1}
+            spacing={2}
             align="stretch"
             bg={'black'}
             borderRadius={'10px'}
           >
+            <SimpleGrid columns={6} width="100%">
+              <GridItem colSpan={1}>
+                <Text color="brand.0" mt={0.5} mb={2}>
+                  Crime in{' '}
+                </Text>
+              </GridItem>
+              <GridItem colSpan={5}>
+                <Select
+                  display={'inline'}
+                  size={'sm'}
+                  variant={'filled'}
+                  color={'brand.200'}
+                  bg={'black'}
+                  fontSize={'16px'}
+                  value={toTitleCase(props.id)}
+                  placeholder={toTitleCase(props.id)}
+                  onChange={(e) => {
+                    let value = e.target.value.toLowerCase();
+                    if (value !== props.id) {
+                      let myCentroid = centroids[value];
+
+                      router.push(
+                        '/neighborhoods/' + encodeURIComponent(value)
+                      );
+                    }
+                  }}
+                >
+                  {props.neighborhoods.map((n) => {
+                    return (
+                      <option key={n.id} value={n.id}>
+                        {toTitleCase(n.neighborhood)}
+                      </option>
+                    );
+                  })}
+                </Select>
+              </GridItem>
+            </SimpleGrid>
+            <Divider></Divider>
+            <Box></Box>
+            <Box></Box>
             <Stack
               direction={{ base: 'column', md: 'row' }}
               width="100%"
-              height="50vh"
+              height="70vh"
             >
               <Table variant="simple" colorScheme="black" size={'sm'}>
                 <colgroup>
@@ -143,21 +205,17 @@ export default function Neighborhood(props) {
                   <col span="1" style={{ width: '25%' }} />
                   <col span="1" style={{ width: '25%' }} />
                 </colgroup>
-                <Thead position="sticky" top={0} bgColor="black">
+                <Thead bgColor="black">
                   <Tr>
-                    <Th color={'white'}>Offense</Th>
+                    <Th color={'white'}>Crime</Th>
                     <Th color={'white'}>Crimes in 2022</Th>
                     <Th color={'white'}>YoY Change</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {tableData.map((o) => (
+                  {props.table.map((o) => (
                     <Tr key={o.offense_category}>
                       <Td
-                        // onClick={(e) => {
-                        //   let v = e.target.innerText.toLowerCase();
-                        //   setOffense(v === 'all' ? [] : [v]);
-                        // }}
                         style={{
                           whiteSpace: 'nowrap',
                           textOverflow: 'ellipsis',
@@ -174,10 +232,17 @@ export default function Neighborhood(props) {
                 </Tbody>
               </Table>
               <MyNeighborhoodMap
+                key={props.id}
                 neighborhood={props.id}
-                data={mapData}
+                data={props.crimes}
               ></MyNeighborhoodMap>
             </Stack>
+            <Box mt={4}></Box>
+            <Box></Box>
+            <Box></Box>
+            <Text fontSize={'14px'} fontStyle={'italic'}>
+              Cumulative crimes comparisons (2022 vs. 2021)
+            </Text>
             <SimpleGrid
               gap={1}
               columns={{ base: 1, md: 3 }}
