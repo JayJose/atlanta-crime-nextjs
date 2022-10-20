@@ -1,7 +1,7 @@
 with cutoff as (
-    select day_of_year
-    from {{ ref('dim_dates') }}
-    where date = '2022-09-30'
+    select d.day_of_year
+    from {{ ref('dim_dates') }} as d
+        inner join {{ ref('app_cutoff') }} as c on c.cutoff_date = d.date
 ), categories as (
     select distinct offense_category from {{ ref('dim_offenses') }}
     union all

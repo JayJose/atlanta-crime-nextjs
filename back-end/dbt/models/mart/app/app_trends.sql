@@ -1,9 +1,9 @@
 --- for each neighborhood, each week_of_year, each offense...
 
 with cutoff as (
-    select day_of_year
-    from {{ ref('dim_dates') }}
-    where date = '2022-09-30'
+    select d.day_of_year
+    from {{ ref('dim_dates') }} as d
+        inner join {{ ref('app_cutoff') }} as c on c.cutoff_date = d.date
 ),
 neighborhoods as (
     select distinct neighborhood from {{ ref('dim_neighborhoods') }}
