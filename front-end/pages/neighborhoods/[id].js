@@ -108,20 +108,18 @@ export default function Neighborhood(props) {
 
   // map
   const [offense, setOffense] = useState([]);
-  var mapData;
-  if (offense.length === 0) {
-    mapData = props.crimes;
-  } else {
+  var mapData = props.crimes;
+  if (offense.length !== 0) {
     mapData = _.filter(props.crimes, function (row) {
       return row.offense_category === offense[0];
     });
   }
 
   // add coordinates
-  mapData.forEach(
-    (row) =>
-      (row.coordinates = [parseFloat(row.longitude), parseFloat(row.latitude)])
-  );
+  mapData.forEach((row) => {
+    row.coordinates = [parseFloat(row.longitude), parseFloat(row.latitude)];
+    row.color = [111, 255, 176];
+  });
 
   // select placeholder
   const myPlaceholder = props.neighborhoods.find(
