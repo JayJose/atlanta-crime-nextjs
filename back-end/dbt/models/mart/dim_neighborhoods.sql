@@ -26,3 +26,6 @@ select neighborhood as id,
     display_name,
     {{ created_at() }}
 from de_dupe
+where neighborhood not in (
+    'englewood manor' -- mapped to chosewood park
+)
