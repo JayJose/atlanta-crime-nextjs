@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 
 import { MyHeader } from '../../components/chakra/header';
@@ -10,23 +9,22 @@ import {
   Divider,
   Flex,
   GridItem,
-  HStack,
   Select,
   SimpleGrid,
   Stack,
-  Text,
-  VStack,
   Table,
+  Text,
   Thead,
   Tbody,
   Td,
   Tr,
-  Th
+  Th,
+  VStack
 } from '@chakra-ui/react';
 import { MyResponsiveLine } from '../../components/trends';
 import { MyNeighborhoodMap } from '../../components/map';
 
-import { genHeatmapData, genTrendData } from '../../lib/transformData';
+import { genTrendData } from '../../lib/transformData';
 import { getYoyChange, toTitleCase } from '../../lib/transformStrings';
 import _ from 'underscore';
 
@@ -36,16 +34,7 @@ export const getStaticPaths = async () => {
   const { data: neighborhoods } = await supabase
     .from('dim_neighborhoods')
     .select('id')
-    .in('id', [
-      'midtown',
-      'downtown',
-      'inman park',
-      'poncey-highland',
-      'grant park',
-      'brookhaven',
-      'kirkwood',
-      'morningside/lenox park'
-    ]);
+    .neq('id', 'none');
 
   const paths = neighborhoods.map(({ id }) => ({
     params: {
@@ -85,16 +74,7 @@ export const getStaticProps = async ({ params }) => {
   const { data: neighborhoods } = await supabase
     .from('dim_neighborhoods')
     .select('*')
-    .in('id', [
-      'midtown',
-      'downtown',
-      'inman park',
-      'poncey-highland',
-      'grant park',
-      'brookhaven',
-      'kirkwood',
-      'morningside/lenox park'
-    ])
+    .neq('id', 'none')
     .order('neighborhood', { ascending: true });
 
   return {
@@ -123,6 +103,11 @@ export default function Neighborhood(props) {
     (row) =>
       (row.coordinates = [parseFloat(row.longitude), parseFloat(row.latitude)])
   );
+
+  // select placeholder
+  const myPlaceholder = props.neighborhoods.find(
+    (e) => e.id === props.id
+  ).display_name;
 
   return (
     <>
@@ -169,7 +154,7 @@ export default function Neighborhood(props) {
                   bg={'black'}
                   fontSize={'16px'}
                   value={toTitleCase(props.id)}
-                  placeholder={toTitleCase(props.id)}
+                  placeholder={myPlaceholder}
                   onChange={(e) => {
                     let value = e.target.value.toLowerCase();
                     if (value !== props.id) {
@@ -184,7 +169,7 @@ export default function Neighborhood(props) {
                   {props.neighborhoods.map((n) => {
                     return (
                       <option key={n.id} value={n.id}>
-                        {toTitleCase(n.neighborhood)}
+                        {n.display_name}
                       </option>
                     );
                   })}

@@ -32,11 +32,6 @@ import {
 } from '@chakra-ui/react';
 
 export const getStaticProps = async () => {
-  const { data: crimes } = await supabase
-    .from('app_main')
-    .select('*')
-    .eq('neighborhood', 'all');
-
   const { data: table } = await supabase
     .from('app_table')
     .select('*')
@@ -60,7 +55,6 @@ export const getStaticProps = async () => {
 
   return {
     props: {
-      crimes,
       table,
       map,
       neighborhoods,
@@ -74,31 +68,13 @@ export default function Home(props) {
 
   const router = useRouter();
 
-  // box config
-  const elevation = 'xsmall';
-  const margin = 'small';
-  const pad = 'small';
-  const round = 'small';
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const [neighborhood, setNeighborhood] = useState([]);
   const [offense, setOffense] = useState([]);
-  const [crimes, setCrimes] = useState(props.crimes);
 
-  // count crimes by year
-  var years = { current: 2022, prior: 2021 };
-  let currentCount = 0;
-  let priorCount = 0;
-  crimes.forEach((e) => {
-    if (e.year === years.current) {
-      currentCount += e.value;
-    }
-    if (e.year === years.prior) {
-      priorCount += e.value;
-    }
-  });
+  const years = { current: 2022, prior: 2021 };
 
   useEffect(() => {
     if (isMounted.current) {
@@ -113,11 +89,6 @@ export default function Home(props) {
       setLoading(true);
 
       let { data, error, status } = await supabase
-        .from('app_main')
-        .select('*')
-        .in('neighborhood', neighborhood.length === 0 ? ['all'] : neighborhood);
-
-      let { data: tableData } = await supabase
         .from('app_table')
         .select('*')
         .eq('neighborhood', neighborhood.length === 0 ? ['all'] : neighborhood)
@@ -128,11 +99,7 @@ export default function Home(props) {
       }
 
       if (data) {
-        setCrimes(data);
-      }
-
-      if (tableData) {
-        setTableData(tableData);
+        setTableData(data);
       }
     } catch (error) {
       alert(error.message);
@@ -201,7 +168,7 @@ export default function Home(props) {
                 </colgroup>
                 <Thead position="sticky" top={0} bgColor="black">
                   <Tr>
-                    <Th color={'white'}>Offense</Th>
+                    <Th color={'white'}>Crime</Th>
                     <Th color={'white'}>Crimes in 2022</Th>
                     <Th color={'white'}>YoY Change</Th>
                   </Tr>
