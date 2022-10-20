@@ -21,7 +21,6 @@ select md5(offense_id || lower(ibr_code)) as crime_tk,
         when lower(neighborhood) = 'westminster/milmar' then 'westminster/milar'
         when lower(neighborhood) = 'englewood manor' then 'chosewood park'
         when lower(neighborhood) = 'westmont estates' then 'oakland city'
-        when lower(neighborhood) = 'pomona park' then 'the villages at east lake'
         else lower(coalesce(neighborhood, 'none'))
     end as neighborhood,
     case
