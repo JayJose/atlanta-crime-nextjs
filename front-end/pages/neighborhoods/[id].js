@@ -33,7 +33,8 @@ import centroids from '../../data/atlantaNeighborhoodCentroids.json';
 export const getStaticPaths = async () => {
   const { data: neighborhoods } = await supabase
     .from('dim_neighborhoods')
-    .select('id');
+    .select('id')
+    .neq('id', 'none');
 
   const paths = neighborhoods.map(({ id }) => ({
     params: {
@@ -73,6 +74,7 @@ export const getStaticProps = async ({ params }) => {
   const { data: neighborhoods } = await supabase
     .from('dim_neighborhoods')
     .select('*')
+    .neq('id', 'none')
     .order('neighborhood', { ascending: true });
 
   return {
