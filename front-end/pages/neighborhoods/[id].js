@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 
 import { MyHeader } from '../../components/chakra/header';
@@ -10,23 +9,22 @@ import {
   Divider,
   Flex,
   GridItem,
-  HStack,
   Select,
   SimpleGrid,
   Stack,
-  Text,
-  VStack,
   Table,
+  Text,
   Thead,
   Tbody,
   Td,
   Tr,
-  Th
+  Th,
+  VStack
 } from '@chakra-ui/react';
 import { MyResponsiveLine } from '../../components/trends';
 import { MyNeighborhoodMap } from '../../components/map';
 
-import { genHeatmapData, genTrendData } from '../../lib/transformData';
+import { genTrendData } from '../../lib/transformData';
 import { getYoyChange, toTitleCase } from '../../lib/transformStrings';
 import _ from 'underscore';
 
