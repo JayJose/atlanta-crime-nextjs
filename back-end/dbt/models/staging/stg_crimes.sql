@@ -19,8 +19,6 @@ select md5(offense_id || lower(ibr_code)) as crime_tk,
     lower(uc2_literal) as uc2_literal,
     case
         when lower(neighborhood) = 'westminster/milmar' then 'westminster/milar'
-        when lower(neighborhood) = 'audobon forest' then 'audubon forest'
-        when lower(neighborhood) = 'audobon forest west' then 'audubon forest west'
         when lower(neighborhood) = 'pomona park' then 'the villages at east lake'
         else lower(coalesce(neighborhood, 'none'))
     end as neighborhood,
