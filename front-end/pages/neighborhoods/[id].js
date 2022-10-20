@@ -33,17 +33,7 @@ import centroids from '../../data/atlantaNeighborhoodCentroids.json';
 export const getStaticPaths = async () => {
   const { data: neighborhoods } = await supabase
     .from('dim_neighborhoods')
-    .select('id')
-    .in('id', [
-      'midtown',
-      'downtown',
-      'inman park',
-      'poncey-highland',
-      'grant park',
-      'brookhaven',
-      'kirkwood',
-      'morningside/lenox park'
-    ]);
+    .select('id');
 
   const paths = neighborhoods.map(({ id }) => ({
     params: {
@@ -83,16 +73,6 @@ export const getStaticProps = async ({ params }) => {
   const { data: neighborhoods } = await supabase
     .from('dim_neighborhoods')
     .select('*')
-    .in('id', [
-      'midtown',
-      'downtown',
-      'inman park',
-      'poncey-highland',
-      'grant park',
-      'brookhaven',
-      'kirkwood',
-      'morningside/lenox park'
-    ])
     .order('neighborhood', { ascending: true });
 
   return {
