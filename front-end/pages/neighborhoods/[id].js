@@ -17,10 +17,14 @@ import {
   Thead,
   Tbody,
   Td,
-  Tr,
   Th,
+  Tooltip,
+  Tr,
   VStack
 } from '@chakra-ui/react';
+
+import { InfoOutlineIcon } from '@chakra-ui/icons';
+
 import { MyResponsiveLine } from '../../components/trends';
 import { MyNeighborhoodMap } from '../../components/map';
 
@@ -77,6 +81,10 @@ export const getStaticProps = async ({ params }) => {
     .neq('id', 'none')
     .order('neighborhood', { ascending: true });
 
+  const { data: cutoff } = await supabase
+    .from('app_cutoff')
+    .select('cutoff_date');
+
   return {
     props: {
       id: params.id,
@@ -84,7 +92,8 @@ export const getStaticProps = async ({ params }) => {
       trends,
       table,
       offenses,
-      neighborhoods
+      neighborhoods,
+      cutoff
     }
   };
 };
@@ -108,6 +117,10 @@ export default function Neighborhood(props) {
   const myPlaceholder = props.neighborhoods.find(
     (e) => e.id === props.id
   ).display_name;
+
+  // date period
+  const asOf = new Date(props.cutoff[0].cutoff_date);
+  // alert(typeof asOf);
 
   return (
     <>
@@ -139,7 +152,7 @@ export default function Neighborhood(props) {
             bg={'black'}
             borderRadius={'10px'}
           >
-            <SimpleGrid columns={6} width="100%">
+            <SimpleGrid columns={7} width="100%" p={0}>
               <GridItem colSpan={1}>
                 <Text color="brand.0" mt={0.5} mb={2}>
                   Crime in{' '}
@@ -175,6 +188,14 @@ export default function Neighborhood(props) {
                   })}
                 </Select>
               </GridItem>
+              <GridItem colSpan={1} ml={4} mt={0.5} mr={0}>
+                <Tooltip
+                  label={`As of ${asOf.toLocaleDateString()}`}
+                  aria-label="A tooltip"
+                >
+                  <InfoOutlineIcon color="brand.100"></InfoOutlineIcon>
+                </Tooltip>
+              </GridItem>
             </SimpleGrid>
             <Divider></Divider>
             <Box></Box>
@@ -192,7 +213,15 @@ export default function Neighborhood(props) {
                 </colgroup>
                 <Thead bgColor="black">
                   <Tr>
-                    <Th color={'white'}>Crime</Th>
+                    <Th color={'white'}>
+                      Crime{' '}
+                      <Tooltip
+                        label={`Click a Crime category to filter the map.`}
+                        aria-label="A tooltip"
+                      >
+                        <InfoOutlineIcon color="brand.100"></InfoOutlineIcon>
+                      </Tooltip>
+                    </Th>
                     <Th color={'white'}>Crimes in 2022</Th>
                     <Th color={'white'}>YoY Change</Th>
                   </Tr>
@@ -225,6 +254,7 @@ export default function Neighborhood(props) {
             <Box mt={4}></Box>
             <Box></Box>
             <Box></Box>
+            <Divider></Divider>
             <Text fontSize={'14px'} fontStyle={'italic'}>
               Cumulative crimes comparisons (2022 vs. 2021)
             </Text>
