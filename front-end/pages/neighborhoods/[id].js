@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { supabase } from '../../lib/supabase';
+import { useState } from 'react';
 
 import { MyHeader } from '../../components/chakra/header';
 import {
@@ -106,9 +107,18 @@ export default function Neighborhood(props) {
   ].sort();
 
   // map
+  const [offense, setOffense] = useState([]);
+  var mapData;
+  if (offense.length === 0) {
+    mapData = props.crimes;
+  } else {
+    mapData = _.filter(props.crimes, function (row) {
+      return row.offense_category === offense[0];
+    });
+  }
 
   // add coordinates
-  props.crimes.forEach(
+  mapData.forEach(
     (row) =>
       (row.coordinates = [parseFloat(row.longitude), parseFloat(row.latitude)])
   );
@@ -120,7 +130,6 @@ export default function Neighborhood(props) {
 
   // date period
   const asOf = new Date(props.cutoff[0].cutoff_date);
-  // alert(typeof asOf);
 
   return (
     <>
@@ -216,7 +225,7 @@ export default function Neighborhood(props) {
                     <Th color={'white'}>
                       Crime{' '}
                       <Tooltip
-                        label={`Click a Crime category to filter the map.`}
+                        label={`Hover over a Crime category to filter the map.`}
                         aria-label="A tooltip"
                       >
                         <InfoOutlineIcon color="brand.100"></InfoOutlineIcon>
@@ -230,6 +239,13 @@ export default function Neighborhood(props) {
                   {props.table.map((o) => (
                     <Tr key={o.offense_category}>
                       <Td
+                        onMouseEnter={(e) => {
+                          let v = e.target.innerText.toLowerCase();
+                          setOffense(v === 'all' ? [] : [v]);
+                        }}
+                        onMouseLeave={(e) => {
+                          setOffense([]);
+                        }}
                         style={{
                           whiteSpace: 'nowrap',
                           textOverflow: 'ellipsis',
@@ -248,7 +264,7 @@ export default function Neighborhood(props) {
               <MyNeighborhoodMap
                 key={props.id}
                 neighborhood={props.id}
-                data={props.crimes}
+                data={mapData}
               ></MyNeighborhoodMap>
             </Stack>
             <Box mt={4}></Box>
