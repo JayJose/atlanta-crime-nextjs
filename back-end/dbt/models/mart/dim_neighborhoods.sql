@@ -29,5 +29,5 @@ from de_dupe
 where neighborhood not in (
     'englewood manor', -- mapped to chosewood park
     'westmont estates', -- mapped to oakland city
-    'englewood manor' -- mapped to chosewood park
+    'rosalie h. wright community council' -- unsure what this is
 )
