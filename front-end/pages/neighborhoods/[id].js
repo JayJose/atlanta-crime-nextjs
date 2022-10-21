@@ -10,6 +10,7 @@ import {
   Divider,
   Flex,
   GridItem,
+  IconButton,
   Select,
   SimpleGrid,
   Stack,
@@ -129,6 +130,10 @@ export default function Neighborhood(props) {
   // date period
   const asOf = new Date(props.cutoff[0].cutoff_date);
 
+  // tooltips
+  const [isDateTipOpen, setisDateTipOpen] = useState(false);
+  const [isFilterTipOpen, setisFilterTipOpen] = useState(false);
+
   return (
     <>
       <Head>
@@ -159,8 +164,8 @@ export default function Neighborhood(props) {
             bg={'black'}
             borderRadius={'10px'}
           >
-            <SimpleGrid columns={7} width="100%" p={0}>
-              <GridItem colSpan={1}>
+            <SimpleGrid columns={8} width="100%" p={0}>
+              <GridItem colSpan={2}>
                 <Text color="brand.0" mt={0.5} mb={2}>
                   Crime in{' '}
                 </Text>
@@ -195,12 +200,19 @@ export default function Neighborhood(props) {
                   })}
                 </Select>
               </GridItem>
-              <GridItem colSpan={1} ml={4} mt={0.5} mr={0}>
+              <GridItem colSpan={1} mt={-1} mr={0}>
                 <Tooltip
-                  label={`As of ${asOf.toLocaleDateString()}`}
+                  label={`As of ${asOf.toLocaleDateString()}.`}
                   aria-label="A tooltip"
+                  isOpen={isDateTipOpen}
                 >
-                  <InfoOutlineIcon color="brand.100"></InfoOutlineIcon>
+                  <IconButton
+                    icon={<InfoOutlineIcon />}
+                    color="brand.100"
+                    bg={'black'}
+                    onMouseEnter={() => setisDateTipOpen(true)}
+                    onMouseLeave={() => setisDateTipOpen(false)}
+                  ></IconButton>
                 </Tooltip>
               </GridItem>
             </SimpleGrid>
@@ -223,10 +235,17 @@ export default function Neighborhood(props) {
                     <Th color={'white'}>
                       Crime{' '}
                       <Tooltip
-                        label={`Hover over a Crime category to filter the map.`}
+                        label={'Hover over a CRIME to filter the map.'}
                         aria-label="A tooltip"
+                        isOpen={isFilterTipOpen}
                       >
-                        <InfoOutlineIcon color="brand.100"></InfoOutlineIcon>
+                        <IconButton
+                          icon={<InfoOutlineIcon />}
+                          color="brand.100"
+                          bg={'black'}
+                          onMouseEnter={() => setisFilterTipOpen(true)}
+                          onMouseLeave={() => setisFilterTipOpen(false)}
+                        ></IconButton>
                       </Tooltip>
                     </Th>
                     <Th color={'white'}>Crimes in 2022</Th>
