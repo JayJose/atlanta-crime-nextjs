@@ -134,6 +134,8 @@ export default function Neighborhood(props) {
   const [isDateTipOpen, setisDateTipOpen] = useState(false);
   const [isFilterTipOpen, setisFilterTipOpen] = useState(false);
 
+  const [isHover, setIsHover] = useState(false);
+
   return (
     <>
       <Head>
@@ -259,15 +261,18 @@ export default function Neighborhood(props) {
                         onMouseEnter={(e) => {
                           let v = e.target.innerText.toLowerCase();
                           setOffense(v === 'all' ? [] : [v]);
+                          setIsHover(true);
                         }}
                         onMouseLeave={(e) => {
                           setOffense([]);
+                          setIsHover(false);
                         }}
                         style={{
                           whiteSpace: 'nowrap',
                           textOverflow: 'ellipsis',
                           overflow: 'hidden',
-                          maxWidth: '1px'
+                          maxWidth: '1px',
+                          backgroundColor: isHover ? '#FD6FFF' : 'black'
                         }}
                       >
                         {toTitleCase(o.offense_category)}
@@ -289,7 +294,7 @@ export default function Neighborhood(props) {
             <Box></Box>
             <Divider></Divider>
             <Text fontSize={'14px'} fontStyle={'italic'}>
-              Cumulative crimes comparisons (2022 vs. 2021)
+              Cumulative crime counts (2022 vs. 2021)
             </Text>
             <SimpleGrid
               gap={1}
