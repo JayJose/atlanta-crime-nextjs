@@ -139,11 +139,11 @@ export default function Neighborhood(props) {
   return (
     <>
       <Head>
-        <title>Crime!</title>
+        <title>{myPlaceholder} crime!</title>
         <meta name="description" content="A crime app." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <MyHeader title={props.id}></MyHeader>
+      <MyHeader></MyHeader>
       <Container
         maxW="container.xl"
         p={{ base: 0, md: 3 }}
