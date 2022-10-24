@@ -58,7 +58,8 @@ export const getStaticProps = async ({ params }) => {
   const { data: crimes } = await supabase
     .from('app_map')
     .select('*')
-    .eq('neighborhood', params.id);
+    .eq('neighborhood', params.id)
+    .eq('year', 2022);
 
   const { data: trends } = await supabase
     .from('app_trends')
