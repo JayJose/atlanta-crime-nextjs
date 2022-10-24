@@ -185,9 +185,7 @@ export default function Neighborhood(props) {
                     if (value !== props.id) {
                       let myCentroid = centroids[value];
 
-                      router.push(
-                        '/neighborhoods/' + encodeURIComponent(value)
-                      );
+                      router.push('/hoods/' + encodeURIComponent(value));
                     }
                   }}
                 >
