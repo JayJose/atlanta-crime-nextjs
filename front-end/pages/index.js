@@ -19,6 +19,7 @@ import {
   Flex,
   Heading,
   HStack,
+  IconButton,
   Stack,
   Text,
   VStack,
@@ -30,6 +31,8 @@ import {
   Th,
   Td
 } from '@chakra-ui/react';
+
+import { InfoOutlineIcon } from '@chakra-ui/icons';
 
 export const getStaticProps = async () => {
   const { data: table } = await supabase
@@ -53,12 +56,17 @@ export const getStaticProps = async () => {
     .select('*')
     .order('offense', { ascending: true });
 
+  const { data: cutoff } = await supabase
+    .from('app_cutoff')
+    .select('cutoff_date');
+
   return {
     props: {
       table,
       map,
       neighborhoods,
-      offenses
+      offenses,
+      cutoff
     }
   };
 };
@@ -109,9 +117,9 @@ export default function Home(props) {
   };
 
   const indexViewState = {
-    latitude: 33.74,
+    latitude: 33.73,
     longitude: -84.42,
-    zoom: 10.5,
+    zoom: 10,
     bearing: 0,
     pitch: 35
   };
@@ -129,6 +137,13 @@ export default function Home(props) {
   }
 
   const [tableData, setTableData] = useState(props.table);
+
+  // date period
+  const asOf = new Date(props.cutoff[0].cutoff_date);
+
+  // tooltips
+  const [isDateTipOpen, setisDateTipOpen] = useState(false);
+  const [isFilterTipOpen, setisFilterTipOpen] = useState(false);
 
   return (
     <>
@@ -153,33 +168,60 @@ export default function Home(props) {
           <VStack
             w="100%"
             h="full"
-            p={3}
-            spacing={3}
+            p={0}
+            spacing={2}
             align="stretch"
             bg={'black'}
             borderRadius={'10px'}
           >
-            <Box>
-              <Table variant="simple" colorScheme="black" size={'sm'}>
+            <Stack
+              direction={{ base: 'column', md: 'row' }}
+              width="100%"
+              height="40vh"
+            >
+              <Table
+                variant="simple"
+                colorScheme="black"
+                size={'sm'}
+                className={'crime-table-highlight'}
+              >
                 <colgroup>
-                  <col span="1" style={{ width: '40%' }} />
-                  <col span="1" style={{ width: '30%' }} />
-                  <col span="1" style={{ width: '30%' }} />
+                  <col span="1" style={{ width: '50%' }} />
+                  <col span="1" style={{ width: '25%' }} />
+                  <col span="1" style={{ width: '25%' }} />
                 </colgroup>
-                <Thead position="sticky" top={0} bgColor="black">
+                <Thead bgColor="black">
                   <Tr>
-                    <Th color={'white'}>Crime</Th>
+                    <Th color={'white'}>
+                      Crime{' '}
+                      <Tooltip
+                        label={'Hover over a CRIME to filter the map.'}
+                        aria-label="A tooltip"
+                        isOpen={isFilterTipOpen}
+                      >
+                        <IconButton
+                          icon={<InfoOutlineIcon />}
+                          color="brand.100"
+                          bg={'black'}
+                          onMouseEnter={() => setisFilterTipOpen(true)}
+                          onMouseLeave={() => setisFilterTipOpen(false)}
+                        ></IconButton>
+                      </Tooltip>
+                    </Th>
                     <Th color={'white'}>Crimes in 2022</Th>
                     <Th color={'white'}>YoY Change</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {tableData.map((o) => (
+                  {props.table.map((o) => (
                     <Tr key={o.offense_category}>
                       <Td
-                        onClick={(e) => {
+                        onMouseOver={(e) => {
                           let v = e.target.innerText.toLowerCase();
                           setOffense(v === 'all' ? [] : [v]);
+                        }}
+                        onMouseLeave={(e) => {
+                          setOffense([]);
                         }}
                         style={{
                           whiteSpace: 'nowrap',
@@ -196,7 +238,13 @@ export default function Home(props) {
                   ))}
                 </Tbody>
               </Table>
-            </Box>
+              <MyCityMap
+                data={mapData}
+                setNeighborhood={setNeighborhood}
+                viewState={viewState}
+                setViewState={setViewState}
+              ></MyCityMap>
+            </Stack>
             <HStack spacing={2}>
               <Button
                 bg={'#6FFFB0'}
@@ -219,21 +267,6 @@ export default function Home(props) {
                 </Button>
               ) : null}
             </HStack>
-            <Text size={'lg'}>
-              Viewing {offense.length === 0 ? 'All' : toTitleCase(offense[0])}{' '}
-              crimes in{' '}
-              {neighborhood.length === 0
-                ? 'Atlanta'
-                : toTitleCase(neighborhood[0])}
-            </Text>
-            <Box w="100%" h="75vh">
-              <MyCityMap
-                data={mapData}
-                setNeighborhood={setNeighborhood}
-                viewState={viewState}
-                setViewState={setViewState}
-              ></MyCityMap>
-            </Box>
           </VStack>
         </Flex>
       </Container>

@@ -184,10 +184,14 @@ export function MyCityMap({ data, setNeighborhood, setViewState, viewState }) {
     getPosition: (d) => d.coordinates,
     // colorbrewer: 4-class greys
     colorRange: [
-      [247, 247, 247, hexAlpha],
-      [150, 150, 150, hexAlpha],
-      [99, 99, 99, hexAlpha],
-      [37, 37, 37, hexAlpha]
+      // [247, 247, 247, hexAlpha],
+      // [150, 150, 150, hexAlpha],
+      // [99, 99, 99, hexAlpha],
+      // [37, 37, 37, hexAlpha]
+      [254, 235, 226, hexAlpha],
+      [251, 180, 185, hexAlpha],
+      [247, 104, 161, hexAlpha],
+      [174, 1, 126, hexAlpha]
     ]
   });
 
