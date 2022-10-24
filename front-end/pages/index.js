@@ -201,7 +201,7 @@ export default function Home(props) {
               <Button
                 bg={'#6FFFB0'}
                 textColor={'black'}
-                onClick={() => router.push(`/neighborhoods/${neighborhood[0]}`)}
+                onClick={() => router.push(`/hoods/${neighborhood[0]}`)}
               >
                 Show me more.
               </Button>

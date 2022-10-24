@@ -58,7 +58,8 @@ export const getStaticProps = async ({ params }) => {
   const { data: crimes } = await supabase
     .from('app_map')
     .select('*')
-    .eq('neighborhood', params.id);
+    .eq('neighborhood', params.id)
+    .eq('year', 2022);
 
   const { data: trends } = await supabase
     .from('app_trends')
@@ -137,11 +138,11 @@ export default function Neighborhood(props) {
   return (
     <>
       <Head>
-        <title>Crime!</title>
+        <title>{myPlaceholder} crime!</title>
         <meta name="description" content="A crime app." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <MyHeader title={props.id}></MyHeader>
+      <MyHeader></MyHeader>
       <Container
         maxW="container.xl"
         p={{ base: 0, md: 3 }}
@@ -185,9 +186,7 @@ export default function Neighborhood(props) {
                     if (value !== props.id) {
                       let myCentroid = centroids[value];
 
-                      router.push(
-                        '/neighborhoods/' + encodeURIComponent(value)
-                      );
+                      router.push('/hoods/' + encodeURIComponent(value));
                     }
                   }}
                 >
@@ -224,7 +223,12 @@ export default function Neighborhood(props) {
               width="100%"
               height="70vh"
             >
-              <Table variant="simple" colorScheme="black" size={'sm'}>
+              <Table
+                variant="simple"
+                colorScheme="black"
+                size={'sm'}
+                className={'crime-table-highlight'}
+              >
                 <colgroup>
                   <col span="1" style={{ width: '50%' }} />
                   <col span="1" style={{ width: '25%' }} />
@@ -256,7 +260,7 @@ export default function Neighborhood(props) {
                   {props.table.map((o) => (
                     <Tr key={o.offense_category}>
                       <Td
-                        onMouseEnter={(e) => {
+                        onMouseOver={(e) => {
                           let v = e.target.innerText.toLowerCase();
                           setOffense(v === 'all' ? [] : [v]);
                         }}
@@ -289,7 +293,7 @@ export default function Neighborhood(props) {
             <Box></Box>
             <Divider></Divider>
             <Text fontSize={'14px'} fontStyle={'italic'}>
-              Cumulative crimes comparisons (2022 vs. 2021)
+              Cumulative crime counts (2022 vs. 2021)
             </Text>
             <SimpleGrid
               gap={1}
