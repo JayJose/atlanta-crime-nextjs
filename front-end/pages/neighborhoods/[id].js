@@ -134,8 +134,6 @@ export default function Neighborhood(props) {
   const [isDateTipOpen, setisDateTipOpen] = useState(false);
   const [isFilterTipOpen, setisFilterTipOpen] = useState(false);
 
-  const [isHover, setIsHover] = useState(false);
-
   return (
     <>
       <Head>
@@ -226,7 +224,12 @@ export default function Neighborhood(props) {
               width="100%"
               height="70vh"
             >
-              <Table variant="simple" colorScheme="black" size={'sm'}>
+              <Table
+                variant="simple"
+                colorScheme="black"
+                size={'sm'}
+                className={'crime-table-highlight'}
+              >
                 <colgroup>
                   <col span="1" style={{ width: '50%' }} />
                   <col span="1" style={{ width: '25%' }} />
@@ -258,21 +261,18 @@ export default function Neighborhood(props) {
                   {props.table.map((o) => (
                     <Tr key={o.offense_category}>
                       <Td
-                        onMouseEnter={(e) => {
+                        onMouseOver={(e) => {
                           let v = e.target.innerText.toLowerCase();
                           setOffense(v === 'all' ? [] : [v]);
-                          setIsHover(true);
                         }}
                         onMouseLeave={(e) => {
                           setOffense([]);
-                          setIsHover(false);
                         }}
                         style={{
                           whiteSpace: 'nowrap',
                           textOverflow: 'ellipsis',
                           overflow: 'hidden',
-                          maxWidth: '1px',
-                          backgroundColor: isHover ? '#FD6FFF' : 'black'
+                          maxWidth: '1px'
                         }}
                       >
                         {toTitleCase(o.offense_category)}

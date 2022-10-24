@@ -5,3 +5,9 @@
     margin-bottom: "10px";
     font-size: 8px;
   }
+
+  .crime-table-highlight tbody tr:hover {
+    background-color: #f9f0f9;
+    color: black;
+    
+}  
