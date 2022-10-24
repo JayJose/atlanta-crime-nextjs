@@ -226,7 +226,7 @@ export function MyCityMap({ data, setNeighborhood, setViewState, viewState }) {
         >
           <StaticMap
             reuseMaps
-            mapStyle={BASEMAP.POSITRON}
+            mapStyle={BASEMAP.DARK_MATTER}
             mapboxAccessToken={process.env.mapboxAccessToken}
           ></StaticMap>
         </DeckGL>
