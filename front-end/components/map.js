@@ -57,7 +57,7 @@ export function MyNeighborhoodMap({ neighborhood, data }) {
     radiusMaxPixels: 6,
     lineWidthMinPixels: 1,
     getPosition: (d) => d.coordinates,
-    getFillColor: (d) => [111, 255, 176],
+    getFillColor: (d) => d.color,
     getLineColor: (d) => [0, 0, 0]
   });
 

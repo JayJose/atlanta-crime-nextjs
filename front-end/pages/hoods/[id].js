@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { supabase } from '../../lib/supabase';
+import { useState } from 'react';
 
 import { MyHeader } from '../../components/chakra/header';
 import {
@@ -9,6 +10,7 @@ import {
   Divider,
   Flex,
   GridItem,
+  IconButton,
   Select,
   SimpleGrid,
   Stack,
@@ -17,10 +19,14 @@ import {
   Thead,
   Tbody,
   Td,
-  Tr,
   Th,
+  Tooltip,
+  Tr,
   VStack
 } from '@chakra-ui/react';
+
+import { InfoOutlineIcon } from '@chakra-ui/icons';
+
 import { MyResponsiveLine } from '../../components/trends';
 import { MyNeighborhoodMap } from '../../components/map';
 
@@ -52,7 +58,8 @@ export const getStaticProps = async ({ params }) => {
   const { data: crimes } = await supabase
     .from('app_map')
     .select('*')
-    .eq('neighborhood', params.id);
+    .eq('neighborhood', params.id)
+    .eq('year', 2022);
 
   const { data: trends } = await supabase
     .from('app_trends')
@@ -77,6 +84,10 @@ export const getStaticProps = async ({ params }) => {
     .neq('id', 'none')
     .order('neighborhood', { ascending: true });
 
+  const { data: cutoff } = await supabase
+    .from('app_cutoff')
+    .select('cutoff_date');
+
   return {
     props: {
       id: params.id,
@@ -84,7 +95,8 @@ export const getStaticProps = async ({ params }) => {
       trends,
       table,
       offenses,
-      neighborhoods
+      neighborhoods,
+      cutoff
     }
   };
 };
@@ -97,26 +109,40 @@ export default function Neighborhood(props) {
   ].sort();
 
   // map
+  const [offense, setOffense] = useState([]);
+  var mapData = props.crimes;
+  if (offense.length !== 0) {
+    mapData = _.filter(props.crimes, function (row) {
+      return row.offense_category === offense[0];
+    });
+  }
 
   // add coordinates
-  props.crimes.forEach(
-    (row) =>
-      (row.coordinates = [parseFloat(row.longitude), parseFloat(row.latitude)])
-  );
+  mapData.forEach((row) => {
+    row.coordinates = [parseFloat(row.longitude), parseFloat(row.latitude)];
+    row.color = [111, 255, 176];
+  });
 
   // select placeholder
   const myPlaceholder = props.neighborhoods.find(
     (e) => e.id === props.id
   ).display_name;
 
+  // date period
+  const asOf = new Date(props.cutoff[0].cutoff_date);
+
+  // tooltips
+  const [isDateTipOpen, setisDateTipOpen] = useState(false);
+  const [isFilterTipOpen, setisFilterTipOpen] = useState(false);
+
   return (
     <>
       <Head>
-        <title>Crime!</title>
+        <title>{myPlaceholder} crime!</title>
         <meta name="description" content="A crime app." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <MyHeader title={props.id}></MyHeader>
+      <MyHeader></MyHeader>
       <Container
         maxW="container.xl"
         p={{ base: 0, md: 3 }}
@@ -139,8 +165,8 @@ export default function Neighborhood(props) {
             bg={'black'}
             borderRadius={'10px'}
           >
-            <SimpleGrid columns={6} width="100%">
-              <GridItem colSpan={1}>
+            <SimpleGrid columns={8} width="100%" p={0}>
+              <GridItem colSpan={2}>
                 <Text color="brand.0" mt={0.5} mb={2}>
                   Crime in{' '}
                 </Text>
@@ -160,9 +186,7 @@ export default function Neighborhood(props) {
                     if (value !== props.id) {
                       let myCentroid = centroids[value];
 
-                      router.push(
-                        '/neighborhoods/' + encodeURIComponent(value)
-                      );
+                      router.push('/hoods/' + encodeURIComponent(value));
                     }
                   }}
                 >
@@ -175,6 +199,21 @@ export default function Neighborhood(props) {
                   })}
                 </Select>
               </GridItem>
+              <GridItem colSpan={1} mt={-1} mr={0}>
+                <Tooltip
+                  label={`As of ${asOf.toLocaleDateString()}.`}
+                  aria-label="A tooltip"
+                  isOpen={isDateTipOpen}
+                >
+                  <IconButton
+                    icon={<InfoOutlineIcon />}
+                    color="brand.100"
+                    bg={'black'}
+                    onMouseEnter={() => setisDateTipOpen(true)}
+                    onMouseLeave={() => setisDateTipOpen(false)}
+                  ></IconButton>
+                </Tooltip>
+              </GridItem>
             </SimpleGrid>
             <Divider></Divider>
             <Box></Box>
@@ -184,7 +223,12 @@ export default function Neighborhood(props) {
               width="100%"
               height="70vh"
             >
-              <Table variant="simple" colorScheme="black" size={'sm'}>
+              <Table
+                variant="simple"
+                colorScheme="black"
+                size={'sm'}
+                className={'crime-table-highlight'}
+              >
                 <colgroup>
                   <col span="1" style={{ width: '50%' }} />
                   <col span="1" style={{ width: '25%' }} />
@@ -192,7 +236,22 @@ export default function Neighborhood(props) {
                 </colgroup>
                 <Thead bgColor="black">
                   <Tr>
-                    <Th color={'white'}>Crime</Th>
+                    <Th color={'white'}>
+                      Crime{' '}
+                      <Tooltip
+                        label={'Hover over a CRIME to filter the map.'}
+                        aria-label="A tooltip"
+                        isOpen={isFilterTipOpen}
+                      >
+                        <IconButton
+                          icon={<InfoOutlineIcon />}
+                          color="brand.100"
+                          bg={'black'}
+                          onMouseEnter={() => setisFilterTipOpen(true)}
+                          onMouseLeave={() => setisFilterTipOpen(false)}
+                        ></IconButton>
+                      </Tooltip>
+                    </Th>
                     <Th color={'white'}>Crimes in 2022</Th>
                     <Th color={'white'}>YoY Change</Th>
                   </Tr>
@@ -201,6 +260,13 @@ export default function Neighborhood(props) {
                   {props.table.map((o) => (
                     <Tr key={o.offense_category}>
                       <Td
+                        onMouseOver={(e) => {
+                          let v = e.target.innerText.toLowerCase();
+                          setOffense(v === 'all' ? [] : [v]);
+                        }}
+                        onMouseLeave={(e) => {
+                          setOffense([]);
+                        }}
                         style={{
                           whiteSpace: 'nowrap',
                           textOverflow: 'ellipsis',
@@ -219,14 +285,15 @@ export default function Neighborhood(props) {
               <MyNeighborhoodMap
                 key={props.id}
                 neighborhood={props.id}
-                data={props.crimes}
+                data={mapData}
               ></MyNeighborhoodMap>
             </Stack>
             <Box mt={4}></Box>
             <Box></Box>
             <Box></Box>
+            <Divider></Divider>
             <Text fontSize={'14px'} fontStyle={'italic'}>
-              Cumulative crimes comparisons (2022 vs. 2021)
+              Cumulative crime counts (2022 vs. 2021)
             </Text>
             <SimpleGrid
               gap={1}
