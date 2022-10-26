@@ -179,7 +179,7 @@ export default function Home(props) {
                 Select a neighborhood from the map to see more crime data.
               </Text>{' '}
               <Text fontSize={'0.85em'}>
-                Data current as of {asOf.toLocaleDateString()}
+                Data current as of {asOf.toLocaleDateString()}.
               </Text>{' '}
             </VStack>
             <MyCityMap
