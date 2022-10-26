@@ -142,6 +142,7 @@ export function MyCityMap({ data, setNeighborhood, setViewState, viewState }) {
 
   // LAYERS
   const jsonAlpha = 150;
+  const gray = 180;
   const jsonLayer = new GeoJsonLayer({
     id: 'neighborhoods-layer',
     data: 'https://raw.githubusercontent.com/JayJose/needs-more-polygons/main/data/atlantaNeighborhoods.json',
@@ -149,7 +150,7 @@ export function MyCityMap({ data, setNeighborhood, setViewState, viewState }) {
     getFillColor: [0, 0, 0, 0],
     stroked: true,
     getLineWidth: 30,
-    getLineColor: [0, 0, 0, jsonAlpha],
+    getLineColor: [gray, gray, gray, jsonAlpha],
     pickable: true,
     autoHighlight: true,
     highlightColor: [111, 255, 176, jsonAlpha],
