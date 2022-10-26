@@ -29,7 +29,8 @@ import {
   Tooltip,
   Tr,
   Th,
-  Td
+  Td,
+  Divider
 } from '@chakra-ui/react';
 
 import { InfoOutlineIcon } from '@chakra-ui/icons';
@@ -126,7 +127,6 @@ export default function Home(props) {
 
   const [viewState, setViewState] = useState(indexViewState);
 
-  //TODO update map to include neighborhood and offense values
   var mapData;
   if (offense.length === 0) {
     mapData = props.map;
@@ -167,106 +167,90 @@ export default function Home(props) {
         >
           <VStack
             w="100%"
-            h="full"
+            h="85vh"
             p={0}
             spacing={2}
             align="stretch"
             bg={'black'}
             borderRadius={'10px'}
           >
-            <Stack
-              direction={{ base: 'column', md: 'row' }}
-              width="100%"
-              height="40vh"
+            <VStack margin={2} spacing={0} align={'left'}>
+              <Text fontSize={'0.85em'}>
+                Select a neighborhood from the map to see more crime data.
+              </Text>{' '}
+              <Text fontSize={'0.85em'}>
+                Data current as of {asOf.toLocaleDateString()}
+              </Text>{' '}
+            </VStack>
+            <MyCityMap
+              data={mapData}
+              setNeighborhood={setNeighborhood}
+              viewState={viewState}
+              setViewState={setViewState}
+            ></MyCityMap>
+            <Box></Box>
+            <Box></Box>
+            <Box></Box>
+            <Divider></Divider>
+            <Table
+              variant="simple"
+              colorScheme="black"
+              size={'sm'}
+              className={'crime-table-highlight'}
             >
-              <Table
-                variant="simple"
-                colorScheme="black"
-                size={'sm'}
-                className={'crime-table-highlight'}
-              >
-                <colgroup>
-                  <col span="1" style={{ width: '50%' }} />
-                  <col span="1" style={{ width: '25%' }} />
-                  <col span="1" style={{ width: '25%' }} />
-                </colgroup>
-                <Thead bgColor="black">
-                  <Tr>
-                    <Th color={'white'}>
-                      Crime{' '}
-                      <Tooltip
-                        label={'Hover over a CRIME to filter the map.'}
-                        aria-label="A tooltip"
-                        isOpen={isFilterTipOpen}
-                      >
-                        <IconButton
-                          icon={<InfoOutlineIcon />}
-                          color="brand.100"
-                          bg={'black'}
-                          onMouseEnter={() => setisFilterTipOpen(true)}
-                          onMouseLeave={() => setisFilterTipOpen(false)}
-                        ></IconButton>
-                      </Tooltip>
-                    </Th>
-                    <Th color={'white'}>Crimes in 2022</Th>
-                    <Th color={'white'}>YoY Change</Th>
+              <colgroup>
+                <col span="1" style={{ width: '50%' }} />
+                <col span="1" style={{ width: '25%' }} />
+                <col span="1" style={{ width: '25%' }} />
+              </colgroup>
+              <Thead bgColor="black">
+                <Tr>
+                  <Th color={'white'}>
+                    Crime{' '}
+                    <Tooltip
+                      label={'Hover over a CRIME to filter the map.'}
+                      aria-label="A tooltip"
+                      isOpen={isFilterTipOpen}
+                    >
+                      <IconButton
+                        icon={<InfoOutlineIcon />}
+                        color="brand.100"
+                        bg={'black'}
+                        onMouseEnter={() => setisFilterTipOpen(true)}
+                        onMouseLeave={() => setisFilterTipOpen(false)}
+                      ></IconButton>
+                    </Tooltip>
+                  </Th>
+                  <Th color={'white'}>Crimes in 2022</Th>
+                  <Th color={'white'}>YoY Change</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {props.table.map((o) => (
+                  <Tr key={o.offense_category}>
+                    <Td
+                      onMouseOver={(e) => {
+                        let v = e.target.innerText.toLowerCase();
+                        setOffense(v === 'all' ? [] : [v]);
+                      }}
+                      onMouseLeave={(e) => {
+                        setOffense([]);
+                      }}
+                      style={{
+                        whiteSpace: 'nowrap',
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        maxWidth: '1px'
+                      }}
+                    >
+                      {toTitleCase(o.offense_category)}
+                    </Td>
+                    <Td textAlign={'right'}>{o._2022.toLocaleString()}</Td>
+                    <Td>{getYoyChange(o._2021, o._2022)}</Td>
                   </Tr>
-                </Thead>
-                <Tbody>
-                  {props.table.map((o) => (
-                    <Tr key={o.offense_category}>
-                      <Td
-                        onMouseOver={(e) => {
-                          let v = e.target.innerText.toLowerCase();
-                          setOffense(v === 'all' ? [] : [v]);
-                        }}
-                        onMouseLeave={(e) => {
-                          setOffense([]);
-                        }}
-                        style={{
-                          whiteSpace: 'nowrap',
-                          textOverflow: 'ellipsis',
-                          overflow: 'hidden',
-                          maxWidth: '1px'
-                        }}
-                      >
-                        {toTitleCase(o.offense_category)}
-                      </Td>
-                      <Td textAlign={'right'}>{o._2022.toLocaleString()}</Td>
-                      <Td>{getYoyChange(o._2021, o._2022)}</Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-              <MyCityMap
-                data={mapData}
-                setNeighborhood={setNeighborhood}
-                viewState={viewState}
-                setViewState={setViewState}
-              ></MyCityMap>
-            </Stack>
-            <HStack spacing={2}>
-              <Button
-                bg={'#6FFFB0'}
-                textColor={'black'}
-                onClick={() => router.push(`/hoods/${neighborhood[0]}`)}
-              >
-                Show me more.
-              </Button>
-              {(neighborhood.length !== 0) | (offense.length !== 0) ? (
-                <Button
-                  bg={'#6FFFB0'}
-                  textColor={'black'}
-                  onClick={() => {
-                    setNeighborhood([]);
-                    setOffense([]);
-                    setViewState(indexViewState);
-                  }}
-                >
-                  Reset the map.
-                </Button>
-              ) : null}
-            </HStack>
+                ))}
+              </Tbody>
+            </Table>
           </VStack>
         </Flex>
       </Container>

@@ -121,17 +121,16 @@ export function MyCityMap({ data, setNeighborhood, setViewState, viewState }) {
   const onClick = (info) => {
     if (info.object) {
       let name = info.object.properties.NAME.toLowerCase();
-      //TODO logic to associate GeoJSON names with crime data names
-      //router.push(`/neighborhoods/${name}`);
-      let myCentroid = centroids[name];
-      setViewState({
-        latitude: parseFloat(myCentroid[1]),
-        longitude: parseFloat(myCentroid[0]),
-        zoom: 12.5,
-        bearing: 0,
-        pitch: 20
-      });
-      setNeighborhood([name]);
+      router.push('/hoods/' + encodeURIComponent(name));
+      // let myCentroid = centroids[name];
+      // setViewState({
+      //   latitude: parseFloat(myCentroid[1]),
+      //   longitude: parseFloat(myCentroid[0]),
+      //   zoom: 12.5,
+      //   bearing: 0,
+      //   pitch: 20
+      // });
+      // setNeighborhood([name]);
     }
   };
 
@@ -188,9 +187,10 @@ export function MyCityMap({ data, setNeighborhood, setViewState, viewState }) {
       // [150, 150, 150, hexAlpha],
       // [99, 99, 99, hexAlpha],
       // [37, 37, 37, hexAlpha]
-      [254, 235, 226, hexAlpha],
-      [251, 180, 185, hexAlpha],
+      // [254, 235, 226, hexAlpha],
+      [250, 159, 181, hexAlpha],
       [247, 104, 161, hexAlpha],
+      [221, 52, 151, hexAlpha],
       [174, 1, 126, hexAlpha]
     ]
   });
