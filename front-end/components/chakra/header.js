@@ -1,5 +1,6 @@
 import {
   Text,
+  HStack,
   Heading,
   Spacer,
   Flex,
@@ -12,11 +13,14 @@ import {
   Link
 } from '@chakra-ui/react';
 
+import { useRouter } from 'next/router';
+
 import { HamburgerIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import { Home } from 'grommet-icons';
 import { toTitleCase } from '../../lib/transformStrings';
 
 export function MyHeader({ openDrawer, openModal }) {
+  const router = useRouter();
   return (
     <>
       <Flex
@@ -34,7 +38,14 @@ export function MyHeader({ openDrawer, openModal }) {
           </Heading>
         </Box>
         <Spacer />
-        <Box>
+        <HStack spacing={2}>
+          {router.pathname === '/' ? null : (
+            <IconButton
+              onClick={() => router.push('/')}
+              bg={'black'}
+              icon={<Home color="#6fffb0"></Home>}
+            ></IconButton>
+          )}
           <Menu>
             {({ isOpen }) => (
               <>
@@ -42,8 +53,6 @@ export function MyHeader({ openDrawer, openModal }) {
                   as={IconButton}
                   aria-label="Options"
                   icon={<HamburgerIcon w={6} h={6} color="brand.100" />}
-                  mr={4}
-                  mt={0}
                   background={'black'}
                   maxH={7}
                 >
@@ -74,7 +83,7 @@ export function MyHeader({ openDrawer, openModal }) {
               </>
             )}
           </Menu>
-        </Box>
+        </HStack>
       </Flex>
     </>
   );

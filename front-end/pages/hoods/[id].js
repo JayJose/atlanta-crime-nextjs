@@ -138,7 +138,7 @@ export default function Neighborhood(props) {
   return (
     <>
       <Head>
-        <title>{myPlaceholder} crime!</title>
+        <title>ATL crime!</title>
         <meta name="description" content="A crime app." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -184,8 +184,6 @@ export default function Neighborhood(props) {
                   onChange={(e) => {
                     let value = e.target.value.toLowerCase();
                     if (value !== props.id) {
-                      let myCentroid = centroids[value];
-
                       router.push('/hoods/' + encodeURIComponent(value));
                     }
                   }}

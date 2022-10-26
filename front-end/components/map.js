@@ -121,17 +121,16 @@ export function MyCityMap({ data, setNeighborhood, setViewState, viewState }) {
   const onClick = (info) => {
     if (info.object) {
       let name = info.object.properties.NAME.toLowerCase();
-      //TODO logic to associate GeoJSON names with crime data names
-      //router.push(`/neighborhoods/${name}`);
-      let myCentroid = centroids[name];
-      setViewState({
-        latitude: parseFloat(myCentroid[1]),
-        longitude: parseFloat(myCentroid[0]),
-        zoom: 12.5,
-        bearing: 0,
-        pitch: 20
-      });
-      setNeighborhood([name]);
+      router.push('/hoods/' + encodeURIComponent(name));
+      // let myCentroid = centroids[name];
+      // setViewState({
+      //   latitude: parseFloat(myCentroid[1]),
+      //   longitude: parseFloat(myCentroid[0]),
+      //   zoom: 12.5,
+      //   bearing: 0,
+      //   pitch: 20
+      // });
+      // setNeighborhood([name]);
     }
   };
 
@@ -153,7 +152,7 @@ export function MyCityMap({ data, setNeighborhood, setViewState, viewState }) {
     getLineColor: [0, 0, 0, jsonAlpha],
     pickable: true,
     autoHighlight: true,
-    highlightColor: [253, 111, 255, jsonAlpha],
+    highlightColor: [111, 255, 176, jsonAlpha],
     onClick: onClick
   });
 
@@ -184,10 +183,15 @@ export function MyCityMap({ data, setNeighborhood, setViewState, viewState }) {
     getPosition: (d) => d.coordinates,
     // colorbrewer: 4-class greys
     colorRange: [
-      [247, 247, 247, hexAlpha],
-      [150, 150, 150, hexAlpha],
-      [99, 99, 99, hexAlpha],
-      [37, 37, 37, hexAlpha]
+      // [247, 247, 247, hexAlpha],
+      // [150, 150, 150, hexAlpha],
+      // [99, 99, 99, hexAlpha],
+      // [37, 37, 37, hexAlpha]
+      // [254, 235, 226, hexAlpha],
+      [250, 159, 181, hexAlpha],
+      [247, 104, 161, hexAlpha],
+      [221, 52, 151, hexAlpha],
+      [174, 1, 126, hexAlpha]
     ]
   });
 
@@ -222,7 +226,7 @@ export function MyCityMap({ data, setNeighborhood, setViewState, viewState }) {
         >
           <StaticMap
             reuseMaps
-            mapStyle={BASEMAP.POSITRON}
+            mapStyle={BASEMAP.DARK_MATTER}
             mapboxAccessToken={process.env.mapboxAccessToken}
           ></StaticMap>
         </DeckGL>
