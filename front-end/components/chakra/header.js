@@ -13,11 +13,14 @@ import {
   Link
 } from '@chakra-ui/react';
 
+import { useRouter } from 'next/router';
+
 import { HamburgerIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import { Home } from 'grommet-icons';
 import { toTitleCase } from '../../lib/transformStrings';
 
 export function MyHeader({ openDrawer, openModal }) {
+  const router = useRouter();
   return (
     <>
       <Flex
@@ -36,7 +39,13 @@ export function MyHeader({ openDrawer, openModal }) {
         </Box>
         <Spacer />
         <HStack spacing={2}>
-          <Home color="yellow"></Home>
+          {router.pathname === '/' ? null : (
+            <IconButton
+              onClick={() => router.push('/')}
+              bg={'black'}
+              icon={<Home color="#6fffb0"></Home>}
+            ></IconButton>
+          )}
           <Menu>
             {({ isOpen }) => (
               <>

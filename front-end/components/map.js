@@ -153,7 +153,7 @@ export function MyCityMap({ data, setNeighborhood, setViewState, viewState }) {
     getLineColor: [0, 0, 0, jsonAlpha],
     pickable: true,
     autoHighlight: true,
-    highlightColor: [253, 111, 255, jsonAlpha],
+    highlightColor: [111, 255, 176, jsonAlpha],
     onClick: onClick
   });
 
