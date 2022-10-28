@@ -161,6 +161,9 @@ export default function Home(props) {
   const [isDateTipOpen, setisDateTipOpen] = useState(false);
   const [isFilterTipOpen, setisFilterTipOpen] = useState(false);
 
+  // grid formatting
+  const grid = { rows: 6, cols: 2 };
+
   return (
     <>
       <Head>
@@ -175,101 +178,126 @@ export default function Home(props) {
         background={'black'}
         color="brand.0"
       >
-        <Flex
-          h={{ base: 'auto', md: '100vh' }}
-          py={[0, 0, 0]}
-          px={[0, 0, 0]}
-          direction={{ base: 'column', md: 'row' }}
+        <VStack
+          h="90vh"
+          w="100%"
+          p={0}
+          spacing={2}
+          align="stretch"
+          bg={'darkgray'}
+          borderRadius={'10px'}
+          overflowY={'auto'}
         >
-          <VStack
-            w="100%"
-            h="90vh"
-            p={0}
-            spacing={2}
-            align="stretch"
-            bg={'black'}
-            borderRadius={'10px'}
-          >
-            <VStack margin={2} spacing={0} align={'left'}>
-              <Text fontSize={'0.85em'}>
-                Select a neighborhood from the map to see more crime data.
-              </Text>{' '}
-              <Text fontSize={'0.85em'}>
-                Data current as of {asOf.toLocaleDateString()}.
-              </Text>{' '}
-            </VStack>
-            <MyCityMap
-              data={mapData}
-              setNeighborhood={setNeighborhood}
-              viewState={viewState}
-              setViewState={setViewState}
-            ></MyCityMap>
-            <Box></Box>
-            <Box></Box>
-            <Box></Box>
-            <Divider></Divider>
-            <Table
-              variant="simple"
-              colorScheme="black"
-              size={'sm'}
-              className={'crime-table-highlight'}
-            >
-              <colgroup>
-                <col span="1" style={{ width: '50%' }} />
-                <col span="1" style={{ width: '25%' }} />
-                <col span="1" style={{ width: '25%' }} />
-              </colgroup>
-              <Thead bgColor="black">
-                <Tr>
-                  <Th color={'white'}>
-                    Crime{' '}
-                    <Tooltip
-                      label={'Hover over a CRIME to filter the map.'}
-                      aria-label="A tooltip"
-                      isOpen={isFilterTipOpen}
-                    >
-                      <IconButton
-                        icon={<InfoOutlineIcon />}
-                        color="brand.100"
-                        bg={'black'}
-                        onMouseEnter={() => setisFilterTipOpen(true)}
-                        onMouseLeave={() => setisFilterTipOpen(false)}
-                      ></IconButton>
-                    </Tooltip>
-                  </Th>
-                  <Th color={'white'}>Crimes in 2022</Th>
-                  <Th color={'white'}>YoY Change</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {props.table.map((o) => (
-                  <Tr key={o.offense_category}>
-                    <Td
-                      onMouseOver={(e) => {
-                        console.log(e);
-                        let v = e.target.textContent.toLowerCase();
-                        setOffense(v === 'all' ? [] : [v]);
-                      }}
-                      onMouseLeave={(e) => {
-                        setOffense([]);
-                      }}
-                      style={{
-                        whiteSpace: 'nowrap',
-                        textOverflow: 'ellipsis',
-                        overflow: 'hidden',
-                        maxWidth: '1px'
-                      }}
-                    >
-                      {toTitleCase(o.offense_category)}
-                    </Td>
-                    <Td textAlign={'right'}>{o._2022.toLocaleString()}</Td>
-                    <Td>{getYoyChange(o._2021, o._2022)}</Td>
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
+          <VStack margin={2} mb={0} spacing={0} align={'left'} p={0}>
+            <Text fontSize={'0.85em'}>
+              Select a neighborhood from the map to see more crime data.
+            </Text>{' '}
+            <Text fontSize={'0.85em'}>
+              Data current as of {asOf.toLocaleDateString()}.
+            </Text>{' '}
           </VStack>
-        </Flex>
+          <SimpleGrid
+            gap={5}
+            columns={{ base: grid.cols }}
+            rows={{ base: 4 }}
+            width={'100%'}
+            minHeight={'90%'}
+            maxHeight={'90%'}
+          >
+            <GridItem colSpan={grid.cols} rowSpan={grid.rows - 1}>
+              <MyCityMap
+                data={mapData}
+                setNeighborhood={setNeighborhood}
+                viewState={viewState}
+                setViewState={setViewState}
+              ></MyCityMap>
+            </GridItem>
+            <GridItem
+              colSpan={{ base: grid.cols, md: grid.cols - 1 }}
+              rowSpan={1}
+            >
+              <Table
+                variant="simple"
+                colorScheme="black"
+                size={'sm'}
+                className={'crime-table-highlight'}
+              >
+                <colgroup>
+                  <col span="1" style={{ width: '50%' }} />
+                  <col span="1" style={{ width: '25%' }} />
+                  <col span="1" style={{ width: '25%' }} />
+                </colgroup>
+                <Thead bgColor="black">
+                  <Tr>
+                    <Th color={'white'}>
+                      Crime{' '}
+                      <Tooltip
+                        label={'Hover over a CRIME to filter the map.'}
+                        aria-label="A tooltip"
+                        isOpen={isFilterTipOpen}
+                      >
+                        <IconButton
+                          icon={<InfoOutlineIcon />}
+                          color="brand.100"
+                          bg={'black'}
+                          onMouseEnter={() => setisFilterTipOpen(true)}
+                          onMouseLeave={() => setisFilterTipOpen(false)}
+                        ></IconButton>
+                      </Tooltip>
+                    </Th>
+                    <Th color={'white'}>Crimes in 2022</Th>
+                    <Th color={'white'}>YoY Change</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {props.table.map((o) => (
+                    <Tr key={o.offense_category}>
+                      <Td
+                        onMouseOver={(e) => {
+                          console.log(e);
+                          let v = e.target.textContent.toLowerCase();
+                          setOffense(v === 'all' ? [] : [v]);
+                        }}
+                        onMouseLeave={(e) => {
+                          setOffense([]);
+                        }}
+                        style={{
+                          whiteSpace: 'nowrap',
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden',
+                          maxWidth: '1px'
+                        }}
+                      >
+                        {toTitleCase(o.offense_category)}
+                      </Td>
+                      <Td textAlign={'right'}>{o._2022.toLocaleString()}</Td>
+                      <Td>{getYoyChange(o._2021, o._2022)}</Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </GridItem>
+            <GridItem
+              colSpan={{ base: grid.cols, md: grid.cols - 1 }}
+              rowSpan={1}
+              h={'200px'}
+            >
+              <SimpleGrid gap={1} columns={{ base: 1, md: 3 }} width={'100%'}>
+                {offenseCategories.map((o) => {
+                  let data = props.trends.filter(
+                    (c) => c.offense_category === o
+                  );
+                  let chartData = genTrendData(data, 'year', 'week_of_year');
+                  return (
+                    <GridItem key={o} h={'200px'}>
+                      <MyResponsiveLine key={o} data={chartData} y_label={o} />
+                    </GridItem>
+                  );
+                })}
+              </SimpleGrid>
+            </GridItem>
+          </SimpleGrid>
+        </VStack>
       </Container>
     </>
   );
