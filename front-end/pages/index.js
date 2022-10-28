@@ -5,8 +5,10 @@ import Head from 'next/head';
 import { supabase } from '../lib/supabase';
 
 import { MyCityMap } from '../components/map';
+import { MyResponsiveLine } from '../components/trends';
 
 import _ from 'underscore';
+import { genTrendData } from '../lib/transformData';
 import { toTitleCase, getYoyChange } from '../lib/transformStrings';
 
 // NEW
@@ -30,10 +32,13 @@ import {
   Tr,
   Th,
   Td,
-  Divider
+  Divider,
+  SimpleGrid,
+  GridItem
 } from '@chakra-ui/react';
 
 import { InfoOutlineIcon } from '@chakra-ui/icons';
+import { ST } from 'next/dist/shared/lib/utils';
 
 export const getStaticProps = async () => {
   const { data: table } = await supabase
@@ -46,6 +51,13 @@ export const getStaticProps = async () => {
     .from('app_map')
     .select('*')
     .eq('year', 2022);
+
+  const { data: trends } = await supabase
+    .from('app_trends')
+    .select('*')
+    .eq('neighborhood', 'all')
+    .eq('neighborhood', 'all')
+    .order('offense_category', { ascending: true });
 
   const { data: neighborhoods } = await supabase
     .from('dim_neighborhoods')
@@ -65,6 +77,7 @@ export const getStaticProps = async () => {
     props: {
       table,
       map,
+      trends,
       neighborhoods,
       offenses,
       cutoff
@@ -82,6 +95,9 @@ export default function Home(props) {
 
   const [neighborhood, setNeighborhood] = useState([]);
   const [offense, setOffense] = useState([]);
+  const offenseCategories = [
+    ...new Set(props.offenses.map((e) => e.offense_category))
+  ].sort();
 
   const years = { current: 2022, prior: 2021 };
 
@@ -167,7 +183,7 @@ export default function Home(props) {
         >
           <VStack
             w="100%"
-            h="85vh"
+            h="100%"
             p={0}
             spacing={2}
             align="stretch"
@@ -192,65 +208,90 @@ export default function Home(props) {
             <Box></Box>
             <Box></Box>
             <Divider></Divider>
-            <Table
-              variant="simple"
-              colorScheme="black"
-              size={'sm'}
-              className={'crime-table-highlight'}
+            <Stack
+              direction={{ base: 'column', md: 'row' }}
+              width="100%"
+              height={'50vh'}
             >
-              <colgroup>
-                <col span="1" style={{ width: '50%' }} />
-                <col span="1" style={{ width: '25%' }} />
-                <col span="1" style={{ width: '25%' }} />
-              </colgroup>
-              <Thead bgColor="black">
-                <Tr>
-                  <Th color={'white'}>
-                    Crime{' '}
-                    <Tooltip
-                      label={'Hover over a CRIME to filter the map.'}
-                      aria-label="A tooltip"
-                      isOpen={isFilterTipOpen}
-                    >
-                      <IconButton
-                        icon={<InfoOutlineIcon />}
-                        color="brand.100"
-                        bg={'black'}
-                        onMouseEnter={() => setisFilterTipOpen(true)}
-                        onMouseLeave={() => setisFilterTipOpen(false)}
-                      ></IconButton>
-                    </Tooltip>
-                  </Th>
-                  <Th color={'white'}>Crimes in 2022</Th>
-                  <Th color={'white'}>YoY Change</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {props.table.map((o) => (
-                  <Tr key={o.offense_category}>
-                    <Td
-                      onMouseOver={(e) => {
-                        let v = e.target.innerText.toLowerCase();
-                        setOffense(v === 'all' ? [] : [v]);
-                      }}
-                      onMouseLeave={(e) => {
-                        setOffense([]);
-                      }}
-                      style={{
-                        whiteSpace: 'nowrap',
-                        textOverflow: 'ellipsis',
-                        overflow: 'hidden',
-                        maxWidth: '1px'
-                      }}
-                    >
-                      {toTitleCase(o.offense_category)}
-                    </Td>
-                    <Td textAlign={'right'}>{o._2022.toLocaleString()}</Td>
-                    <Td>{getYoyChange(o._2021, o._2022)}</Td>
+              <Table
+                variant="simple"
+                colorScheme="black"
+                size={'sm'}
+                className={'crime-table-highlight'}
+              >
+                <colgroup>
+                  <col span="1" style={{ width: '50%' }} />
+                  <col span="1" style={{ width: '25%' }} />
+                  <col span="1" style={{ width: '25%' }} />
+                </colgroup>
+                <Thead bgColor="black">
+                  <Tr>
+                    <Th color={'white'}>
+                      Crime{' '}
+                      <Tooltip
+                        label={'Hover over a CRIME to filter the map.'}
+                        aria-label="A tooltip"
+                        isOpen={isFilterTipOpen}
+                      >
+                        <IconButton
+                          icon={<InfoOutlineIcon />}
+                          color="brand.100"
+                          bg={'black'}
+                          onMouseEnter={() => setisFilterTipOpen(true)}
+                          onMouseLeave={() => setisFilterTipOpen(false)}
+                        ></IconButton>
+                      </Tooltip>
+                    </Th>
+                    <Th color={'white'}>Crimes in 2022</Th>
+                    <Th color={'white'}>YoY Change</Th>
                   </Tr>
-                ))}
-              </Tbody>
-            </Table>
+                </Thead>
+                <Tbody>
+                  {props.table.map((o) => (
+                    <Tr key={o.offense_category}>
+                      <Td
+                        onMouseOver={(e) => {
+                          console.log(e);
+                          let v = e.target.textContent.toLowerCase();
+                          setOffense(v === 'all' ? [] : [v]);
+                        }}
+                        onMouseLeave={(e) => {
+                          setOffense([]);
+                        }}
+                        style={{
+                          whiteSpace: 'nowrap',
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden',
+                          maxWidth: '1px'
+                        }}
+                      >
+                        {toTitleCase(o.offense_category)}
+                      </Td>
+                      <Td textAlign={'right'}>{o._2022.toLocaleString()}</Td>
+                      <Td>{getYoyChange(o._2021, o._2022)}</Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+              <SimpleGrid
+                gap={1}
+                columns={{ base: 1, md: 3 }}
+                width={'100%'}
+                height={'20vh'}
+              >
+                {offenseCategories.map((o) => {
+                  let data = props.trends.filter(
+                    (c) => c.offense_category === o
+                  );
+                  let chartData = genTrendData(data, 'year', 'week_of_year');
+                  return (
+                    <GridItem key={o}>
+                      <MyResponsiveLine key={o} data={chartData} y_label={o} />
+                    </GridItem>
+                  );
+                })}
+              </SimpleGrid>{' '}
+            </Stack>
           </VStack>
         </Flex>
       </Container>
