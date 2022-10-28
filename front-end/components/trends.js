@@ -94,7 +94,7 @@ export function MyResponsiveLine({ data, y_label = 'Crimes' }) {
         // max: 'auto'
       }}
       colors={(d) => d.color}
-      yFormat=" >-.0f"
+      yFormat=" >-,.0f"
       axisBottom={{
         orient: 'bottom',
         tickSize: 0,
