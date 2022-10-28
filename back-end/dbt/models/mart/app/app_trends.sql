@@ -42,7 +42,22 @@ group by d.neighborhood,
     d.offense_category,
     d.year,
     d.week_of_year
-)
+), final_hoods as (
 select *,
     sum(value) OVER (partition by neighborhood, offense_category, year ORDER BY week_of_year) as cum_value
 from final
+-- TODO: need solution for this
+where concat(year, '-', week_of_year) <> '2022-42'
+)
+select * from final_hoods
+union all
+select 'all' as neighborhood,
+  offense_category,
+  year,
+  week_of_year,
+  sum(value) as value,
+  sum(cum_value) as cum_value
+from final_hoods
+group by offense_category,
+  year,
+  week_of_year

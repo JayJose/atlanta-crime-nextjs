@@ -5,8 +5,10 @@ import Head from 'next/head';
 import { supabase } from '../lib/supabase';
 
 import { MyCityMap } from '../components/map';
+import { MyResponsiveLine } from '../components/trends';
 
 import _ from 'underscore';
+import { genTrendData } from '../lib/transformData';
 import { toTitleCase, getYoyChange } from '../lib/transformStrings';
 
 // NEW
@@ -30,10 +32,13 @@ import {
   Tr,
   Th,
   Td,
-  Divider
+  Divider,
+  SimpleGrid,
+  GridItem
 } from '@chakra-ui/react';
 
 import { InfoOutlineIcon } from '@chakra-ui/icons';
+import { ST } from 'next/dist/shared/lib/utils';
 
 export const getStaticProps = async () => {
   const { data: table } = await supabase
@@ -46,6 +51,13 @@ export const getStaticProps = async () => {
     .from('app_map')
     .select('*')
     .eq('year', 2022);
+
+  const { data: trends } = await supabase
+    .from('app_trends')
+    .select('*')
+    .eq('neighborhood', 'all')
+    .eq('neighborhood', 'all')
+    .order('offense_category', { ascending: true });
 
   const { data: neighborhoods } = await supabase
     .from('dim_neighborhoods')
@@ -65,6 +77,7 @@ export const getStaticProps = async () => {
     props: {
       table,
       map,
+      trends,
       neighborhoods,
       offenses,
       cutoff
@@ -82,6 +95,9 @@ export default function Home(props) {
 
   const [neighborhood, setNeighborhood] = useState([]);
   const [offense, setOffense] = useState([]);
+  const offenseCategories = [
+    ...new Set(props.offenses.map((e) => e.offense_category))
+  ].sort();
 
   const years = { current: 2022, prior: 2021 };
 
@@ -167,7 +183,7 @@ export default function Home(props) {
         >
           <VStack
             w="100%"
-            h="85vh"
+            h="90vh"
             p={0}
             spacing={2}
             align="stretch"
@@ -230,7 +246,8 @@ export default function Home(props) {
                   <Tr key={o.offense_category}>
                     <Td
                       onMouseOver={(e) => {
-                        let v = e.target.innerText.toLowerCase();
+                        console.log(e);
+                        let v = e.target.textContent.toLowerCase();
                         setOffense(v === 'all' ? [] : [v]);
                       }}
                       onMouseLeave={(e) => {
