@@ -183,7 +183,7 @@ export default function Home(props) {
         >
           <VStack
             w="100%"
-            h="100%"
+            h="90vh"
             p={0}
             spacing={2}
             align="stretch"
@@ -208,90 +208,66 @@ export default function Home(props) {
             <Box></Box>
             <Box></Box>
             <Divider></Divider>
-            <Stack
-              direction={{ base: 'column', md: 'row' }}
-              width="100%"
-              height={'50vh'}
+            <Table
+              variant="simple"
+              colorScheme="black"
+              size={'sm'}
+              className={'crime-table-highlight'}
             >
-              <Table
-                variant="simple"
-                colorScheme="black"
-                size={'sm'}
-                className={'crime-table-highlight'}
-              >
-                <colgroup>
-                  <col span="1" style={{ width: '50%' }} />
-                  <col span="1" style={{ width: '25%' }} />
-                  <col span="1" style={{ width: '25%' }} />
-                </colgroup>
-                <Thead bgColor="black">
-                  <Tr>
-                    <Th color={'white'}>
-                      Crime{' '}
-                      <Tooltip
-                        label={'Hover over a CRIME to filter the map.'}
-                        aria-label="A tooltip"
-                        isOpen={isFilterTipOpen}
-                      >
-                        <IconButton
-                          icon={<InfoOutlineIcon />}
-                          color="brand.100"
-                          bg={'black'}
-                          onMouseEnter={() => setisFilterTipOpen(true)}
-                          onMouseLeave={() => setisFilterTipOpen(false)}
-                        ></IconButton>
-                      </Tooltip>
-                    </Th>
-                    <Th color={'white'}>Crimes in 2022</Th>
-                    <Th color={'white'}>YoY Change</Th>
+              <colgroup>
+                <col span="1" style={{ width: '50%' }} />
+                <col span="1" style={{ width: '25%' }} />
+                <col span="1" style={{ width: '25%' }} />
+              </colgroup>
+              <Thead bgColor="black">
+                <Tr>
+                  <Th color={'white'}>
+                    Crime{' '}
+                    <Tooltip
+                      label={'Hover over a CRIME to filter the map.'}
+                      aria-label="A tooltip"
+                      isOpen={isFilterTipOpen}
+                    >
+                      <IconButton
+                        icon={<InfoOutlineIcon />}
+                        color="brand.100"
+                        bg={'black'}
+                        onMouseEnter={() => setisFilterTipOpen(true)}
+                        onMouseLeave={() => setisFilterTipOpen(false)}
+                      ></IconButton>
+                    </Tooltip>
+                  </Th>
+                  <Th color={'white'}>Crimes in 2022</Th>
+                  <Th color={'white'}>YoY Change</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {props.table.map((o) => (
+                  <Tr key={o.offense_category}>
+                    <Td
+                      onMouseOver={(e) => {
+                        console.log(e);
+                        let v = e.target.textContent.toLowerCase();
+                        setOffense(v === 'all' ? [] : [v]);
+                      }}
+                      onMouseLeave={(e) => {
+                        setOffense([]);
+                      }}
+                      style={{
+                        whiteSpace: 'nowrap',
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        maxWidth: '1px'
+                      }}
+                    >
+                      {toTitleCase(o.offense_category)}
+                    </Td>
+                    <Td textAlign={'right'}>{o._2022.toLocaleString()}</Td>
+                    <Td>{getYoyChange(o._2021, o._2022)}</Td>
                   </Tr>
-                </Thead>
-                <Tbody>
-                  {props.table.map((o) => (
-                    <Tr key={o.offense_category}>
-                      <Td
-                        onMouseOver={(e) => {
-                          console.log(e);
-                          let v = e.target.textContent.toLowerCase();
-                          setOffense(v === 'all' ? [] : [v]);
-                        }}
-                        onMouseLeave={(e) => {
-                          setOffense([]);
-                        }}
-                        style={{
-                          whiteSpace: 'nowrap',
-                          textOverflow: 'ellipsis',
-                          overflow: 'hidden',
-                          maxWidth: '1px'
-                        }}
-                      >
-                        {toTitleCase(o.offense_category)}
-                      </Td>
-                      <Td textAlign={'right'}>{o._2022.toLocaleString()}</Td>
-                      <Td>{getYoyChange(o._2021, o._2022)}</Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-              <SimpleGrid
-                gap={1}
-                columns={{ base: 1, md: 3 }}
-                width={'100%'}
-                height={'20vh'}
-              >
-                {offenseCategories.map((o) => {
-                  let data = props.trends.filter(
-                    (c) => c.offense_category === o
-                  );
-                  let chartData = genTrendData(data, 'year', 'week_of_year');
-                  return (
-                    <GridItem key={o}>
-                      <MyResponsiveLine key={o} data={chartData} y_label={o} />
-                    </GridItem>
-                  );
-                })}
-              </SimpleGrid>{' '}
-            </Stack>
+                ))}
+              </Tbody>
+            </Table>
           </VStack>
         </Flex>
       </Container>
