@@ -150,7 +150,7 @@ export function MyCityMap({ data, setNeighborhood, setViewState, viewState }) {
     getFillColor: [0, 0, 0, 0],
     stroked: true,
     getLineWidth: 30,
-    getLineColor: [gray, gray, gray, jsonAlpha],
+    getLineColor: [111, 255, 176, jsonAlpha],
     pickable: true,
     autoHighlight: true,
     highlightColor: [111, 255, 176, jsonAlpha],
