@@ -144,10 +144,16 @@ export default function Home(props) {
   const [viewState, setViewState] = useState(indexViewState);
 
   var mapData;
+  var trendData;
   if (offense.length === 0) {
     mapData = props.map;
+    trendData = props.trends;
   } else {
     mapData = _.filter(props.map, function (row) {
+      return row.offense_category === offense[0];
+    });
+
+    trendData = _.filter(props.trends, function (row) {
       return row.offense_category === offense[0];
     });
   }
@@ -184,7 +190,7 @@ export default function Home(props) {
           p={0}
           spacing={2}
           align="stretch"
-          bg={'darkgray'}
+          bg={'black'}
           borderRadius={'10px'}
           overflowY={'auto'}
         >
@@ -212,10 +218,7 @@ export default function Home(props) {
                 setViewState={setViewState}
               ></MyCityMap>
             </GridItem>
-            <GridItem
-              colSpan={{ base: grid.cols, md: grid.cols - 1 }}
-              rowSpan={1}
-            >
+            <GridItem colSpan={{ base: grid.cols }} rowSpan={1}>
               <Table
                 variant="simple"
                 colorScheme="black"
@@ -276,25 +279,6 @@ export default function Home(props) {
                   ))}
                 </Tbody>
               </Table>
-            </GridItem>
-            <GridItem
-              colSpan={{ base: grid.cols, md: grid.cols - 1 }}
-              rowSpan={1}
-              h={'200px'}
-            >
-              <SimpleGrid gap={1} columns={{ base: 1, md: 3 }} width={'100%'}>
-                {offenseCategories.map((o) => {
-                  let data = props.trends.filter(
-                    (c) => c.offense_category === o
-                  );
-                  let chartData = genTrendData(data, 'year', 'week_of_year');
-                  return (
-                    <GridItem key={o} h={'200px'}>
-                      <MyResponsiveLine key={o} data={chartData} y_label={o} />
-                    </GridItem>
-                  );
-                })}
-              </SimpleGrid>
             </GridItem>
           </SimpleGrid>
         </VStack>
