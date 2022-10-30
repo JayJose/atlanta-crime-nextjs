@@ -44,7 +44,7 @@ const theme = {
   }
 };
 
-export function MyResponsiveLine({ data, y_label = 'Crimes' }) {
+export function MyResponsiveLine({ data, y_label = 'Crimes', height = '200' }) {
   data[0]['color'] = 'gray';
   data[1]['color'] = '#6FFFB0'; // TODO: incorporate theme
 
@@ -52,7 +52,7 @@ export function MyResponsiveLine({ data, y_label = 'Crimes' }) {
     <ResponsiveLine
       theme={theme.theme}
       data={data}
-      height="200"
+      height={height}
       enableSlices="x"
       sliceTooltip={({ slice }) => {
         var pts = slice.points.map((point) => point.data.y);
