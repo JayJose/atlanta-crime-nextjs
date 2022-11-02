@@ -58,7 +58,9 @@ export function MyNeighborhoodMap({ neighborhood, data }) {
     lineWidthMinPixels: 1,
     getPosition: (d) => d.coordinates,
     getFillColor: (d) => d.color,
-    getLineColor: (d) => [0, 0, 0]
+    getLineColor: (d) => [0, 0, 0],
+    autoHighlight: true,
+    highlightColor: [253, 111, 255, 255]
   });
 
   const heatmapLayer = new HeatmapLayer({
