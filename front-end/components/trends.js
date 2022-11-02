@@ -29,6 +29,13 @@ const theme = {
         }
       }
     },
+    crosshair: {
+      line: {
+        stroke: '#FFFFFF',
+        strokeWidth: 2,
+        strokeOpacity: 0.75
+      }
+    },
     legends: {
       text: {
         fontSize: 12
@@ -54,6 +61,8 @@ export function MyResponsiveLine({ data, y_label = 'Crimes', height = '200' }) {
       data={data}
       height={height}
       enableSlices="x"
+      enableCrosshair
+      crosshairType="x"
       sliceTooltip={({ slice }) => {
         var pts = slice.points.map((point) => point.data.y);
         console.log(pts);
