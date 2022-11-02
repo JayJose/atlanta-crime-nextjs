@@ -58,7 +58,9 @@ export function MyNeighborhoodMap({ neighborhood, data }) {
     lineWidthMinPixels: 1,
     getPosition: (d) => d.coordinates,
     getFillColor: (d) => d.color,
-    getLineColor: (d) => [0, 0, 0]
+    getLineColor: (d) => [0, 0, 0],
+    autoHighlight: true,
+    highlightColor: [253, 111, 255, 255]
   });
 
   const heatmapLayer = new HeatmapLayer({
@@ -87,7 +89,16 @@ export function MyNeighborhoodMap({ neighborhood, data }) {
           onViewStateChange={updateViewState}
           getTooltip={({ object }) =>
             object && {
-              html: `${object.offense}`
+              html: `
+                <h1>${object.offense_category}</h1>
+                <h1>${object.offense}</h1>
+                <div>${object.date}</div>
+              `,
+              style: {
+                backgroundColor: '#000000',
+                color: 'white',
+                fontSize: '0.8em'
+              }
             }
           }
         >
