@@ -87,7 +87,16 @@ export function MyNeighborhoodMap({ neighborhood, data }) {
           onViewStateChange={updateViewState}
           getTooltip={({ object }) =>
             object && {
-              html: `${object.offense}`
+              html: `
+                <h1>${object.offense_category}</h1>
+                <h1>${object.offense}</h1>
+                <div>${object.date}</div>
+              `,
+              style: {
+                backgroundColor: '#000000',
+                color: 'white',
+                fontSize: '0.8em'
+              }
             }
           }
         >
