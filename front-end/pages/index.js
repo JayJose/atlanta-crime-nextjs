@@ -81,7 +81,8 @@ export const getStaticProps = async () => {
       neighborhoods,
       offenses,
       cutoff
-    }
+    },
+    revalidate: 300
   };
 };
 
