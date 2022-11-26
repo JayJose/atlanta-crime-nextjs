@@ -36,7 +36,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ## Jest
 
 Install Jest:  
-`npm i jest`  
+`npm i jest --save-dev`  
 `npm install @types/jest --save-dev`
 
 Add it to `package.json` scripts:  
