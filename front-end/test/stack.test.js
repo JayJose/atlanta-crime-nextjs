@@ -30,4 +30,5 @@ describe('My Stack', () => {
   });
 
   it.todo('is can pop off');
+  //  removes the last element from an array and returns that element
 });
