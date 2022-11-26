@@ -12,6 +12,13 @@ class Stack {
     this.top += 1;
     this.items[this.top] = value;
   }
+
+  get pop() {
+    let val = this.items[this.top];
+    delete this.items[this.top];
+    this.top -= 1;
+    return val;
+  }
 }
 
 describe('My Stack', () => {
@@ -24,11 +31,15 @@ describe('My Stack', () => {
   });
 
   it('it can push to the top', () => {
-    stack.push('XXX');
+    let pushVal = '😎';
+    stack.push(pushVal);
     expect(stack.top).toBe(0);
-    expect(stack.peek).toBe('XXX');
+    expect(stack.peek).toBe(pushVal);
   });
 
-  it.todo('is can pop off');
-  //  removes the last element from an array and returns that element
+  it('is can pop off', () => {
+    let vals = ['firstVal', 'secondVal'];
+    vals.forEach((e) => stack.push(e));
+    expect(stack.pop).toBe('secondVal');
+  });
 });
