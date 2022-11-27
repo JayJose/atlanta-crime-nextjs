@@ -174,7 +174,7 @@ export default function Home(props) {
   return (
     <>
       <Head>
-        <title>Crime!</title>
+        <title>Atlanta crime</title>
         <meta name="description" content="A crime app." />
         <link rel="icon" href="/favicon.ico" />
       </Head>

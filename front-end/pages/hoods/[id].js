@@ -136,10 +136,13 @@ export default function Neighborhood(props) {
   const [isDateTipOpen, setisDateTipOpen] = useState(false);
   const [isFilterTipOpen, setisFilterTipOpen] = useState(false);
 
+  const titleHood = toTitleCase(props.id);
+  const titleMessage = `${titleHood} crime`;
+
   return (
     <>
       <Head>
-        <title>ATL crime!</title>
+        <title>{titleMessage}</title>
         <meta name="description" content="A crime app." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
