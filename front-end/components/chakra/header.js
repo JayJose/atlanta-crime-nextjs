@@ -1,8 +1,6 @@
 import {
-  Text,
   HStack,
   Heading,
-  Spacer,
   Flex,
   Box,
   Menu,
@@ -18,7 +16,7 @@ import { useRouter } from 'next/router';
 import { HamburgerIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import { Home } from 'grommet-icons';
 
-export function MyHeader({ openDrawer, openModal }) {
+export function MyHeader() {
   const router = useRouter();
   return (
     <>
