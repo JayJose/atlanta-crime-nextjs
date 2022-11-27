@@ -8,8 +8,8 @@ const theme = extendTheme({
   colors: {
     brand: {
       0: '#FFFFFF',
-      100: '#6FFFB0', // rgb: 111, 255, 176
-      200: '#FD6FFF'
+      100: '#6FFFB0', // rgb: 111, 255, 176 // neon green
+      200: '#FD6FFF' // neon purple
     }
   },
   fonts: {

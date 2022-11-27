@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase';
 import { useState } from 'react';
 
 import { MyHeader } from '../../components/chakra/header';
+import MyRadio from '../../components/radio';
 import {
   Box,
   Container,
@@ -33,8 +34,6 @@ import { MyNeighborhoodMap } from '../../components/map';
 import { genTrendData } from '../../lib/transformData';
 import { getYoyChange, toTitleCase } from '../../lib/transformStrings';
 import _ from 'underscore';
-
-import centroids from '../../data/atlantaNeighborhoodCentroids.json';
 
 export const getStaticPaths = async () => {
   const { data: neighborhoods } = await supabase
@@ -131,34 +130,41 @@ export default function Neighborhood(props) {
 
   // date period
   const asOf = new Date(props.cutoff[0].cutoff_date);
+  const asOfLabel = `As of ${asOf.toLocaleDateString()}`;
 
   // tooltips
-  const [isDateTipOpen, setisDateTipOpen] = useState(false);
   const [isFilterTipOpen, setisFilterTipOpen] = useState(false);
+
+  // title
+  const titleHood = toTitleCase(props.id);
+  const titleMessage = `${titleHood} crime`;
+
+  // trends
+  const [trendValue, setTrendValue] = useState('cum_value');
 
   return (
     <>
       <Head>
-        <title>ATL crime!</title>
+        <title>{titleMessage}</title>
         <meta name="description" content="A crime app." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MyHeader></MyHeader>
       <Container
         maxW="container.xl"
-        p={{ base: 0, md: 3 }}
+        p={{ base: 0, md: 2 }}
         background={'black'}
         color="brand.0"
       >
         <Flex
-          h={{ base: 'auto', md: '90vh' }}
+          h={{ base: 'auto', md: '95vh' }}
           py={[0, 0, 0]}
           px={[0, 0, 0]}
           direction={{ base: 'column', md: 'row' }}
         >
           <VStack
             w="100%"
-            //h="full" // watch this
+            // h="full"
             overflowY={'auto'}
             p={1}
             spacing={2}
@@ -166,57 +172,44 @@ export default function Neighborhood(props) {
             bg={'black'}
             borderRadius={'10px'}
           >
-            <SimpleGrid columns={8} width="100%" p={0}>
-              <GridItem colSpan={2}>
-                <Text color="brand.0" mt={0.5} mb={2}>
-                  Crime in{' '}
-                </Text>
-              </GridItem>
-              <GridItem colSpan={5}>
-                <Select
-                  display={'inline'}
-                  size={'sm'}
-                  variant={'filled'}
-                  color={'brand.200'}
-                  bg={'black'}
-                  fontSize={'16px'}
-                  value={toTitleCase(props.id)}
-                  placeholder={myPlaceholder}
-                  onChange={(e) => {
-                    let value = e.target.value.toLowerCase();
-                    if (value !== props.id) {
-                      router.push('/hoods/' + encodeURIComponent(value));
-                    }
-                  }}
-                >
-                  {props.neighborhoods.map((n) => {
-                    return (
-                      <option key={n.id} value={n.id}>
-                        {n.display_name}
-                      </option>
-                    );
-                  })}
-                </Select>
-              </GridItem>
-              <GridItem colSpan={1} mt={-1} mr={0}>
-                <Tooltip
-                  label={`As of ${asOf.toLocaleDateString()}.`}
-                  aria-label="A tooltip"
-                  isOpen={isDateTipOpen}
-                >
-                  <IconButton
-                    icon={<InfoOutlineIcon />}
-                    color="brand.100"
-                    bg={'black'}
-                    onMouseEnter={() => setisDateTipOpen(true)}
-                    onMouseLeave={() => setisDateTipOpen(false)}
-                  ></IconButton>
-                </Tooltip>
-              </GridItem>
-            </SimpleGrid>
+            <Flex justifyContent={'flex-start'} alignItems={'center'} mb={-2}>
+              <Text color="brand.0" w={'80px'}>
+                Crime in
+              </Text>
+              <Select
+                display={'inline'}
+                size={'sm'}
+                variant={'filled'}
+                color={'brand.200'}
+                bg={'black'}
+                fontSize={'16px'}
+                value={toTitleCase(props.id)}
+                placeholder={myPlaceholder}
+                onChange={(e) => {
+                  let value = e.target.value.toLowerCase();
+                  if (value !== props.id) {
+                    router.push('/hoods/' + encodeURIComponent(value));
+                  }
+                }}
+              >
+                {props.neighborhoods.map((n) => {
+                  return (
+                    <option key={n.id} value={n.id}>
+                      {n.display_name}
+                    </option>
+                  );
+                })}
+              </Select>
+            </Flex>
+            <Text
+              className="text-date"
+              fontSize={'0.85rem'}
+              color={'brand.100'}
+            >
+              {asOfLabel}
+            </Text>
             <Divider></Divider>
-            <Box></Box>
-            <Box></Box>
+
             <Stack
               direction={{ base: 'column', md: 'row' }}
               width="100%"
@@ -291,9 +284,10 @@ export default function Neighborhood(props) {
             <Box></Box>
             <Box></Box>
             <Divider></Divider>
-            <Text fontSize={'14px'} fontStyle={'italic'}>
-              Cumulative crime counts (2022 vs. 2021)
+            <Text fontSize={'1.05rem'}>
+              Crime trend comparisons (2022 vs. 2021)
             </Text>
+            <MyRadio value={trendValue} setValue={setTrendValue} />
             <SimpleGrid
               gap={1}
               columns={{ base: 1, md: 3 }}
@@ -302,7 +296,12 @@ export default function Neighborhood(props) {
             >
               {offenseCategories.map((o) => {
                 let data = props.trends.filter((c) => c.offense_category === o);
-                let chartData = genTrendData(data, 'year', 'week_of_year');
+                let chartData = genTrendData(
+                  data,
+                  'year',
+                  'week_of_year',
+                  trendValue
+                );
                 return (
                   <GridItem key={o}>
                     <MyResponsiveLine key={o} data={chartData} y_label={o} />

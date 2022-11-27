@@ -163,6 +163,7 @@ export default function Home(props) {
 
   // date period
   const asOf = new Date(props.cutoff[0].cutoff_date);
+  const asOfLabel = `Data current as of ${asOf.toLocaleDateString()}`;
 
   // tooltips
   const [isDateTipOpen, setisDateTipOpen] = useState(false);
@@ -174,7 +175,7 @@ export default function Home(props) {
   return (
     <>
       <Head>
-        <title>Crime!</title>
+        <title>Atlanta crime</title>
         <meta name="description" content="A crime app." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -186,7 +187,7 @@ export default function Home(props) {
         color="brand.0"
       >
         <VStack
-          h="90vh"
+          h="95vh"
           w="100%"
           p={0}
           spacing={2}
@@ -199,9 +200,13 @@ export default function Home(props) {
             <Text fontSize={'0.85em'}>
               Select a neighborhood from the map to see more crime data.
             </Text>{' '}
-            <Text fontSize={'0.85em'}>
-              Data current as of {asOf.toLocaleDateString()}.
-            </Text>{' '}
+            <Text
+              className="text-date"
+              fontSize={'0.85rem'}
+              color={'brand.100'}
+            >
+              {asOfLabel}
+            </Text>
           </VStack>
           <SimpleGrid
             gap={5}

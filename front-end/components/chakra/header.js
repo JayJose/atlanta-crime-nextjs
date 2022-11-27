@@ -1,8 +1,6 @@
 import {
-  Text,
   HStack,
   Heading,
-  Spacer,
   Flex,
   Box,
   Menu,
@@ -17,15 +15,15 @@ import { useRouter } from 'next/router';
 
 import { HamburgerIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import { Home } from 'grommet-icons';
-import { toTitleCase } from '../../lib/transformStrings';
 
-export function MyHeader({ openDrawer, openModal }) {
+export function MyHeader() {
   const router = useRouter();
   return (
     <>
       <Flex
         width={'100%'}
         top="0"
+        justifyContent={'space-between'}
         position="sticky"
         zIndex={1}
         p={2}
@@ -37,7 +35,6 @@ export function MyHeader({ openDrawer, openModal }) {
             Atlanta Crime
           </Heading>
         </Box>
-        <Spacer />
         <HStack spacing={2}>
           {router.pathname === '/' ? null : (
             <IconButton
