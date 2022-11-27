@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase';
 import { useState } from 'react';
 
 import { MyHeader } from '../../components/chakra/header';
+import MyRadio from '../../components/radio';
 import {
   Box,
   Container,
@@ -136,8 +137,12 @@ export default function Neighborhood(props) {
   const [isDateTipOpen, setisDateTipOpen] = useState(false);
   const [isFilterTipOpen, setisFilterTipOpen] = useState(false);
 
+  // title
   const titleHood = toTitleCase(props.id);
   const titleMessage = `${titleHood} crime`;
+
+  // trends
+  const [trendValue, setTrendValue] = useState('cum_value');
 
   return (
     <>
@@ -294,9 +299,10 @@ export default function Neighborhood(props) {
             <Box></Box>
             <Box></Box>
             <Divider></Divider>
-            <Text fontSize={'14px'} fontStyle={'italic'}>
-              Cumulative crime counts (2022 vs. 2021)
+            <Text fontSize={'1.05rem'}>
+              Crime trend comparisons (2022 vs. 2021)
             </Text>
+            <MyRadio value={trendValue} setValue={setTrendValue} />
             <SimpleGrid
               gap={1}
               columns={{ base: 1, md: 3 }}
@@ -309,7 +315,7 @@ export default function Neighborhood(props) {
                   data,
                   'year',
                   'week_of_year',
-                  'cum_value'
+                  trendValue
                 );
                 return (
                   <GridItem key={o}>
