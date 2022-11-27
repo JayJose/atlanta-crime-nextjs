@@ -45,14 +45,14 @@ export function genHeatmapData(data, outerCategory, innerCategory) {
   });
 }
 
-export function genTrendData(data, outerCategory, innerCategory) {
+export function genTrendData(data, outerCategory, innerCategory, valueToTrend) {
   return _.map(_.groupBy(data, outerCategory), function (value, key) {
     return {
       id: key,
       data: _.map(_.groupBy(value, innerCategory), function (value, key) {
         return {
           x: key,
-          y: value[0].cum_value
+          y: value[0][valueToTrend]
         };
       })
     };

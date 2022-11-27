@@ -305,7 +305,12 @@ export default function Neighborhood(props) {
             >
               {offenseCategories.map((o) => {
                 let data = props.trends.filter((c) => c.offense_category === o);
-                let chartData = genTrendData(data, 'year', 'week_of_year');
+                let chartData = genTrendData(
+                  data,
+                  'year',
+                  'week_of_year',
+                  'cum_value'
+                );
                 return (
                   <GridItem key={o}>
                     <MyResponsiveLine key={o} data={chartData} y_label={o} />
