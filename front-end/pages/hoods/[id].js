@@ -157,7 +157,7 @@ export default function Neighborhood(props) {
         color="brand.0"
       >
         <Flex
-          h={{ base: 'auto', md: '90vh' }}
+          h={{ base: 'auto', md: '95vh' }}
           py={[0, 0, 0]}
           px={[0, 0, 0]}
           direction={{ base: 'column', md: 'row' }}
