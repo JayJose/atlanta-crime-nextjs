@@ -26,6 +26,8 @@ import {
   VStack
 } from '@chakra-ui/react';
 
+import MySelect from '../../components/chakra/select';
+
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 
 import { MyResponsiveLine } from '../../components/trends';
