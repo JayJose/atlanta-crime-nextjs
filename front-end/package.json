@@ -28,6 +28,7 @@
     "@supabase/supabase-js": "^2.0.0",
     "@turf/centroid": "^6.5.0",
     "@turf/turf": "^6.5.0",
+    "d3": "^7.6.1",
     "deck.gl": "^8.8.11",
     "framer-motion": "^7.5.3",
     "grommet": "^2.26.0",
@@ -42,9 +43,9 @@
     "underscore": "^1.13.6"
   },
   "devDependencies": {
-    "jest": "^29.3.1",
     "@types/jest": "^29.2.3",
     "eslint": "8.24.0",
-    "eslint-config-next": "12.3.1"
+    "eslint-config-next": "12.3.1",
+    "jest": "^29.3.1"
   }
 }

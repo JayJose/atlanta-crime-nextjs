@@ -4,7 +4,7 @@ import Head from 'next/head';
 
 import { supabase } from '../lib/supabase';
 
-import { MyCityMap, MyCityFilledMap } from '../components/map';
+import FilledMap from '../components/FilledMap';
 
 import _ from 'underscore';
 import { toTitleCase, getYoyChange } from '../lib/transformStrings';
@@ -13,13 +13,7 @@ import { toTitleCase, getYoyChange } from '../lib/transformStrings';
 import { MyHeader } from '../components/chakra/header';
 import {
   Container,
-  Box,
-  Button,
-  Flex,
-  Heading,
-  HStack,
   IconButton,
-  Stack,
   Text,
   VStack,
   Table,
@@ -29,7 +23,6 @@ import {
   Tr,
   Th,
   Td,
-  Divider,
   SimpleGrid,
   GridItem
 } from '@chakra-ui/react';
@@ -44,7 +37,7 @@ export const getStaticProps = async () => {
     .order('offense_category', { ascending: true });
 
   const { data: map } = await supabase
-    .from('app_map')
+    .from('app_filled_map')
     .select('*')
     .eq('year', 2022);
 
@@ -221,12 +214,12 @@ export default function Home(props) {
             maxHeight={'90%'}
           >
             <GridItem colSpan={grid.cols} rowSpan={grid.rows - 1}>
-              <MyCityFilledMap
+              <FilledMap
                 data={mapData}
                 setNeighborhood={setNeighborhood}
                 viewState={viewState}
                 setViewState={setViewState}
-              ></MyCityFilledMap>
+              ></FilledMap>
             </GridItem>
             <GridItem colSpan={{ base: grid.cols }} rowSpan={1}>
               <Table

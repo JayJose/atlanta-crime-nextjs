@@ -12,6 +12,15 @@ import centroids from '../data/atlantaNeighborhoodCentroids.json';
 
 import _ from 'underscore';
 
+// COLOR MAP
+import * as d3 from 'd3';
+
+export function colorPercents(value) {
+  var colorScale = d3.scaleSequential(d3.interpolateRdYlGn).domain([0, 365]);
+  var col = d3.color(colorScale(value));
+  return col;
+}
+
 /**Create a neighborhood-specific map */
 export function MyNeighborhoodMap({ neighborhood, data }) {
   const myNeighborhood = _.filter(neighborhoods.features, function (row) {
@@ -227,90 +236,6 @@ export function MyCityMap({ data, setNeighborhood, setViewState, viewState }) {
       >
         <DeckGL
           layers={[jsonLayer, hexLayer]}
-          controller={true}
-          initialViewState={viewState}
-          onViewStateChange={updateViewState}
-          getTooltip={({ object }) =>
-            object && {
-              html: `${object.properties.NAME}`
-            }
-          }
-        >
-          <StaticMap
-            reuseMaps
-            mapStyle={BASEMAP.DARK_MATTER}
-            mapboxAccessToken={process.env.mapboxAccessToken}
-          ></StaticMap>
-        </DeckGL>
-      </div>
-    </>
-  );
-}
-
-/** Generate a map of Atlanta
- * Display a map of all crimes in Atlanta with outlines by neighborhood
- * Clicking a neighborhood routes the user to a drill down
- */
-export function MyCityFilledMap({
-  data,
-  setNeighborhood,
-  setViewState,
-  viewState
-}) {
-  // const router = useRouter();
-
-  data.forEach(
-    (row) =>
-      (row.coordinates = [parseFloat(row.longitude), parseFloat(row.latitude)])
-  );
-
-  const updateViewState = ({ viewState }) => {
-    setViewState(viewState);
-  };
-
-  // const onClick = (info) => {
-  //   if (info.object) {
-  //     let name = info.object.properties.NAME.toLowerCase();
-  //     router.push('/hoods/' + encodeURIComponent(name));
-  //   }
-  // };
-
-  // const onHover = (info) => {
-  //   info && {
-  //     html: `${info.object.properties.NAME}`
-  //   };
-  // };
-
-  // LAYERS
-  const jsonAlpha = 150;
-  const gray = 180;
-  const jsonLayer = new GeoJsonLayer({
-    id: 'neighborhoods-layer',
-    data: 'https://raw.githubusercontent.com/JayJose/needs-more-polygons/main/data/atlantaNeighborhoods.json',
-    filled: true,
-    getFillColor: [0, 0, 0, 0],
-    stroked: true,
-    getLineWidth: 30,
-    getLineColor: [111, 255, 176, jsonAlpha],
-    pickable: true,
-    autoHighlight: true,
-    highlightColor: [111, 255, 176, jsonAlpha]
-    // onClick: onClick
-  });
-
-  return (
-    <>
-      <div
-        style={{
-          height: '100%',
-          width: '100%',
-          position: 'relative',
-          margin: 'large',
-          pad: 'small'
-        }}
-      >
-        <DeckGL
-          layers={[jsonLayer]}
           controller={true}
           initialViewState={viewState}
           onViewStateChange={updateViewState}
