@@ -4,16 +4,13 @@ import Head from 'next/head';
 
 import { supabase } from '../lib/supabase';
 
-import { MyCityMap } from '../components/map';
-import { MyResponsiveLine } from '../components/trends';
+import { MyCityMap, MyCityFilledMap } from '../components/map';
 
 import _ from 'underscore';
-import { genTrendData } from '../lib/transformData';
 import { toTitleCase, getYoyChange } from '../lib/transformStrings';
 
 // NEW
 import { MyHeader } from '../components/chakra/header';
-import { MyVerticalTable } from '../components/chakra/verticalTable';
 import {
   Container,
   Box,
@@ -38,7 +35,6 @@ import {
 } from '@chakra-ui/react';
 
 import { InfoOutlineIcon } from '@chakra-ui/icons';
-import { ST } from 'next/dist/shared/lib/utils';
 
 export const getStaticProps = async () => {
   const { data: table } = await supabase
@@ -134,18 +130,26 @@ export default function Home(props) {
     }
   };
 
+  // const indexViewState = {
+  //   latitude: 33.73,
+  //   longitude: -84.42,
+  //   zoom: 10,
+  //   bearing: 0,
+  //   pitch: 35
+  // };
+
   const indexViewState = {
-    latitude: 33.73,
+    latitude: 33.75,
     longitude: -84.42,
-    zoom: 10,
+    zoom: 9.5,
     bearing: 0,
-    pitch: 35
+    pitch: 0
   };
 
   const [viewState, setViewState] = useState(indexViewState);
 
-  var mapData;
-  var trendData;
+  let mapData;
+  let trendData;
   if (offense.length === 0) {
     mapData = props.map;
     trendData = props.trends;
@@ -217,12 +221,12 @@ export default function Home(props) {
             maxHeight={'90%'}
           >
             <GridItem colSpan={grid.cols} rowSpan={grid.rows - 1}>
-              <MyCityMap
+              <MyCityFilledMap
                 data={mapData}
                 setNeighborhood={setNeighborhood}
                 viewState={viewState}
                 setViewState={setViewState}
-              ></MyCityMap>
+              ></MyCityFilledMap>
             </GridItem>
             <GridItem colSpan={{ base: grid.cols }} rowSpan={1}>
               <Table
