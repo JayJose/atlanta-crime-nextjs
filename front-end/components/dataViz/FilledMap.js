@@ -30,7 +30,7 @@ export default function FilledMap({
   // color scale
   function colorPercents(value) {
     var colorScale = d3
-      .scaleSequential(d3.interpolatePurples)
+      .scaleSequential(d3.interpolateGreens)
       .domain([minVal.crimes, 500]);
     var col = d3.color(colorScale(value));
     return col;

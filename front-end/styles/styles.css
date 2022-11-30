@@ -19,37 +19,40 @@
   margin: auto;
   min-height: 750px;
   max-width: 1200px;
-  /* border: 8px dashed red; */
   container-type: inline-size;
+  padding: 1rem
 }
 
 .layout {
   margin: auto;
   min-height: 500px;
-  /* border: 8px dashed blue; */
 }
 
 .chart {
-  min-height: 250px;
-  border: 3px dashed green;
+  max-height: 150px;
   grid-column: span 1;
-  grid-row: span 1
+  grid-row: span 1;
+  
+}
+
+.chart > p {
+  font-size: 0.75rem;
 }
 
 .bigChart {
   grid-column: span 3;
-  grid-row: span 1
+  grid-row: span 1;
+  border: 1px dashed red
 }
 
 .map {
-  min-height: 250px;
-  border: 3px dashed red;
+  min-height: 20px;
   grid-column: span 1;
   grid-row: span 1
 }
 
 .table {
-  min-height: 200px;
+  min-height: 250px;
   grid-column: span 3;
   grid-row: span 1
 }
@@ -58,7 +61,7 @@
   .layout {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 150px 150px 1fr;
     grid-gap: 0.5rem
   }
 }

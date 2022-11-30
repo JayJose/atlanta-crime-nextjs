@@ -15,7 +15,7 @@ const theme = {
       },
       legend: {
         text: {
-          fontSize: 11
+          fontSize: 10
         }
       },
       ticks: {
@@ -24,7 +24,7 @@ const theme = {
           strokeWidth: 0
         },
         text: {
-          fontSize: 10,
+          fontSize: 8,
           fill: 'white'
         }
       }
@@ -91,7 +91,7 @@ export default function TrendChart({ data, y_label = 'Crimes' }) {
           </div>
         );
       }}
-      margin={{ top: 40, right: 20, bottom: 50, left: 50 }}
+      margin={{ top: 20, right: 10, bottom: 50, left: 10 }}
       xScale={{
         type: 'linear',
         min: 1
@@ -109,7 +109,7 @@ export default function TrendChart({ data, y_label = 'Crimes' }) {
         tickPadding: 5,
         tickRotation: 0,
         legend: 'Week',
-        legendOffset: 36,
+        legendOffset: 25,
         legendPosition: 'middle'
       }}
       axisLeft={{
@@ -117,7 +117,7 @@ export default function TrendChart({ data, y_label = 'Crimes' }) {
         tickSize: 0,
         tickPadding: 10,
         tickRotation: 0,
-        legend: toTitleCase(y_label),
+        //legend: toTitleCase(y_label),
         legendOffset: -20,
         legendPosition: 'middle',
         format: () => ''
@@ -135,7 +135,7 @@ export default function TrendChart({ data, y_label = 'Crimes' }) {
           anchor: 'top-left',
           direction: 'row',
           justify: false,
-          translateX: 0,
+          translateX: -10,
           translateY: -20,
           itemsSpacing: -30,
           itemDirection: 'left-to-right',

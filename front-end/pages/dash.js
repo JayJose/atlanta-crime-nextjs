@@ -12,6 +12,7 @@ import TrendChart from '../components/dataViz/TrendChart';
 
 // HELPER FN
 import { genTrendData } from '../lib/transformData';
+import { toTitleCase } from '../lib/transformStrings';
 
 export const getStaticProps = async () => {
   const { data: table } = await supabase
@@ -60,32 +61,16 @@ export const getStaticProps = async () => {
   };
 };
 
-export function Chart() {
-  return <div className="chart">CHART</div>;
-}
-
-export function BigChart() {
-  return <div className="chart bigChart">BIGCHART</div>;
-}
-
 export default function Dash(props) {
+  const offenseCategories = [
+    ...new Set(props.offenses.map((e) => e.offense_category))
+  ].sort();
+
   // big chart
   let data = props.trends.filter(
     (c) => c.offense_category === 'motor vehicle theft'
   );
   let chartData = genTrendData(data, 'year', 'week_of_year', 'cum_value');
-
-  // map
-  const [neighborhood, setNeighborhood] = useState([]);
-  const indexViewState = {
-    latitude: 33.75,
-    longitude: -84.42,
-    zoom: 9,
-    bearing: 0,
-    pitch: 0
-  };
-
-  const [viewState, setViewState] = useState(indexViewState);
 
   return (
     <>
@@ -99,28 +84,21 @@ export default function Dash(props) {
               y_label={'motor vehicle theft'}
             />
           </div>
-          <div className="chart">
-            <TrendChart
-              key={'motor vehicle theft'}
-              data={chartData}
-              y_label={'motor vehicle theft'}
-            />
-          </div>
-          <div className="chart">
-            <TrendChart
-              key={'motor vehicle theft'}
-              data={chartData}
-              y_label={'motor vehicle theft'}
-            />
-          </div>
-          <div className="map">
-            <FilledMap
-              data={props.map}
-              setNeighborhood={setNeighborhood}
-              viewState={viewState}
-              setViewState={setViewState}
-            ></FilledMap>
-          </div>
+          {offenseCategories.map((o) => {
+            let data = props.trends.filter((c) => c.offense_category === o);
+            let chartData = genTrendData(
+              data,
+              'year',
+              'week_of_year',
+              'cum_value'
+            );
+            return (
+              <div className="chart" key={o}>
+                <p>{toTitleCase(o)}</p>
+                <TrendChart key={o} data={chartData} y_label={o} />
+              </div>
+            );
+          })}
           <div className="table">
             <Table data={props.table} />
           </div>
