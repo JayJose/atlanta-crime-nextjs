@@ -4,7 +4,8 @@ import { supabase } from '../lib/supabase';
 import { MyHeader } from '../components/chakra/header';
 
 // DATA VIZ
-import { MyResponsiveLine } from '../components/trends';
+import TrendChart from '../components/dataViz/TrendChart';
+import Table from '../components/dataViz/Table';
 
 // HELPER FN
 import { genTrendData } from '../lib/transformData';
@@ -15,11 +16,6 @@ export const getStaticProps = async () => {
     .select('*')
     .eq('neighborhood', 'all')
     .order('offense_category', { ascending: true });
-
-  const { data: map } = await supabase
-    .from('app_map')
-    .select('*')
-    .eq('year', 2022);
 
   const { data: trends } = await supabase
     .from('app_trends')
@@ -45,7 +41,6 @@ export const getStaticProps = async () => {
   return {
     props: {
       table,
-      map,
       trends,
       neighborhoods,
       offenses,
@@ -63,21 +58,12 @@ export function BigChart() {
   return <div className="chart bigChart">BIGCHART</div>;
 }
 
-export function Table() {
-  return <div className="table">TABLE</div>;
-}
-
 export default function Dash(props) {
   // big chart
   let data = props.trends.filter(
     (c) => c.offense_category === 'motor vehicle theft'
   );
-  let chartData = genTrendData(
-    data,
-    'year',
-    'week_of_year',
-    'cum_value' //trendValue
-  );
+  let chartData = genTrendData(data, 'year', 'week_of_year', 'cum_value');
 
   return (
     <>
@@ -85,16 +71,30 @@ export default function Dash(props) {
       <div className="page">
         <div className="layout">
           <div className="bigChart">
-            <MyResponsiveLine
+            <TrendChart
               key={'motor vehicle theft'}
               data={chartData}
               y_label={'motor vehicle theft'}
             />
           </div>
-          <Chart />
-          <Chart />
-          <Chart />
-          <Table />
+          <div className="chart">
+            <TrendChart
+              key={'motor vehicle theft'}
+              data={chartData}
+              y_label={'motor vehicle theft'}
+            />
+          </div>
+          <div className="chart">
+            <TrendChart
+              key={'motor vehicle theft'}
+              data={chartData}
+              y_label={'motor vehicle theft'}
+            />
+          </div>
+          <div className="map">MAP</div>
+          <div className="table">
+            <Table data={props.table} />
+          </div>
         </div>
       </div>
     </>

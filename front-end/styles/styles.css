@@ -17,40 +17,44 @@
   background: black;
   color: white;
   margin: auto;
-  min-height: 500px;
-  max-width: 1000px;
-  border: 8px dashed red;
+  min-height: 750px;
+  max-width: 1200px;
+  /* border: 8px dashed red; */
   container-type: inline-size;
 }
 
 .layout {
   margin: auto;
   min-height: 500px;
-  border: 8px dashed blue;
+  /* border: 8px dashed blue; */
 }
 
-
 .chart {
-  min-height: 200px;
+  min-height: 250px;
   border: 3px dashed green;
   grid-column: span 1;
   grid-row: span 1
 }
 
 .bigChart {
-  border: 3px dashed red;
   grid-column: span 3;
+  grid-row: span 1
+}
+
+.map {
+  min-height: 250px;
+  border: 3px dashed red;
+  grid-column: span 1;
   grid-row: span 1
 }
 
 .table {
-  min-height: 200px; 
-  border: 3px dashed black;
+  min-height: 200px;
   grid-column: span 3;
   grid-row: span 1
 }
 
-@container (min-width: 900px) {
+@container (min-width: 750px) {
   .layout {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
