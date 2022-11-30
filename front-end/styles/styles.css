@@ -14,6 +14,8 @@
 /* dashboard styling */
 
 .page {
+  background: black;
+  color: white;
   margin: auto;
   min-height: 500px;
   max-width: 1000px;
@@ -35,7 +37,7 @@
   grid-row: span 1
 }
 
-#bigChart {
+.bigChart {
   border: 3px dashed red;
   grid-column: span 3;
   grid-row: span 1
@@ -53,6 +55,6 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
-    grid-gap: 1rem
+    grid-gap: 0.5rem
   }
 }
