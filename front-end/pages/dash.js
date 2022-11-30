@@ -1,11 +1,14 @@
+import { useState } from 'react';
+
 import { supabase } from '../lib/supabase';
 
 // UI
 import { MyHeader } from '../components/chakra/header';
 
 // DATA VIZ
-import TrendChart from '../components/dataViz/TrendChart';
+import FilledMap from '../components/dataViz/FilledMap';
 import Table from '../components/dataViz/Table';
+import TrendChart from '../components/dataViz/TrendChart';
 
 // HELPER FN
 import { genTrendData } from '../lib/transformData';
@@ -23,6 +26,12 @@ export const getStaticProps = async () => {
     .eq('neighborhood', 'all')
     .eq('neighborhood', 'all')
     .order('offense_category', { ascending: true });
+
+  const { data: map } = await supabase
+    .from('app_filled_map')
+    .select('*')
+    .eq('year', 2022)
+    .order('neighborhood', { ascending: true });
 
   const { data: neighborhoods } = await supabase
     .from('dim_neighborhoods')
@@ -42,6 +51,7 @@ export const getStaticProps = async () => {
     props: {
       table,
       trends,
+      map,
       neighborhoods,
       offenses,
       cutoff
@@ -64,6 +74,18 @@ export default function Dash(props) {
     (c) => c.offense_category === 'motor vehicle theft'
   );
   let chartData = genTrendData(data, 'year', 'week_of_year', 'cum_value');
+
+  // map
+  const [neighborhood, setNeighborhood] = useState([]);
+  const indexViewState = {
+    latitude: 33.75,
+    longitude: -84.42,
+    zoom: 9,
+    bearing: 0,
+    pitch: 0
+  };
+
+  const [viewState, setViewState] = useState(indexViewState);
 
   return (
     <>
@@ -91,7 +113,14 @@ export default function Dash(props) {
               y_label={'motor vehicle theft'}
             />
           </div>
-          <div className="map">MAP</div>
+          <div className="map">
+            <FilledMap
+              data={props.map}
+              setNeighborhood={setNeighborhood}
+              viewState={viewState}
+              setViewState={setViewState}
+            ></FilledMap>
+          </div>
           <div className="table">
             <Table data={props.table} />
           </div>

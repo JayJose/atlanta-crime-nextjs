@@ -7,8 +7,6 @@ import { BASEMAP } from '@deck.gl/carto';
 import { DeckGL } from '@deck.gl/react';
 import { GeoJsonLayer, ScatterplotLayer } from '@deck.gl/layers';
 import { HeatmapLayer, HexagonLayer } from '@deck.gl/aggregation-layers';
-import neighborhoods from '../data/atlantaNeighborhoods.json';
-import centroids from '../data/atlantaNeighborhoodCentroids.json';
 
 import _ from 'underscore';
 
