@@ -4,10 +4,55 @@
 .mapboxgl-ctrl-attrib {
     margin-bottom: "10px";
     font-size: 8px;
-  }
+}
 
-  .crime-table-highlight tbody tr:hover {
-    background-color: #f9f0f9;
-    color: black;
-    
-}  
+.crime-table-highlight tbody tr:hover {
+  background-color: #f9f0f9;
+  color: black;
+}
+
+/* dashboard styling */
+
+.page {
+  margin: auto;
+  min-height: 500px;
+  max-width: 1000px;
+  border: 8px dashed red;
+  container-type: inline-size;
+}
+
+.layout {
+  margin: auto;
+  min-height: 500px;
+  border: 8px dashed blue;
+}
+
+
+.chart {
+  min-height: 200px;
+  border: 3px dashed green;
+  grid-column: span 1;
+  grid-row: span 1
+}
+
+#bigChart {
+  border: 3px dashed red;
+  grid-column: span 3;
+  grid-row: span 1
+}
+
+.table {
+  min-height: 200px; 
+  border: 3px dashed black;
+  grid-column: span 3;
+  grid-row: span 1
+}
+
+@container (min-width: 900px) {
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-gap: 1rem
+  }
+}
