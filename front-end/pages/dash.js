@@ -1,3 +1,5 @@
+import Head from 'next/head';
+
 import { useState } from 'react';
 
 import { supabase } from '../lib/supabase';
@@ -74,6 +76,12 @@ export default function Dash(props) {
 
   return (
     <>
+      <Head>
+        <title>Atlanta crime</title>
+        <meta name="description" content="A crime app." />
+        <link rel="icon" href="/favicon.ico" />
+        <script src="https://cdn.jsdelivr.net/npm/container-query-polyfill@1/dist/container-query-polyfill.modern.js"></script>
+      </Head>
       <MyHeader></MyHeader>
       <div className="page">
         <div className="layout">

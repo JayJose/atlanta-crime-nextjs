@@ -178,6 +178,7 @@ export default function Home(props) {
         <title>Atlanta crime</title>
         <meta name="description" content="A crime app." />
         <link rel="icon" href="/favicon.ico" />
+        <script src="https://cdn.jsdelivr.net/npm/container-query-polyfill@1/dist/container-query-polyfill.modern.js"></script>
       </Head>
       <MyHeader></MyHeader>
       <Container
