@@ -42,7 +42,7 @@ export default function Table({ data }) {
             >
               {toTitleCase(o.offense_category)}
             </Td>
-            <Td textAlign={'right'}>{o._2022.toLocaleString()}</Td>
+            <Td>{o._2022.toLocaleString()}</Td>
             <Td>{getYoyChange(o._2021, o._2022)}</Td>
           </Tr>
         ))}
